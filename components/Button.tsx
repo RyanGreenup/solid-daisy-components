@@ -1,167 +1,93 @@
-import { cva, type RecipeVariantProps } from "../styled-system/css";
-import { styled } from "../styled-system/jsx";
+import { tv } from 'tailwind-variants';
+import { splitProps, children, JSX } from 'solid-js';
 
-const buttonStyle = cva({
-  base: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontWeight: "medium",
-    // TODO this isn't right
-    borderRadius: "field",
-    shadow: "md",
-    cursor: "pointer",
-    userSelect: "none",
-
-    // Focus styles
-    _focus: {
-      outline: "none",
-      ringWidth: "2px",
-      ringColor: "primary",
-      ringOffset: "2px",
-    },
-    transition: "all 0.2s ease",
-    _hover: {
-      transform: "scale(1.05)",
-      // TODO common token
-      opacity: 0.9,
-    },
-    _active: {
-      opacity: 0.8,
-    },
-
-    // Disabled styles
-    _disabled: {
-      opacity: 0.5,
-      cursor: "not-allowed",
-      pointerEvents: "none",
-    },
-  },
+export const buttonVariants = tv({
+  base: 'btn',
   variants: {
     variant: {
-      primary: {
-        bg: "primary",
-        color: "content.primary",
-      },
-      secondary: {
-        bg: "secondary",
-        color: "content.secondary",
-      },
-      accent: {
-        bg: "accent",
-        color: "content.accent",
-      },
-      neutral: {
-        bg: "neutral",
-        color: "content.neutral",
-      },
-      info: {
-        bg: "info",
-        color: "content.info",
-      },
-      success: {
-        bg: "success",
-        color: "content.success",
-      },
-      warning: {
-        bg: "warning",
-        color: "content.warning",
-      },
-      error: {
-        bg: "error",
-        color: "content.error",
-      },
-      ghost: {
-        bg: "transparent",
-        color: "base.content",
-        shadow: "none",
-        _hover: {
-          bg: "base.200",
-          opacity: 1,
-        },
-        _active: {
-          bg: "base.300",
-          opacity: 1,
-        },
-      },
-      outline: {
-        bg: "transparent",
-        color: "primary",
-        border: "1px solid",
-        borderColor: "primary",
-        _hover: {
-          bg: "primary",
-          color: "content.primary",
-          opacity: 1,
-        },
-        _active: {
-          bg: "primary",
-          color: "content.primary",
-          opacity: 0.8,
-        },
-      },
-      link: {
-        bg: "transparent",
-        color: "link.default",
-        textDecoration: "underline",
-        textDecorationColor: "link.underline",
-        _hover: {
-          color: "link.hover",
-          textDecorationColor: "link.hover",
-          opacity: 1,
-        },
-        _active: {
-          color: "link.hover",
-        },
-        _focus: {
-          ringWidth: "2px",
-          ringColor: "link.default",
-        },
-      },
+      default: '',
+      outline: 'btn-outline',
+      soft: 'btn-soft',
+      dash: 'btn-dash',
+      ghost: 'btn-ghost',
+      link: 'btn-link',
+    },
+    color: {
+      default: '',
+      neutral: 'btn-neutral',
+      primary: 'btn-primary',
+      secondary: 'btn-secondary',
+      accent: 'btn-accent',
+      info: 'btn-info',
+      success: 'btn-success',
+      warning: 'btn-warning',
+      error: 'btn-error',
     },
     size: {
-      xs: {
-        px: 2,
-        py: 1,
-        fontSize: "xs",
-        minH: "6",
-      },
-      sm: {
-        px: 3,
-        py: 1.5,
-        fontSize: "sm",
-        minH: "8",
-      },
-      md: {
-        px: 4,
-        py: 2,
-        fontSize: "sm",
-        minH: "10",
-      },
-      lg: {
-        px: 6,
-        py: 3,
-        fontSize: "base",
-        minH: "12",
-      },
-      xl: {
-        px: 8,
-        py: 4,
-        fontSize: "lg",
-        minH: "14",
-      },
+      xs: 'btn-xs',
+      sm: 'btn-sm',
+      md: '',
+      lg: 'btn-lg',
+      xl: 'btn-xl',
     },
-    fullWidth: {
-      true: {
-        width: "full",
-      },
+    shape: {
+      default: '',
+      square: 'btn-square',
+      circle: 'btn-circle',
+    },
+    width: {
+      default: '',
+      wide: 'btn-wide',
+      block: 'btn-block',
+    },
+    state: {
+      default: '',
+      active: 'btn-active',
+      disabled: 'btn-disabled',
     },
   },
   defaultVariants: {
-    variant: "primary",
-    size: "md",
+    variant: 'default',
+    color: 'default',
+    size: 'md',
+    shape: 'default',
+    width: 'default',
+    state: 'default',
   },
 });
 
-export type ButtonVariants = RecipeVariantProps<typeof buttonStyle>;
-export const Button = styled("button", buttonStyle);
+type ButtonVariants = Parameters<typeof buttonVariants>[0];
+
+export type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & ButtonVariants;
+
+export const Button = (props: ButtonProps) => {
+  const [local, others] = splitProps(props, [
+    'variant',
+    'color',
+    'size',
+    'shape',
+    'width',
+    'state',
+    'class',
+    'children',
+  ]);
+
+  const safeChildren = children(() => local.children);
+
+  return (
+    <button
+      {...others}
+      class={buttonVariants({
+        variant: local.variant,
+        color: local.color,
+        size: local.size,
+        shape: local.shape,
+        width: local.width,
+        state: local.state,
+        class: local.class,
+      })}
+    >
+      {safeChildren()}
+    </button>
+  );
+};
