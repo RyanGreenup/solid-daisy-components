@@ -8,6 +8,8 @@ These are basic components implemented in Daisy UI
 * See Also
 
 - Mulberry
+
   Styled components written for solid-js in Panda CSS
+
 - [[https://github.com/RyanGreenup/mulberry][Components]]
 - [[https://github.com/RyanGreenup/mulberry-storybook][Storybook]]
