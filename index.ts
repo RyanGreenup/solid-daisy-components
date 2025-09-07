@@ -6,3 +6,4 @@ export { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, Command
 export { Input } from "./components/Input";
 export { Badge } from "./components/Badge";
 export { Progress } from "./components/Progress";
+export { KeybindList } from "./components/KeybindList";
