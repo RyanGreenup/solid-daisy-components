@@ -44,15 +44,16 @@ export const keybindListItemVariants = tv({
 
 type KeybindListVariants = Parameters<typeof keybindListVariants>[0];
 
-export type KeybindListProps = JSX.HTMLAttributes<HTMLUListElement> &
+export type KeybindListProps<T = string> = JSX.HTMLAttributes<HTMLUListElement> &
   KeybindListVariants & {
-    items: string[];
-    onSelect?: (item: string, index: number) => void;
-    onFocused?: (item: string, index: number) => void;
+    items: T[];
+    onSelect?: (item: T, index: number) => void;
+    onFocused?: (item: T, index: number) => void;
     selectedIndex?: number;
+    children?: (item: T, index: () => number, state: { focused: boolean; selected: boolean }) => JSX.Element;
   };
 
-export const KeybindList = (props: KeybindListProps) => {
+export function KeybindList<T = string>(props: KeybindListProps<T>) {
   const [local, others] = splitProps(props, [
     "items",
     "onSelect",
@@ -61,6 +62,7 @@ export const KeybindList = (props: KeybindListProps) => {
     "size",
     "maxHeight",
     "class",
+    "children",
   ]);
 
   const [focusedIndex, setFocusedIndex] = createSignal(0);
@@ -117,25 +119,44 @@ export const KeybindList = (props: KeybindListProps) => {
       style={{ "overflow-y": "auto" }}
     >
       <For each={local.items}>
-        {(item, index) => (
-          <li
-            class={keybindListItemVariants({
-              selected: local.selectedIndex === index(),
-              focused: focusedIndex() === index(),
-            })}
-          >
-            <a
-              onClick={() => {
-                setFocusedIndex(index());
-                local.onFocused?.(item, index());
-                local.onSelect?.(item, index());
-              }}
+        {(item, index) => {
+          const isFocused = () => focusedIndex() === index();
+          const isSelected = () => local.selectedIndex === index();
+          
+          return (
+            <li
+              class={local.children ? "" : keybindListItemVariants({
+                selected: isSelected(),
+                focused: isFocused(),
+              })}
             >
-              {item}
-            </a>
-          </li>
-        )}
+              {local.children ? (
+                <div
+                  class="w-full"
+                  onClick={() => {
+                    setFocusedIndex(index());
+                    local.onFocused?.(item, index());
+                    local.onSelect?.(item, index());
+                  }}
+                >
+                  {local.children(item, index, { focused: isFocused(), selected: isSelected() })}
+                </div>
+              ) : (
+                <a
+                  class="w-full"
+                  onClick={() => {
+                    setFocusedIndex(index());
+                    local.onFocused?.(item, index());
+                    local.onSelect?.(item, index());
+                  }}
+                >
+                  {String(item)}
+                </a>
+              )}
+            </li>
+          );
+        }}
       </For>
     </ul>
   );
-};
+}
