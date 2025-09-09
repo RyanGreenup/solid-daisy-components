@@ -2,11 +2,12 @@ import { Combobox, ComboboxTriggerMode } from "@kobalte/core/combobox";
 
 // @ts-ignore
 import Check from "lucide-solid/icons/check";
-import { createEffect, createSignal, JSX, Show } from "solid-js";
+import { createSignal, For, createEffect, JSX, Show } from "solid-js";
 
 // @ts-ignore
 import ChevronsUpDown from "lucide-solid/icons/chevrons-up-down";
 import { comboboxStyles } from "./style";
+import "./comboboxStyle.module.css";
 
 const styles = comboboxStyles();
 
@@ -44,9 +45,9 @@ export function SingleCombobox(props: SingleComboboxProps): JSX.Element {
         placeholder={props.placeholder || "Search..."}
         triggerMode={props.triggerMode ?? "input"}
         itemComponent={(itemProps) => (
-          <Combobox.Item item={itemProps.item} class={styles.item()}>
+          <Combobox.Item item={itemProps.item} class={styles.item}>
             <Combobox.ItemLabel>{itemProps.item.rawValue}</Combobox.ItemLabel>
-            <Combobox.ItemIndicator class={styles.itemIndicator()}>
+            <Combobox.ItemIndicator class={styles.itemIndicator}>
               <Check />
             </Combobox.ItemIndicator>
           </Combobox.Item>
@@ -55,23 +56,21 @@ export function SingleCombobox(props: SingleComboboxProps): JSX.Element {
         <Show when={props.label}>
           <Combobox.Label>{props.label}</Combobox.Label>
         </Show>
-        <Combobox.Control class={styles.control()} aria-label="Fruit">
+        <Combobox.Control class={styles.control} aria-label="Fruit">
           <Combobox.Input class={styles.input} ref={props.ref} />
-          <Combobox.Trigger class={styles.trigger()}>
-            <Combobox.Icon class={styles.icon()}>
+          <Combobox.Trigger class={styles.trigger}>
+            <Combobox.Icon class={styles.icon}>
               <ChevronsUpDown />
             </Combobox.Icon>
           </Combobox.Trigger>
         </Combobox.Control>
         <Combobox.Portal>
-          <Combobox.Content class={styles.content()}>
+          <Combobox.Content class={styles.content}>
             <Combobox.Arrow />
-            <Combobox.Listbox class={styles.listbox()} />
+            <Combobox.Listbox class={styles.listbox} />
           </Combobox.Content>
         </Combobox.Portal>
       </Combobox>
     </div>
   );
 }
-
-export default SingleCombobox;
