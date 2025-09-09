@@ -75,12 +75,15 @@ export const Input = (props: InputProps) => {
       {...others}
       value={internalValue()}
       onInput={handleInput}
-      class={inputVariants({
-        variant: local.variant,
-        color: local.color,
-        size: local.size,
-        class: local.class,
-      })}
+      class={
+        inputVariants({
+          variant: local.variant,
+          color: local.color,
+          size: local.size,
+        }) +
+        " " +
+        local.class
+      }
     />
   );
 };
