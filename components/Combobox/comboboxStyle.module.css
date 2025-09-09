@@ -1,0 +1,61 @@
+/* Keyframe animations for combobox content */
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+}
+
+/* Content animations with data attributes */
+.content {
+  animation: contentHide 150ms ease-in forwards;
+}
+
+.content[data-expanded] {
+  animation: contentShow 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Interactive state transitions */
+.item {
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.item[data-highlighted] {
+  background-color: hsl(var(--p)) !important;
+  color: hsl(var(--pc)) !important;
+}
+
+.item[data-selected] {
+  font-weight: 500;
+}
+
+.control {
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.control:focus-within {
+  box-shadow: 0 0 0 2px hsl(var(--p) / 0.2);
+}
+
+.trigger {
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.itemIndicator {
+  transition: opacity 200ms ease;
+}
