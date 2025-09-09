@@ -40,7 +40,7 @@ export function arrayToCsv<T>(data: T[], columns?: ColumnDef<T>[]): string {
       columns
         .filter(col => col.header && typeof col.header === 'string')
         .map(col => {
-          const accessorKey = col.accessorKey as keyof T
+          const accessorKey = 'accessorKey' in col ? col.accessorKey as keyof T : undefined
           if (accessorKey && row[accessorKey] !== undefined) {
             return row[accessorKey]
           }

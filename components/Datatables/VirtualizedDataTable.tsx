@@ -9,9 +9,10 @@ import {
   SortingState,
 } from "@tanstack/solid-table";
 import { createVirtualizer } from "@tanstack/solid-virtual";
+// @ts-ignore
 import ChevronUp from "lucide-solid/icons/chevron-up";
+// @ts-ignore
 import ChevronDown from "lucide-solid/icons/chevron-down";
-import Funnel from "lucide-solid/icons/funnel";
 import { createMemo, createSignal, For, JSXElement, Show } from "solid-js";
 import DownloadButton from "../DownloadButton";
 
@@ -22,7 +23,7 @@ import {
   DataTableVariants,
 } from "./styles";
 
-interface VirtualizedDataTableProps<T> extends DataTableVariants {
+type VirtualizedDataTableProps<T> = DataTableVariants & {
   data: T[];
   columns: ColumnDef<T>[];
   enableGlobalFilter?: boolean;
@@ -40,7 +41,7 @@ interface VirtualizedDataTableProps<T> extends DataTableVariants {
 export function VirtualizedDataTable<T>(
   props: VirtualizedDataTableProps<T>,
 ): JSXElement {
-  let parentRef: HTMLDivElement | undefined;
+  let parentRef: HTMLTableSectionElement | undefined;
 
   const styles = dataTableVariants({
     darkHeader: props.darkHeader,

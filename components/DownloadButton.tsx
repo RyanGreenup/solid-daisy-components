@@ -1,10 +1,11 @@
+// @ts-ignore
 import Download from "lucide-solid/icons/download";
 import { createSignal, Show, splitProps } from "solid-js";
 import { ColumnDef } from "@tanstack/solid-table";
 import { exportTableToCsv } from "../lib/utils/csv-export";
 import { Button, ButtonProps } from "./Button";
 
-interface DownloadButtonProps<T> extends ButtonProps {
+type DownloadButtonProps<T> = ButtonProps & {
   /**
    * The data to export
    */
@@ -25,7 +26,7 @@ interface DownloadButtonProps<T> extends ButtonProps {
    * Optional loading timeout (default: 1000ms)
    */
   loadingTimeout?: number;
-}
+};
 
 /**
  * A reusable download button component that exports data to CSV
@@ -35,24 +36,24 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
   const [isDownloading, setIsDownloading] = createSignal(false);
 
   const [downloadProps, buttonProps] = splitProps(props, [
-    'data',
-    'columns',
-    'filename',
-    'onExport',
-    'loadingTimeout',
-    'onClick'
+    "data",
+    "columns",
+    "filename",
+    "onExport",
+    "loadingTimeout",
   ]);
 
   const {
     data,
     columns,
-    filename = 'data.csv',
+    filename = "data.csv",
     onExport,
     loadingTimeout = 1000,
-    onClick,
   } = downloadProps;
 
-  const handleDownload = async (e: MouseEvent & { currentTarget: HTMLButtonElement; target: Element }) => {
+  const handleDownload = async (
+    e: MouseEvent & { currentTarget: HTMLButtonElement; target: Element },
+  ) => {
     try {
       setIsDownloading(true);
 
@@ -72,31 +73,32 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
     }
 
     // Call the original onClick if provided
-    if (typeof onClick === "function") {
-      onClick(e);
+    if (typeof buttonProps.onClick === "function") {
+      buttonProps.onClick(e);
     }
   };
 
-  const isDisabled = () => buttonProps.disabled || isDownloading() || data.length === 0;
+  const isDisabled = () =>
+    buttonProps.disabled || isDownloading() || data.length === 0;
 
   return (
     <Button
+      color="primary"
+      size="sm"
       {...buttonProps}
-      color={buttonProps.color || "primary"}
-      size={buttonProps.size || "sm"}
       onClick={handleDownload}
       disabled={isDisabled()}
     >
-      <Show when={!isDownloading()} fallback={<span class="loading loading-spinner loading-xs" />}>
+      <Show
+        when={!isDownloading()}
+        fallback={<span class="loading loading-spinner loading-xs" />}
+      >
         <Download class="w-4 h-4" />
       </Show>
       <Show
         when={buttonProps.children}
         fallback={
-          <Show
-            when={isDownloading()}
-            fallback="Download CSV"
-          >
+          <Show when={isDownloading()} fallback="Download CSV">
             Downloading...
           </Show>
         }

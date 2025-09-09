@@ -66,7 +66,7 @@ export const Input = (props: InputProps) => {
     setInternalValue(newValue);
     local.onValueChange?.(newValue);
     if (typeof local.onInput === "function") {
-      local.onInput(e);
+      local.onInput(e as InputEvent & { currentTarget: HTMLInputElement; target: HTMLInputElement; });
     }
   };
 
