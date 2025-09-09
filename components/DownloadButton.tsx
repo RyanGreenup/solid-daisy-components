@@ -5,11 +5,13 @@ import { ColumnDef } from "@tanstack/solid-table";
 import { exportTableToCsv } from "../lib/utils/csv-export";
 import { Button, ButtonProps } from "./Button";
 
+const DEBUG = false;
+
 type DownloadButtonProps<T> = ButtonProps & {
   /**
-   * The data to export
+   * The data to export - can be static array or reactive function
    */
-  data: T[];
+  data: T[] | (() => T[]);
   /**
    * Optional column definitions for structured export
    */
@@ -57,12 +59,25 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
     try {
       setIsDownloading(true);
 
+      // Resolve data at click time (handles both static arrays and reactive functions)
+      const currentData = typeof data === "function" ? data() : data;
+
+      if (DEBUG) {
+        console.log("📥 Debug: Download button clicked", {
+          dataLength: currentData.length,
+          dataPreview: currentData.slice(0, 2),
+          filename,
+          hasColumns: !!columns,
+          dataType: typeof data,
+        });
+      }
+
       if (onExport) {
         // Use custom export function if provided
-        onExport(data);
+        onExport(currentData);
       } else {
         // Use built-in CSV export
-        exportTableToCsv(data, columns, filename);
+        exportTableToCsv(currentData, columns, filename);
       }
 
       // Show loading state briefly for user feedback
@@ -78,8 +93,10 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
     }
   };
 
-  const isDisabled = () =>
-    buttonProps.disabled || isDownloading() || data.length === 0;
+  const isDisabled = () => {
+    const currentData = typeof data === "function" ? data() : data;
+    return buttonProps.disabled || isDownloading() || currentData.length === 0;
+  };
 
   return (
     <Button

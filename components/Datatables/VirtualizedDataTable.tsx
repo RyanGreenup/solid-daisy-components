@@ -36,7 +36,7 @@ type VirtualizedDataTableProps<T> = DataTableVariants & {
   estimateSize?: () => number;
   overscan?: number;
   class?: string;
-}
+};
 
 export function VirtualizedDataTable<T>(
   props: VirtualizedDataTableProps<T>,
@@ -59,42 +59,44 @@ export function VirtualizedDataTable<T>(
   );
   const [globalFilter, setGlobalFilter] = createSignal("");
 
-  const table = createMemo(() =>
-    createSolidTable({
-      get data() {
-        return props.data;
+  const table = createSolidTable({
+    get data() {
+      return props.data;
+    },
+    get columns() {
+      return props.columns;
+    },
+    state: {
+      get sorting() {
+        return props.enableSorting !== false ? sorting() : [];
       },
-      get columns() {
-        return props.columns;
+      get columnFilters() {
+        return props.enableColumnFilters !== false ? columnFilters() : [];
       },
-      state: {
-        get sorting() {
-          return props.enableSorting !== false ? sorting() : [];
-        },
-        get columnFilters() {
-          return props.enableColumnFilters !== false ? columnFilters() : [];
-        },
-        get globalFilter() {
-          return props.enableGlobalFilter !== false ? globalFilter() : "";
-        },
+      get globalFilter() {
+        return props.enableGlobalFilter !== false ? globalFilter() : "";
       },
-      onSortingChange: props.enableSorting !== false ? setSorting : () => {},
-      onColumnFiltersChange:
-        props.enableColumnFilters !== false ? setColumnFilters : () => {},
-      onGlobalFilterChange:
-        props.enableGlobalFilter !== false ? setGlobalFilter : () => {},
-      getCoreRowModel: getCoreRowModel(),
-      getSortedRowModel:
-        props.enableSorting !== false ? getSortedRowModel() : getCoreRowModel(),
-      getFilteredRowModel:
-        props.enableGlobalFilter !== false ||
-        props.enableColumnFilters !== false
-          ? getFilteredRowModel()
-          : getCoreRowModel(),
-    }),
-  );
+    },
+    onSortingChange: props.enableSorting !== false ? setSorting : () => {},
+    onColumnFiltersChange:
+      props.enableColumnFilters !== false ? setColumnFilters : () => {},
+    onGlobalFilterChange:
+      props.enableGlobalFilter !== false ? setGlobalFilter : () => {},
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel:
+      props.enableSorting !== false ? getSortedRowModel() : getCoreRowModel(),
+    getFilteredRowModel:
+      props.enableGlobalFilter !== false || props.enableColumnFilters !== false
+        ? getFilteredRowModel()
+        : getCoreRowModel(),
+    debugTable: true,
+  });
 
-  const filteredRows = createMemo(() => table().getRowModel().rows);
+  const filteredRows = createMemo(() => {
+    const rows = table.getRowModel().rows;
+
+    return rows;
+  });
 
   const rowVirtualizer = createMemo(() =>
     createVirtualizer({
@@ -109,7 +111,11 @@ export function VirtualizedDataTable<T>(
 
   return (
     <div class={styles.container()}>
-      <Show when={props.enableGlobalFilter !== false || props.enableDownload !== false}>
+      <Show
+        when={
+          props.enableGlobalFilter !== false || props.enableDownload !== false
+        }
+      >
         <div class={styles.outerHeader()}>
           <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <Show when={props.enableGlobalFilter !== false}>
@@ -117,16 +123,24 @@ export function VirtualizedDataTable<T>(
                 <Input
                   value={globalFilter()}
                   onInput={(e) => setGlobalFilter(e.currentTarget.value)}
-                  placeholder={props.searchPlaceholder || "Search all columns..."}
+                  placeholder={
+                    props.searchPlaceholder || "Search all columns..."
+                  }
                   class={styles.globalSearchInput()}
                 />
               </div>
             </Show>
             <Show when={props.enableDownload !== false}>
               <DownloadButton
-                data={filteredRows().map(row => row.original)}
+                data={() => {
+                  const downloadData = filteredRows().map(
+                    (row) => row.original,
+                  );
+
+                  return downloadData;
+                }}
                 columns={props.columns}
-                filename={props.downloadFilename || 'table-data.csv'}
+                filename={props.downloadFilename || "table-data.csv"}
               />
             </Show>
           </div>
@@ -152,7 +166,7 @@ export function VirtualizedDataTable<T>(
               display: "block",
             }}
           >
-            <For each={table().getHeaderGroups()}>
+            <For each={table.getHeaderGroups()}>
               {(headerGroup) => (
                 <tr class={styles.tr()}>
                   <For each={headerGroup.headers}>
@@ -301,8 +315,15 @@ export function VirtualizedDataTable<T>(
 
       <div class={styles.outerFooter()}>
         <div class="flex items-center justify-between">
-          <span>Showing {filteredRows().length} of {props.data.length} rows</span>
-          <Show when={props.enableDownload !== false && filteredRows().length !== props.data.length}>
+          <span>
+            Showing {filteredRows().length} of {props.data.length} rows
+          </span>
+          <Show
+            when={
+              props.enableDownload !== false &&
+              filteredRows().length !== props.data.length
+            }
+          >
             <span class="text-sm text-base-content/60">
               Download includes {filteredRows().length} filtered rows
             </span>
