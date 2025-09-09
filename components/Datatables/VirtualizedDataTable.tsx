@@ -190,9 +190,7 @@ export function VirtualizedDataTable<T>(
                               }
                             >
                               <Input
-                                style={{
-                                  flex: "1",
-                                }}
+                                style={{ flex: "1", padding: "0.25rem" }}
                                 type="text"
                                 value={
                                   (header.column.getFilterValue() as string) ||
