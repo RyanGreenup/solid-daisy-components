@@ -137,12 +137,7 @@ export function VirtualizedDataTable<T>(
           >
             <For each={table().getHeaderGroups()}>
               {(headerGroup) => (
-                <tr
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                  }}
-                >
+                <tr class={styles.tr()}>
                   <For each={headerGroup.headers}>
                     {(header) => (
                       <th

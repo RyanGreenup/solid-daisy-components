@@ -6,18 +6,31 @@ export const sortButtonVariants = tv({
 
 export const dataTableVariants = tv({
   slots: {
-    container: "bg-base-100 rounded-box border border-base-300 shadow-sm",
+    container: "bg-base-200 rounded-box border border-base-300 shadow-sm",
     outerHeader: "p-4 rounded-box",
     globalSearchInput: "w-full max-w-xs",
     table: "w-full border-separate border-spacing-0",
-    header: "bg-base-200 w-full block",
+    header: "w-full block",
     body: "bg-base-100 block overflow-auto relative",
-    row: "transition-colors duration-300 hover:bg-base-200/50",
+    row: [
+      "transition-colors duration-300 hover:bg-base-200/50",
+
+      // Re-apply the background color
+      "bg-base-100",
+    ],
     cell: "px-4 py-3 flex items-center",
+    tr: "flex w-full",
     th: "px-4 py-3 text-left text-sm font-semibold text-base-content flex items-center border-b border-base-300",
-    outerFooter: "px-4 py-3 border-t border-base-300 bg-base-200 text-sm text-base-content text-center rounded-b-box",
+    outerFooter:
+      "px-4 py-3 border-t border-base-300 bg-base-200 text-sm text-base-content text-center rounded-b-box",
   },
   variants: {
+    justifyColumns: {
+      true: {
+        tr: " justify-between",
+        row: "justify-between",
+      },
+    },
     darkHeader: {
       true: {
         outerHeader: "bg-base-200",
@@ -63,6 +76,7 @@ export const dataTableVariants = tv({
   defaultVariants: {
     darkHeader: true,
     horizontalBorder: true,
+    justifyColumns: true,
   },
 });
 
