@@ -13,6 +13,7 @@ import ChevronUp from "lucide-solid/icons/chevron-up";
 import ChevronDown from "lucide-solid/icons/chevron-down";
 import Funnel from "lucide-solid/icons/funnel";
 import { createMemo, createSignal, For, JSXElement, Show } from "solid-js";
+import DownloadButton from "../DownloadButton";
 
 import { Input } from "../Input";
 import {
@@ -27,6 +28,8 @@ interface VirtualizedDataTableProps<T> extends DataTableVariants {
   enableGlobalFilter?: boolean;
   enableColumnFilters?: boolean;
   enableSorting?: boolean;
+  enableDownload?: boolean;
+  downloadFilename?: string;
   searchPlaceholder?: string;
   height?: string;
   estimateSize?: () => number;
@@ -105,16 +108,29 @@ export function VirtualizedDataTable<T>(
 
   return (
     <div class={styles.container()}>
-      {props.enableGlobalFilter !== false && (
+      <Show when={props.enableGlobalFilter !== false || props.enableDownload !== false}>
         <div class={styles.outerHeader()}>
-          <Input
-            value={globalFilter()}
-            onInput={(e) => setGlobalFilter(e.currentTarget.value)}
-            placeholder={props.searchPlaceholder || "Search all columns..."}
-            class={styles.globalSearchInput()}
-          />
+          <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <Show when={props.enableGlobalFilter !== false}>
+              <div class="flex-1 w-full sm:w-auto">
+                <Input
+                  value={globalFilter()}
+                  onInput={(e) => setGlobalFilter(e.currentTarget.value)}
+                  placeholder={props.searchPlaceholder || "Search all columns..."}
+                  class={styles.globalSearchInput()}
+                />
+              </div>
+            </Show>
+            <Show when={props.enableDownload !== false}>
+              <DownloadButton
+                data={filteredRows().map(row => row.original)}
+                columns={props.columns}
+                filename={props.downloadFilename || 'table-data.csv'}
+              />
+            </Show>
+          </div>
         </div>
-      )}
+      </Show>
 
       <div
         style={{
@@ -283,7 +299,14 @@ export function VirtualizedDataTable<T>(
       </div>
 
       <div class={styles.outerFooter()}>
-        Showing {filteredRows().length} of {props.data.length} rows
+        <div class="flex items-center justify-between">
+          <span>Showing {filteredRows().length} of {props.data.length} rows</span>
+          <Show when={props.enableDownload !== false && filteredRows().length !== props.data.length}>
+            <span class="text-sm text-base-content/60">
+              Download includes {filteredRows().length} filtered rows
+            </span>
+          </Show>
+        </div>
       </div>
     </div>
   );
