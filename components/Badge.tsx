@@ -39,8 +39,7 @@ export const badgeVariants = tv({
 
 type BadgeVariants = Parameters<typeof badgeVariants>[0];
 
-export type BadgeProps = JSX.HTMLAttributes<HTMLSpanElement> &
-  BadgeVariants;
+export type BadgeProps = JSX.HTMLAttributes<HTMLSpanElement> & BadgeVariants;
 
 export const Badge = (props: BadgeProps) => {
   const [local, others] = splitProps(props, [

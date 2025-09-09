@@ -1,4 +1,3 @@
-
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -16,7 +15,11 @@ import Funnel from "lucide-solid/icons/funnel";
 import { createMemo, createSignal, For, JSXElement, Show } from "solid-js";
 
 import { Input } from "../Input";
-import { dataTableVariants, sortButtonVariants, DataTableVariants } from "./styles";
+import {
+  dataTableVariants,
+  sortButtonVariants,
+  DataTableVariants,
+} from "./styles";
 
 interface VirtualizedDataTableProps<T> extends DataTableVariants {
   data: T[];

@@ -31,8 +31,11 @@ export const progressVariants = tv({
 
 type ProgressVariants = Parameters<typeof progressVariants>[0];
 
-export type ProgressProps = Omit<JSX.ProgressHTMLAttributes<HTMLProgressElement>, "value"> &
- Omit<JSX.IntrinsicElements["div"], "children"> &
+export type ProgressProps = Omit<
+  JSX.ProgressHTMLAttributes<HTMLProgressElement>,
+  "value"
+> &
+  Omit<JSX.IntrinsicElements["div"], "children"> &
   ProgressVariants & {
     value?: number | Accessor<number>;
     max?: number;
@@ -46,8 +49,6 @@ export const Progress = (props: ProgressProps) => {
     "value",
     "max",
   ]);
-
-
 
   const getValue = () => {
     const val = local.value;

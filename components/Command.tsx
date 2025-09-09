@@ -5,7 +5,14 @@ import type {
   VoidProps,
   JSXElement,
 } from "solid-js";
-import { splitProps, Show, createSignal, createEffect, onMount, onCleanup } from "solid-js";
+import {
+  splitProps,
+  Show,
+  createSignal,
+  createEffect,
+  onMount,
+  onCleanup,
+} from "solid-js";
 import { Portal } from "solid-js/web";
 import * as CommandPrimitive from "cmdk-solid";
 import { tv } from "tailwind-variants";
@@ -155,10 +162,7 @@ const CommandShortcut: Component<ComponentProps<"span">> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
   return (
-    <span
-      class={commandShortcutVariants({ class: local.class })}
-      {...others}
-    />
+    <span class={commandShortcutVariants({ class: local.class })} {...others} />
   );
 };
 
@@ -170,7 +174,8 @@ type CommandDialogProps = {
 };
 
 const CommandDialog: Component<CommandDialogProps> = (props) => {
-  const [previousFocusElement, setPreviousFocusElement] = createSignal<HTMLElement | null>(null);
+  const [previousFocusElement, setPreviousFocusElement] =
+    createSignal<HTMLElement | null>(null);
   let commandInputRef: HTMLElement | undefined;
 
   const handleClose = () => {
@@ -178,7 +183,7 @@ const CommandDialog: Component<CommandDialogProps> = (props) => {
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === (props.keybinding || 'j')) {
+    if ((e.ctrlKey || e.metaKey) && e.key === (props.keybinding || "j")) {
       e.preventDefault();
       if (!props.open) {
         setPreviousFocusElement(document.activeElement as HTMLElement);
@@ -187,7 +192,7 @@ const CommandDialog: Component<CommandDialogProps> = (props) => {
         handleClose();
       }
     }
-    if (e.key === 'Escape' && props.open) {
+    if (e.key === "Escape" && props.open) {
       handleClose();
     }
   };
@@ -201,7 +206,9 @@ const CommandDialog: Component<CommandDialogProps> = (props) => {
       }
       // Focus the command input
       setTimeout(() => {
-        const input = document.querySelector('[cmdk-input]') as HTMLInputElement;
+        const input = document.querySelector(
+          "[cmdk-input]",
+        ) as HTMLInputElement;
         if (input) {
           input.focus();
         }
@@ -219,11 +226,11 @@ const CommandDialog: Component<CommandDialogProps> = (props) => {
   });
 
   onMount(() => {
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
   });
 
   onCleanup(() => {
-    document.removeEventListener('keydown', handleKeyDown);
+    document.removeEventListener("keydown", handleKeyDown);
   });
 
   return (
