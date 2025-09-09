@@ -1,7 +1,7 @@
 import Download from "lucide-solid/icons/download";
 import { createSignal, Show, splitProps } from "solid-js";
 import { ColumnDef } from "@tanstack/solid-table";
-import { exportTableToCsv } from "~/lib/utils/csv-export";
+import { exportTableToCsv } from "../lib/utils/csv-export";
 import { Button, ButtonProps } from "./Button";
 
 interface DownloadButtonProps<T> extends ButtonProps {
@@ -33,16 +33,16 @@ interface DownloadButtonProps<T> extends ButtonProps {
  */
 export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
   const [isDownloading, setIsDownloading] = createSignal(false);
-  
+
   const [downloadProps, buttonProps] = splitProps(props, [
     'data',
-    'columns', 
+    'columns',
     'filename',
     'onExport',
     'loadingTimeout',
     'onClick'
   ]);
-  
+
   const {
     data,
     columns,
@@ -55,7 +55,7 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
   const handleDownload = async (e: MouseEvent & { currentTarget: HTMLButtonElement; target: Element }) => {
     try {
       setIsDownloading(true);
-      
+
       if (onExport) {
         // Use custom export function if provided
         onExport(data);
@@ -63,14 +63,14 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
         // Use built-in CSV export
         exportTableToCsv(data, columns, filename);
       }
-      
+
       // Show loading state briefly for user feedback
       setTimeout(() => setIsDownloading(false), loadingTimeout);
     } catch (error) {
       console.error("Failed to download data:", error);
       setIsDownloading(false);
     }
-    
+
     // Call the original onClick if provided
     if (typeof onClick === "function") {
       onClick(e);
@@ -90,8 +90,8 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
       <Show when={!isDownloading()} fallback={<span class="loading loading-spinner loading-xs" />}>
         <Download class="w-4 h-4" />
       </Show>
-      <Show 
-        when={buttonProps.children} 
+      <Show
+        when={buttonProps.children}
         fallback={
           <Show
             when={isDownloading()}
