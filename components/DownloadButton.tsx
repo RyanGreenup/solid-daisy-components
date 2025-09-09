@@ -1,9 +1,10 @@
 import Download from "lucide-solid/icons/download";
-import { createSignal, JSX, Show } from "solid-js";
+import { createSignal, Show, splitProps } from "solid-js";
 import { ColumnDef } from "@tanstack/solid-table";
 import { exportTableToCsv } from "~/lib/utils/csv-export";
+import { Button, ButtonProps } from "./Button";
 
-interface DownloadButtonProps<T> extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
+interface DownloadButtonProps<T> extends ButtonProps {
   /**
    * The data to export
    */
@@ -28,10 +29,19 @@ interface DownloadButtonProps<T> extends JSX.ButtonHTMLAttributes<HTMLButtonElem
 
 /**
  * A reusable download button component that exports data to CSV
- * with visual feedback. Accepts all standard button props.
+ * with visual feedback. Built on top of the Button component.
  */
 export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
   const [isDownloading, setIsDownloading] = createSignal(false);
+  
+  const [downloadProps, buttonProps] = splitProps(props, [
+    'data',
+    'columns', 
+    'filename',
+    'onExport',
+    'loadingTimeout',
+    'onClick'
+  ]);
   
   const {
     data,
@@ -40,11 +50,7 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
     onExport,
     loadingTimeout = 1000,
     onClick,
-    class: className = "btn btn-primary btn-sm gap-2",
-    disabled,
-    children,
-    ...buttonProps
-  } = props;
+  } = downloadProps;
 
   const handleDownload = async (e: MouseEvent & { currentTarget: HTMLButtonElement; target: Element }) => {
     try {
@@ -71,12 +77,13 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
     }
   };
 
-  const isDisabled = () => disabled || isDownloading() || data.length === 0;
+  const isDisabled = () => buttonProps.disabled || isDownloading() || data.length === 0;
 
   return (
-    <button
+    <Button
       {...buttonProps}
-      class={className}
+      color={buttonProps.color || "primary"}
+      size={buttonProps.size || "sm"}
       onClick={handleDownload}
       disabled={isDisabled()}
     >
@@ -84,7 +91,7 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
         <Download class="w-4 h-4" />
       </Show>
       <Show 
-        when={children} 
+        when={buttonProps.children} 
         fallback={
           <Show
             when={isDownloading()}
@@ -94,9 +101,9 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
           </Show>
         }
       >
-        {children}
+        {buttonProps.children}
       </Show>
-    </button>
+    </Button>
   );
 };
 
