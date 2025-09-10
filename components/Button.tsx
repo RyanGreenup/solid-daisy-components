@@ -78,15 +78,19 @@ export const Button = (props: ButtonProps) => {
   return (
     <button
       {...others}
-      class={buttonVariants({
-        variant: local.variant,
-        color: local.color,
-        size: local.size,
-        shape: local.shape,
-        width: local.width,
-        state: local.state,
-        class: local.class,
-      })}
+      class={
+        buttonVariants({
+          variant: local.variant,
+          color: local.color,
+          size: local.size,
+          shape: local.shape,
+          width: local.width,
+          state: local.state,
+          class: local.class,
+        }) +
+        " " +
+        local.class
+      }
     >
       {safeChildren()}
     </button>
