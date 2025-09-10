@@ -54,9 +54,7 @@ export function MultiCombobox(props: MultiComboboxProps): JSX.Element {
         >
           {(state) => (
             <>
-              <div
-                class={`${styles.inputContainer} px-1 py-2`}
-              >
+              <div class={`${styles.inputContainer} px-1 py-2`}>
                 <For each={state.selectedOptions()}>
                   {(option) => (
                     <div
