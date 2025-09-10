@@ -9,3 +9,4 @@ export { Progress } from "./components/Progress";
 export { KeybindList } from "./components/KeybindList";
 export { SingleCombobox } from "./components/Combobox/SingleCombobox";
 export { MultiCombobox } from "./components/Combobox/MultiComboBox";
+export { VirtualList } from "./components/Virtual/VirtualList";
