@@ -3,6 +3,7 @@ export { Button } from "./components/Button";
 export { Fab } from "./components/Fab";
 export { Card } from "./components/Card";
 export { Checkbox } from "./components/Checkbox";
+export { Fieldset, Label } from "./components/Fieldset";
 export { Kbd } from "./components/Kbd";
 export { Breadcrumbs } from "./components/Breadcrumbs";
 export { Stats, Stat, StatTitle, StatValue, StatDesc, StatFigure, StatActions } from "./components/Stat";
