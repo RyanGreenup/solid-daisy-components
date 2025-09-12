@@ -20,7 +20,7 @@ export const apexChartVariants = tv({
 type ApexChartVariants = Parameters<typeof apexChartVariants>[0];
 
 export interface ApexChartProps extends ApexChartVariants {
-  type: 'line' | 'area' | 'bar' | 'pie' | 'donut' | 'scatter' | 'bubble' | 'heatmap' | 'radialBar' | 'candlestick' | 'polarArea';
+  type: 'line' | 'area' | 'bar' | 'pie' | 'donut' | 'scatter' | 'bubble' | 'heatmap' | 'radialBar' | 'candlestick' | 'polarArea' | 'boxPlot';
   series: any[];
   options?: any;
   width?: string | number;
