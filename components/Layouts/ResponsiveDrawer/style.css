@@ -125,8 +125,9 @@
   bottom: var(--bottom-dash-height);
   width: var(--sidebar-width);
   border-left: 1px solid #dee2e6;
-  transition: transform var(--duration-transition-layout)
-    var(--easing-transition-layout);
+  transition: 
+    transform var(--duration-transition-layout) var(--easing-transition-layout),
+    top var(--duration-transition-layout) var(--easing-transition-layout);
   z-index: 1001;
   transform: translatex(100%);
 }
@@ -220,7 +221,8 @@
   visibility: hidden;
   transition:
     opacity var(--duration-transition-layout) ease,
-    visibility 0.3s var(--easing-transition-layout);
+    visibility 0.3s var(--easing-transition-layout),
+    top var(--duration-transition-layout) var(--easing-transition-layout);
   z-index: 1000;
   cursor: pointer;
 }
@@ -306,6 +308,16 @@
 
 #bottom-toggle_gU3UjReQ:checked ~ .main-wrapper_3eSqDsNH {
   margin-bottom: calc(-1 * var(--bottom-dash-height));
+}
+
+/* adjust right drawer position when navbar is hidden */
+#navbar-toggle_YSiT75H2:checked ~ .main-wrapper_3eSqDsNH .right-drawer_oZdA3TkV {
+  top: 0;
+}
+
+/* adjust overlays position when navbar is hidden */
+#navbar-toggle_YSiT75H2:checked ~ .main-wrapper_3eSqDsNH .overlay_g8Z82nUf {
+  top: 0;
 }
 
 /* content centering utility */
