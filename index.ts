@@ -13,6 +13,7 @@ export { Input } from "./components/Input";
 export { Badge } from "./components/Badge";
 export { Progress } from "./components/Progress";
 export { Radio } from "./components/Radio";
+export { Range } from "./components/Range";
 export { KeybindList } from "./components/KeybindList";
 export { SingleCombobox } from "./components/Combobox/SingleCombobox";
 export { MultiCombobox } from "./components/Combobox/MultiComboBox";
