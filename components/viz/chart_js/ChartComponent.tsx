@@ -1,6 +1,6 @@
-
 import {
   ArcElement,
+  BubbleController,
   BarController,
   BarElement,
   CategoryScale,
@@ -23,6 +23,7 @@ import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 // Register the required components
 Chart.register(
+  BubbleController,
   CategoryScale,
   ArcElement,
   DoughnutController,
