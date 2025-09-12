@@ -1,5 +1,5 @@
+import { children, For, JSX, Show, splitProps } from "solid-js";
 import "./style.css";
-import { children, For, JSX, JSXElement, Show, splitProps } from "solid-js";
 
 export const CheckboxId = {
   NAVBAR: "navbar-toggle_YSiT75H2",
@@ -28,6 +28,13 @@ export const Layout = (props: JSX.IntrinsicElements["div"]) => {
   );
 };
 
+/**
+ * ToggleButton component that creates a label element linked to a checkbox input.
+ * @param props.id - The id of the input element which is placed in the 'for' prop of the label
+ * @param props.devStyle - Optional boolean to enable development styling and display the id
+ * @param props.children - Child elements to render inside the label
+ * @param props.class - CSS class names to apply to the label
+ */
 export const ToggleButton = (
   props: JSX.IntrinsicElements["label"] & {
     id: CheckboxIdType;
@@ -38,7 +45,7 @@ export const ToggleButton = (
   let cls = `${local.class} ${(props.devStyle && "toggle-btn_uAsbNe3G") || ""}`;
   const safeChildren = children(() => local.children);
   return (
-    <label for={props.id} class={cls}>
+    <label {...others} for={props.id} class={cls}>
       <Show when={props.devStyle}>{props.id}</Show>
       {safeChildren()}
     </label>
@@ -169,5 +176,3 @@ export const UnstyledExample = () => (
     </BottomDock>
   </Layout>
 );
-
-
