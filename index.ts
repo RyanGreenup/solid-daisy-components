@@ -40,3 +40,14 @@ export { Skeleton } from "./components/Skeleton";
 export { SingleCombobox } from "./components/Combobox/SingleCombobox";
 export { MultiCombobox } from "./components/Combobox/MultiComboBox";
 export { VirtualList } from "./components/Virtual/VirtualList";
+
+// Chart.js Charts
+export { default as ChartComponent } from "./components/viz/chart_js/ChartComponent";
+export { LineChart as ChartJSLineChart } from "./components/viz/chart_js/LineChart";
+export { BarChart as ChartJSBarChart } from "./components/viz/chart_js/BarChart";
+export { AreaChart } from "./components/viz/chart_js/AreaChart";
+export { BubbleChart } from "./components/viz/chart_js/BubbleChart";
+export { DoughnutChart } from "./components/viz/chart_js/DoughnutChart";
+export { PolarAreaChart } from "./components/viz/chart_js/PolarAreaChart";
+export { RadarChart } from "./components/viz/chart_js/RadarChart";
+export { ScatterChart } from "./components/viz/chart_js/ScatterChart";
