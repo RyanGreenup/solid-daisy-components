@@ -122,10 +122,12 @@
   position: fixed;
   top: var(--navbar-height);
   right: 0;
-  bottom: var(--bottom-dash-height);
+  /*bottom: var(--bottom-dash-height);*/
+  /* Easier not to handle dynamic bottom*/
+  bottom: 0;
   width: var(--sidebar-width);
   border-left: 1px solid #dee2e6;
-  transition: 
+  transition:
     transform var(--duration-transition-layout) var(--easing-transition-layout),
     top var(--duration-transition-layout) var(--easing-transition-layout);
   z-index: 1001;
