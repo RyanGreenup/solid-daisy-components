@@ -27,6 +27,7 @@ export { Table } from "./components/Table";
 export { TextInput } from "./components/TextInput";
 export { Textarea } from "./components/Textarea";
 export { Toggle } from "./components/Toggle";
+export { Tooltip } from "./components/Tooltip";
 export { KeybindList } from "./components/KeybindList";
 export { Loading } from "./components/Loading";
 export { Skeleton } from "./components/Skeleton";
