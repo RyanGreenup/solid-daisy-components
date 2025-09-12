@@ -11,11 +11,18 @@ export interface RadarChartProps {
       borderColor?: string;
       backgroundColor?: string;
       borderWidth?: number;
+      borderDash?: number[];
       fill?: boolean;
+      tension?: number;
       pointBackgroundColor?: string | string[];
       pointBorderColor?: string | string[];
+      pointBorderWidth?: number;
       pointRadius?: number;
       pointHoverRadius?: number;
+      pointHoverBackgroundColor?: string | string[];
+      pointHoverBorderColor?: string | string[];
+      pointHoverBorderWidth?: number;
+      pointStyle?: 'circle' | 'cross' | 'crossRot' | 'dash' | 'line' | 'rect' | 'rectRounded' | 'rectRot' | 'star' | 'triangle';
     }[];
   };
   title?: string;
