@@ -19,6 +19,7 @@ export { Progress } from "./components/Progress";
 export { Radio } from "./components/Radio";
 export { Range } from "./components/Range";
 export { Select } from "./components/Select";
+export { Tabs } from "./components/Tabs";
 export { Table } from "./components/Table";
 export { TextInput } from "./components/TextInput";
 export { Textarea } from "./components/Textarea";
