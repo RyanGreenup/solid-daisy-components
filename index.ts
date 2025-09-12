@@ -14,6 +14,7 @@ export { Breadcrumbs } from "./components/Breadcrumbs";
 export { Stats, Stat, StatTitle, StatValue, StatDesc, StatFigure, StatActions } from "./components/Stat";
 export { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator, CommandDialog } from "./components/Command";
 export { Input } from "./components/Input";
+export { Indicator } from "./components/Indicator";
 export { Badge } from "./components/Badge";
 export { Pagination } from "./components/Pagination";
 export { Progress } from "./components/Progress";
