@@ -33,6 +33,7 @@ type RangeVariants = Parameters<typeof rangeVariants>[0];
 
 export type RangeProps = JSX.InputHTMLAttributes<HTMLInputElement> & RangeVariants & {
   valueSignal?: [Accessor<number>, Setter<number>];
+  wheelToChange?: boolean;
 };
 
 export const Range = (props: RangeProps) => {
@@ -44,6 +45,8 @@ export const Range = (props: RangeProps) => {
     "valueSignal",
     "onInput",
     "onChange",
+    "onWheel",
+    "wheelToChange",
   ]);
 
   const handleInput = (e: Event) => {
@@ -65,6 +68,41 @@ export const Range = (props: RangeProps) => {
     }
   };
 
+  const handleWheel = (e: WheelEvent) => {
+    const shouldHandleWheel = local.wheelToChange !== false;
+    
+    if (shouldHandleWheel) {
+      e.preventDefault();
+      
+      const target = e.target as HTMLInputElement;
+      const min = Number(target.min) || 0;
+      const max = Number(target.max) || 100;
+      const step = Number(target.step) || 1;
+      
+      const currentValue = local.valueSignal ? local.valueSignal[0]() : Number(target.value);
+      const direction = e.deltaY > 0 ? -1 : 1;
+      const newValue = Math.min(max, Math.max(min, currentValue + (direction * step)));
+      
+      if (local.valueSignal) {
+        local.valueSignal[1](newValue);
+      } else {
+        target.value = String(newValue);
+        const syntheticEvent = new Event('input', { bubbles: true });
+        target.dispatchEvent(syntheticEvent);
+      }
+      
+      if (local.onChange) {
+        const syntheticChangeEvent = new Event('change', { bubbles: true }) as Event & { target: HTMLInputElement };
+        Object.defineProperty(syntheticChangeEvent, 'target', { value: target, enumerable: true });
+        local.onChange(syntheticChangeEvent);
+      }
+    }
+    
+    if (local.onWheel) {
+      local.onWheel(e);
+    }
+  };
+
   return (
     <input
       {...others}
@@ -72,6 +110,7 @@ export const Range = (props: RangeProps) => {
       value={local.valueSignal ? local.valueSignal[0]() : others.value}
       onInput={handleInput}
       onChange={handleChange}
+      onWheel={handleWheel}
       class={rangeVariants({
         color: local.color,
         size: local.size,
