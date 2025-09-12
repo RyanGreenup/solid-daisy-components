@@ -1,3 +1,4 @@
+export { Alert } from "./components/Alert";
 export { Button } from "./components/Button";
 export { Card } from "./components/Card";
 export { Kbd } from "./components/Kbd";
