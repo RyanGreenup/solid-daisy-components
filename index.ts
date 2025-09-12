@@ -15,6 +15,7 @@ export { Stats, Stat, StatTitle, StatValue, StatDesc, StatFigure, StatActions } 
 export { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator, CommandDialog } from "./components/Command";
 export { Input } from "./components/Input";
 export { Badge } from "./components/Badge";
+export { Pagination } from "./components/Pagination";
 export { Progress } from "./components/Progress";
 export { Radio } from "./components/Radio";
 export { Range } from "./components/Range";
