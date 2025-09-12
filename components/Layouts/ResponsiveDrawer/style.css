@@ -252,7 +252,7 @@
   /* sidebar visible by default on desktop */
   .sidebar_7doPVoW4 {
     transform: translatex(0);
-    z-index: 500;
+    z-index: 1001;
   }
 
   /* main content offset for sidebar */
