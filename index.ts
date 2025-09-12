@@ -27,6 +27,7 @@ export { Textarea } from "./components/Textarea";
 export { Toggle } from "./components/Toggle";
 export { KeybindList } from "./components/KeybindList";
 export { Loading } from "./components/Loading";
+export { Skeleton } from "./components/Skeleton";
 export { SingleCombobox } from "./components/Combobox/SingleCombobox";
 export { MultiCombobox } from "./components/Combobox/MultiComboBox";
 export { VirtualList } from "./components/Virtual/VirtualList";
