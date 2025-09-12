@@ -17,6 +17,7 @@ export { Range } from "./components/Range";
 export { Select } from "./components/Select";
 export { TextInput } from "./components/TextInput";
 export { Textarea } from "./components/Textarea";
+export { Toggle } from "./components/Toggle";
 export { KeybindList } from "./components/KeybindList";
 export { SingleCombobox } from "./components/Combobox/SingleCombobox";
 export { MultiCombobox } from "./components/Combobox/MultiComboBox";
