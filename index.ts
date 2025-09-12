@@ -1,4 +1,5 @@
 export { Alert } from "./components/Alert";
+export { Avatar } from "./components/Avatar";
 export { Button } from "./components/Button";
 export { Calendar, CalendarDate, CalendarMonth } from "./components/Calendar";
 export { Carousel } from "./components/Carousel";
