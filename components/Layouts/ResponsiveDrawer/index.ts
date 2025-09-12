@@ -9,6 +9,7 @@ export {
   BottomDock,
   MainContent,
   UnstyledExample,
+  KeyboardShortcuts,
   CheckboxId
 } from './Layout';
 

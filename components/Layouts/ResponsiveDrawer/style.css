@@ -208,7 +208,7 @@
 }
 
 /* base overlay styles - shared by all overlays */
-.overlay {
+.overlay_g8Z82nUf {
   position: fixed;
   top: var(--navbar-height);
   left: 0;
@@ -231,13 +231,13 @@
 }
 
 /* show left overlay when left drawer is open on mobile */
-#sidebar-toggle_O7wbLo2S:checked ~ .main-wrapper_3eSqDsNH .left-overlay {
+#sidebar-toggle_O7wbLo2S:checked ~ .main-wrapper_3eSqDsNH .left-overlay_LHPeXu4H {
   opacity: 1;
   visibility: visible;
 }
 
 /* show right overlay when right drawer is open (all screen sizes) */
-#right-drawer-toggle_kIMyHA4g:checked ~ .main-wrapper_3eSqDsNH .right-overlay {
+#right-drawer-toggle_kIMyHA4g:checked ~ .main-wrapper_3eSqDsNH .right-overlay_IZyMDE88 {
   opacity: 1;
   visibility: visible;
 }
@@ -271,7 +271,7 @@
   }
 
   /* hide left overlay on desktop (right overlay stays for all screen sizes) */
-  .left-overlay {
+  .left-overlay_LHPeXu4H {
     display: none;
   }
 
@@ -346,4 +346,58 @@
 [data-dev="true"] .right-drawer_oZdA3TkV {
   background: #e1f5fe;
   border-left: 2px solid #0288d1;
+}
+
+/* keyboard shortcuts styling */
+.keyboard-shortcuts {
+  padding: 16px;
+}
+
+.keyboard-shortcuts h3 {
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .shortcut-item {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.shortcut-keys {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+@media (prefers-color-scheme: dark) {
+  .shortcut-keys {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.shortcut-description {
+  margin-left: 12px;
+  color: var(--content-color);
+  opacity: 0.8;
 }
