@@ -20,6 +20,7 @@ export { Badge } from "./components/Badge";
 export { Pagination } from "./components/Pagination";
 export { Progress } from "./components/Progress";
 export { Radio } from "./components/Radio";
+export { RadialProgress } from "./components/RadialProgress";
 export { Range } from "./components/Range";
 export { Select } from "./components/Select";
 export { Tabs } from "./components/Tabs";
