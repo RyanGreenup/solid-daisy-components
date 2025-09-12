@@ -36,11 +36,13 @@
   },
   "dependencies": {
     "@kobalte/core": "^0.13.11",
+    "@tailwindcss/forms": "^0.5.10",
     "@tanstack/solid-table": "^8.21.3",
     "@tanstack/solid-virtual": "^3.13.12",
     "apexcharts": "^5.3.5",
     "cally": "^0.8.0",
     "cmdk-solid": "^1.1.2",
+    "corvu": "^0.7.2",
     "lucide-solid": "^0.500.0",
     "solid-apexcharts": "^0.6.0",
     "solid-charts": "^0.0.2",

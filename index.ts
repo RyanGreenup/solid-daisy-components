@@ -13,6 +13,7 @@ export { Hero } from "./components/Hero";
 export { Filter } from "./components/Filter";
 export { Kbd } from "./components/Kbd";
 export { LineChart } from "./components/LineChart";
+export { BarChart } from "./components/BarChart";
 export { Breadcrumbs } from "./components/Breadcrumbs";
 export { Stats, Stat, StatTitle, StatValue, StatDesc, StatFigure, StatActions } from "./components/Stat";
 export { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator, CommandDialog } from "./components/Command";
