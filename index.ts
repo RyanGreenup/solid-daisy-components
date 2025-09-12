@@ -8,6 +8,7 @@ export { Checkbox } from "./components/Checkbox";
 export { Collapsible } from "./components/Collapsible";
 export { Fieldset, Label } from "./components/Fieldset";
 export { FileInput } from "./components/FileInput";
+export { Hero } from "./components/Hero";
 export { Filter } from "./components/Filter";
 export { Kbd } from "./components/Kbd";
 export { Breadcrumbs } from "./components/Breadcrumbs";
