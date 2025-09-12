@@ -4,6 +4,7 @@ export { Carousel } from "./components/Carousel";
 export { Fab } from "./components/Fab";
 export { Card } from "./components/Card";
 export { Checkbox } from "./components/Checkbox";
+export { Collapsible } from "./components/Collapsible";
 export { Fieldset, Label } from "./components/Fieldset";
 export { FileInput } from "./components/FileInput";
 export { Filter } from "./components/Filter";
