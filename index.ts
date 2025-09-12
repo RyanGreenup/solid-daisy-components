@@ -15,8 +15,26 @@ export { Kbd } from "./components/Kbd";
 export { LineChart } from "./components/viz/solid-charts/LineChart";
 export { BarChart } from "./components/viz/solid-charts/BarChart";
 export { Breadcrumbs } from "./components/Breadcrumbs";
-export { Stats, Stat, StatTitle, StatValue, StatDesc, StatFigure, StatActions } from "./components/Stat";
-export { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator, CommandDialog } from "./components/Command";
+export {
+  Stats,
+  Stat,
+  StatTitle,
+  StatValue,
+  StatDesc,
+  StatFigure,
+  StatActions,
+} from "./components/Stat";
+export {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandShortcut,
+  CommandSeparator,
+  CommandDialog,
+} from "./components/Command";
 export { Input } from "./components/Input";
 export { Indicator } from "./components/Indicator";
 export { Badge } from "./components/Badge";
@@ -40,6 +58,7 @@ export { Skeleton } from "./components/Skeleton";
 export { SingleCombobox } from "./components/Combobox/SingleCombobox";
 export { MultiCombobox } from "./components/Combobox/MultiComboBox";
 export { VirtualList } from "./components/Virtual/VirtualList";
+export { VirtualizedDataTable } from "./components/Datatables/VirtualizedDataTable";
 
 // Chart.js Charts
 export { default as ChartComponent } from "./components/viz/chart_js/ChartComponent";
@@ -51,3 +70,6 @@ export { DoughnutChart } from "./components/viz/chart_js/DoughnutChart";
 export { PolarAreaChart } from "./components/viz/chart_js/PolarAreaChart";
 export { RadarChart } from "./components/viz/chart_js/RadarChart";
 export { ScatterChart } from "./components/viz/chart_js/ScatterChart";
+
+// ApexCharts
+export { ApexChart } from "./components/viz/apex/ApexChart";
