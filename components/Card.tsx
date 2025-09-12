@@ -68,34 +68,6 @@ export type CardTitleProps = JSX.HTMLAttributes<HTMLHeadingElement> & CardTitleV
 
 export type CardActionsProps = JSX.HTMLAttributes<HTMLDivElement> & CardActionsVariants;
 
-export const Card = (props: CardProps) => {
-  const [local, others] = splitProps(props, [
-    "size",
-    "border",
-    "side",
-    "image",
-    "class",
-    "children",
-  ]);
-
-  const safeChildren = children(() => local.children);
-
-  return (
-    <div
-      {...others}
-      class={cardVariants({
-        size: local.size,
-        border: local.border,
-        side: local.side,
-        image: local.image,
-        class: local.class,
-      })}
-    >
-      {safeChildren()}
-    </div>
-  );
-};
-
 export const CardBody = (props: CardBodyProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -140,3 +112,37 @@ export const CardActions = (props: CardActionsProps) => {
     </div>
   );
 };
+
+const CardComponent = (props: CardProps) => {
+  const [local, others] = splitProps(props, [
+    "size",
+    "border",
+    "side",
+    "image",
+    "class",
+    "children",
+  ]);
+
+  const safeChildren = children(() => local.children);
+
+  return (
+    <div
+      {...others}
+      class={cardVariants({
+        size: local.size,
+        border: local.border,
+        side: local.side,
+        image: local.image,
+        class: local.class,
+      })}
+    >
+      {safeChildren()}
+    </div>
+  );
+};
+
+export const Card = Object.assign(CardComponent, {
+  Body: CardBody,
+  Title: CardTitle,
+  Actions: CardActions,
+});
