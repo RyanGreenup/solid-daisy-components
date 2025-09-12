@@ -24,6 +24,7 @@ export { Radio } from "./components/Radio";
 export { RadialProgress } from "./components/RadialProgress";
 export { Range } from "./components/Range";
 export { Select } from "./components/Select";
+export { Steps } from "./components/Steps";
 export { Timeline } from "./components/Timeline";
 export { Tabs } from "./components/Tabs";
 export { Table } from "./components/Table";
