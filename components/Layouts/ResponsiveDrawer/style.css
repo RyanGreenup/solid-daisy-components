@@ -1,0 +1,365 @@
+/* todo */
+/* closed bottom drawer ?? maybe too complex for what it's worth*/
+/* done toggle dash on large displays */
+/* closed mobile only bottom dash could translate x smoothly?
+          -- nah, too complex to have multiple variables for that */
+/* todo implement with css modules in solid js as styled components */
+
+/* basic reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: system-ui, sans-serif;
+}
+
+/* css variables */
+.layout_wJwQgiMd {
+  --navbar-height: 60px;
+  --bottom-dash-height: 60px;
+  --sidebar-width: 280px;
+  --drawer-width: 80%;
+  --transition-speed: var(--duration-transition-layout);
+  --overlay-bg: rgba(0, 0, 0, 0.5);
+  --bg-color: light-dark(#ffffff);
+  @media (prefers-color-scheme: dark) {
+    --bg-color: #1a1a1a;
+  }
+  --content-color: black;
+  @media (prefers-color-scheme: dark) {
+    --content-color: white;
+  }
+
+  --duration-transition-layout: 0.3s;
+  --easing-transition-layout: ease;
+}
+
+/* hidden checkbox inputs */
+.sr-only_iKj3qpqk {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* button-like labels */
+.toggle-btn_uAsbNe3G {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #007bff;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s var(--easing-transition-layout);
+  margin: 8px;
+}
+
+.toggle-btn_uAsbNe3G:hover {
+  background: #0056b3;
+}
+
+/* main layout container */
+.layout_wJwQgiMd {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  transition: background-color var(--duration-transition-layout)
+    var(--easing-transition-layout);
+}
+
+/* navbar */
+.navbar_5CmwKoaj {
+  height: var(--navbar-height);
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 1000;
+  transition: transform var(--duration-transition-layout)
+    var(--easing-transition-layout);
+}
+
+/* hide navbar when toggled */
+#navbar-toggle_YSiT75H2:checked ~ .navbar_5CmwKoaj {
+  transform: translatey(-100%);
+}
+
+/* main content area */
+.main-wrapper_3eSqDsNH {
+  display: flex;
+  flex: 1;
+  /* don't strictly need this because sidebar is absolute position and this is all that remains
+    however, if right drawer became a sidebar, this would help */
+  flex-direction: row;
+  position: relative;
+  overflow: hidden;
+  transition:
+    margin-top var(--duration-transition-layout) ease,
+    margin-bottom 0.3s var(--easing-transition-layout);
+}
+
+/* sidebar - mobile first: hidden by default */
+.sidebar_7doPVoW4 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--sidebar-width);
+  border-right: 1px solid #dee2e6;
+  transition: transform var(--duration-transition-layout)
+    var(--easing-transition-layout);
+  z-index: 1001;
+  transform: translatex(-100%);
+}
+
+/* sidebar content - scrollable container */
+.sidebar-content_hohhjVux {
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* right drawer - always drawer behavior, hidden by default */
+.right-drawer_oZdA3TkV {
+  position: fixed;
+  top: var(--navbar-height);
+  right: 0;
+  bottom: var(--bottom-dash-height);
+  width: var(--sidebar-width);
+  border-left: 1px solid #dee2e6;
+  transition: transform var(--duration-transition-layout)
+    var(--easing-transition-layout);
+  z-index: 1001;
+  transform: translatex(100%);
+}
+
+/* right drawer content - scrollable container */
+.drawer-content_vyEw10wj {
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* resize handle - positioned on right edge of sidebar */
+.resize-handle_rj5Mm6Gp {
+  position: absolute;
+  top: 0;
+  right: 0px;
+  transform: translatex(100%);
+  width: 12px;
+  height: 100%;
+  cursor: col-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s var(--easing-transition-layout);
+  opacity: 0;
+}
+
+/* show handle on sidebar hover */
+.sidebar_7doPVoW4:hover .resize-handle_rj5Mm6Gp {
+  opacity: 1;
+}
+
+/* visible grip element in center of handle */
+.resize-grip_i8KDTvH0 {
+  width: 4px;
+  height: 40px;
+  background: #6c757d;
+  border-radius: 2px;
+  transition:
+    width 0.2s ease,
+    height 0.2s ease,
+    background 0.2s var(--easing-transition-layout);
+}
+
+/* expand grip on hover */
+.resize-handle_rj5Mm6Gp:hover .resize-grip_i8KDTvH0 {
+  width: 6px;
+  height: 60px;
+  background: #495057;
+}
+
+/* hide resize handle on mobile - only show on desktop */
+.resize-handle_rj5Mm6Gp {
+  display: none;
+}
+
+/* main content - mobile first: full width */
+.main-content_qWHMxQ3G {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  margin-left: 0;
+  transition: margin-left var(--duration-transition-layout)
+    var(--easing-transition-layout);
+}
+
+/* bottom dash */
+.bottom-dash_PFrRGaJ9 {
+  height: var(--bottom-dash-height);
+  border-top: 1px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  transition: transform var(--duration-transition-layout)
+    var(--easing-transition-layout);
+}
+
+/* hide bottom dash when toggled */
+#bottom-toggle_gU3UjReQ:checked ~ .bottom-dash_PFrRGaJ9 {
+  transform: translatey(100%);
+}
+
+/* base overlay styles - shared by all overlays */
+.overlay {
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  right: 0;
+  bottom: var(--bottom-dash-height);
+  backdrop-filter: blur(2px);
+  background: var(--overlay-bg);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--duration-transition-layout) ease,
+    visibility 0.3s var(--easing-transition-layout);
+  z-index: 1000;
+  cursor: pointer;
+}
+
+/* mobile behavior - show drawer when toggled */
+#sidebar-toggle_O7wbLo2S:checked ~ .main-wrapper_3eSqDsNH .sidebar_7doPVoW4 {
+  transform: translatex(0);
+}
+
+/* show left overlay when left drawer is open on mobile */
+#sidebar-toggle_O7wbLo2S:checked ~ .main-wrapper_3eSqDsNH .left-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* show right overlay when right drawer is open (all screen sizes) */
+#right-drawer-toggle_kIMyHA4g:checked ~ .main-wrapper_3eSqDsNH .right-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* show right drawer when toggled */
+#right-drawer-toggle_kIMyHA4g:checked ~ .main-wrapper_3eSqDsNH .right-drawer_oZdA3TkV {
+  transform: translatex(0);
+}
+
+/* desktop behavior - 48rem and up */
+@media (width >= 48rem) {
+  /* sidebar visible by default on desktop */
+  .sidebar_7doPVoW4 {
+    transform: translatex(0);
+    z-index: 500;
+  }
+
+  /* main content offset for sidebar */
+  .main-content_qWHMxQ3G {
+    margin-left: var(--sidebar-width);
+  }
+
+  /* hide sidebar when toggled on desktop */
+  #sidebar-toggle_O7wbLo2S:checked ~ .main-wrapper_3eSqDsNH .sidebar_7doPVoW4 {
+    transform: translatex(-100%);
+  }
+
+  /* expand main content when sidebar hidden */
+  #sidebar-toggle_O7wbLo2S:checked ~ .main-wrapper_3eSqDsNH .main-content_qWHMxQ3G {
+    margin-left: 0;
+  }
+
+  /* hide left overlay on desktop (right overlay stays for all screen sizes) */
+  .left-overlay {
+    display: none;
+  }
+
+  /* show resize handle on desktop */
+  .resize-handle_rj5Mm6Gp {
+    display: flex;
+  }
+
+  /* hide resize handle when sidebar is collapsed */
+  #sidebar-toggle_O7wbLo2S:checked
+    ~ .main-wrapper_3eSqDsNH
+    .sidebar_7doPVoW4
+    .resize-handle_rj5Mm6Gp {
+    display: none;
+  }
+
+  /* hide bottom dash on desktop when mobile-only toggle is checked */
+  #bottom-desktop-toggle_nWpPhkQr:checked ~ .bottom-dash_PFrRGaJ9 {
+    display: none;
+  }
+
+  /* expand main wrapper when bottom dash is hidden on desktop */
+  #bottom-desktop-toggle_nWpPhkQr:checked ~ .main-wrapper_3eSqDsNH {
+    margin-bottom: calc(-1 * var(--bottom-dash-height));
+  }
+}
+
+/* adjust main content for navbar and bottom dash toggles */
+#navbar-toggle_YSiT75H2:checked ~ .main-wrapper_3eSqDsNH {
+  margin-top: calc(-1 * var(--navbar-height));
+}
+
+#bottom-toggle_gU3UjReQ:checked ~ .main-wrapper_3eSqDsNH {
+  margin-bottom: calc(-1 * var(--bottom-dash-height));
+}
+
+/* content centering utility */
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* dev colors for visualization */
+[data-dev="true"] .navbar_5CmwKoaj {
+  background: #e3f2fd;
+}
+
+[data-dev="true"] .sidebar_7doPVoW4 {
+  background: #f3e5f5;
+}
+
+[data-dev="true"] .main-content_qWHMxQ3G {
+  background: #e8f5e8;
+}
+
+[data-dev="true"] .bottom-dash_PFrRGaJ9 {
+  background: #fff3e0;
+}
+
+[data-dev="true"] .bottom-dash_PFrRGaJ9 {
+  background: #f8f9fa;
+}
+
+[data-dev="true"] .layout_wJwQgiMd {
+  background: var(--bg-color);
+}
+
+[data-dev="true"] .right-drawer_oZdA3TkV {
+  background: #e1f5fe;
+  border-left: 2px solid #0288d1;
+}
