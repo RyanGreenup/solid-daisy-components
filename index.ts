@@ -1,5 +1,6 @@
 export { Alert } from "./components/Alert";
 export { Button } from "./components/Button";
+export { Fab } from "./components/Fab";
 export { Card } from "./components/Card";
 export { Kbd } from "./components/Kbd";
 export { Breadcrumbs } from "./components/Breadcrumbs";
