@@ -40,7 +40,7 @@ export const Layout = (props: JSX.IntrinsicElements["div"] & {
 
     // Toggle right drawer: Ctrl+Shift+P (like command palette)
     useKeybinding(
-      { key: "p", ctrl: true, shift: true },
+      { key: "b", ctrl: true, alt: true },
       () => toggleCheckbox(CheckboxId.RIGHT_DRAWER)
     );
 
