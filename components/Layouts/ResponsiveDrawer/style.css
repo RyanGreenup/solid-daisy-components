@@ -9,6 +9,7 @@
 .layout_wJwQgiMd {
   --navbar-height: 60px;
   --bottom-dash-height: 60px;
+   /*TODO Probably need clamp() here so it always works on really small screens*/
   --sidebar-width: 280px;
   --drawer-width: 80%;
   --transition-speed: var(--duration-transition-layout);
