@@ -5,6 +5,7 @@ export { Card } from "./components/Card";
 export { Checkbox } from "./components/Checkbox";
 export { Fieldset, Label } from "./components/Fieldset";
 export { FileInput } from "./components/FileInput";
+export { Filter } from "./components/Filter";
 export { Kbd } from "./components/Kbd";
 export { Breadcrumbs } from "./components/Breadcrumbs";
 export { Stats, Stat, StatTitle, StatValue, StatDesc, StatFigure, StatActions } from "./components/Stat";
