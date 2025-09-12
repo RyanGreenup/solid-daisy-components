@@ -117,7 +117,7 @@ export const MainWrapper = (props: JSX.IntrinsicElements["main"]) => {
       <label for={CheckboxId.SIDEBAR} class="overlay_g8Z82nUf left-overlay_LHPeXu4H"></label>
       <label
         for={CheckboxId.RIGHT_DRAWER}
-        class="overlay right-overlay_IZyMDE88"
+        class="overlay_g8Z82nUf right-overlay_IZyMDE88"
       ></label>
       {safeChildren()}
     </main>
