@@ -1,5 +1,5 @@
 import { tv } from "tailwind-variants";
-import { splitProps, JSX, Accessor, Setter } from "solid-js";
+import { splitProps, JSX, Accessor, Setter, createSignal } from "solid-js";
 
 export const rangeVariants = tv({
   base: "range",
@@ -49,6 +49,9 @@ export const Range = (props: RangeProps) => {
     "wheelToChange",
   ]);
 
+  const [wheelAccumulator, setWheelAccumulator] = createSignal(0);
+  const WHEEL_THRESHOLD = 50; // Require 50 deltaY units before triggering a step
+
   const handleInput = (e: Event) => {
     const target = e.target as HTMLInputElement;
     const numValue = Number(target.value);
@@ -74,27 +77,38 @@ export const Range = (props: RangeProps) => {
     if (shouldHandleWheel) {
       e.preventDefault();
       
-      const target = e.target as HTMLInputElement;
-      const min = Number(target.min) || 0;
-      const max = Number(target.max) || 100;
-      const step = Number(target.step) || 1;
+      // Accumulate wheel delta until threshold is reached
+      const newAccumulator = wheelAccumulator() + Math.abs(e.deltaY);
       
-      const currentValue = local.valueSignal ? local.valueSignal[0]() : Number(target.value);
-      const direction = e.deltaY > 0 ? -1 : 1;
-      const newValue = Math.min(max, Math.max(min, currentValue + (direction * step)));
-      
-      if (local.valueSignal) {
-        local.valueSignal[1](newValue);
+      if (newAccumulator >= WHEEL_THRESHOLD) {
+        // Reset accumulator and trigger value change
+        setWheelAccumulator(0);
+        
+        const target = e.target as HTMLInputElement;
+        const min = Number(target.min) || 0;
+        const max = Number(target.max) || 100;
+        const step = Number(target.step) || 1;
+        
+        const currentValue = local.valueSignal ? local.valueSignal[0]() : Number(target.value);
+        const direction = e.deltaY > 0 ? -1 : 1;
+        const newValue = Math.min(max, Math.max(min, currentValue + (direction * step)));
+        
+        if (local.valueSignal) {
+          local.valueSignal[1](newValue);
+        } else {
+          target.value = String(newValue);
+          const syntheticEvent = new Event('input', { bubbles: true });
+          target.dispatchEvent(syntheticEvent);
+        }
+        
+        if (local.onChange) {
+          const syntheticChangeEvent = new Event('change', { bubbles: true }) as Event & { target: HTMLInputElement };
+          Object.defineProperty(syntheticChangeEvent, 'target', { value: target, enumerable: true });
+          local.onChange(syntheticChangeEvent);
+        }
       } else {
-        target.value = String(newValue);
-        const syntheticEvent = new Event('input', { bubbles: true });
-        target.dispatchEvent(syntheticEvent);
-      }
-      
-      if (local.onChange) {
-        const syntheticChangeEvent = new Event('change', { bubbles: true }) as Event & { target: HTMLInputElement };
-        Object.defineProperty(syntheticChangeEvent, 'target', { value: target, enumerable: true });
-        local.onChange(syntheticChangeEvent);
+        // Store accumulated wheel delta
+        setWheelAccumulator(newAccumulator);
       }
     }
     
