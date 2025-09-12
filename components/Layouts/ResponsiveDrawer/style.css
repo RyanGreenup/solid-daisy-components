@@ -5,19 +5,6 @@
           -- nah, too complex to have multiple variables for that */
 /* todo implement with css modules in solid js as styled components */
 
-/* basic reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html,
-body {
-  height: 100%;
-  font-family: system-ui, sans-serif;
-}
-
 /* css variables */
 .layout_wJwQgiMd {
   --navbar-height: 60px;
@@ -128,7 +115,6 @@ body {
 .sidebar-content_hohhjVux {
   height: 100%;
   overflow-y: auto;
-  padding: 20px;
 }
 
 /* right drawer - always drawer behavior, hidden by default */
@@ -149,7 +135,6 @@ body {
 .drawer-content_vyEw10wj {
   height: 100%;
   overflow-y: auto;
-  padding: 20px;
 }
 
 /* resize handle - positioned on right edge of sidebar */
@@ -200,7 +185,6 @@ body {
 /* main content - mobile first: full width */
 .main-content_qWHMxQ3G {
   flex: 1;
-  padding: 20px;
   overflow-y: auto;
   margin-left: 0;
   transition: margin-left var(--duration-transition-layout)
