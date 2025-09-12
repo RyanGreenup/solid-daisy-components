@@ -1,79 +1,39 @@
 import { tv } from "tailwind-variants";
-import { splitProps, children, JSX, For, Show } from "solid-js";
+import { splitProps, children, JSX } from "solid-js";
 
 export const breadcrumbsVariants = tv({
   base: "breadcrumbs",
-  variants: {
-    size: {
-      xs: "text-xs",
-      sm: "text-sm",
-      md: "",
-      lg: "text-lg",
-      xl: "text-xl",
-    },
-  },
-  defaultVariants: {
-    size: "md",
-  },
 });
 
-type BreadcrumbsVariants = Parameters<typeof breadcrumbsVariants>[0];
+export type BreadcrumbsProps = JSX.HTMLAttributes<HTMLDivElement>;
 
-export type BreadcrumbItem = {
-  label: string;
-  href?: string;
-  icon?: JSX.Element;
+export type BreadcrumbsItemProps = JSX.LiHTMLAttributes<HTMLLIElement>;
+
+export const BreadcrumbsItem = (props: BreadcrumbsItemProps) => {
+  const [local, others] = splitProps(props, ["class", "children"]);
+  const safeChildren = children(() => local.children);
+
+  return (
+    <li {...others} class={local.class}>
+      {safeChildren()}
+    </li>
+  );
 };
 
-export type BreadcrumbsProps = JSX.HTMLAttributes<HTMLDivElement> &
-  BreadcrumbsVariants & {
-    items?: BreadcrumbItem[];
-    separator?: JSX.Element;
-  };
-
-export const Breadcrumbs = (props: BreadcrumbsProps) => {
-  const [local, others] = splitProps(props, [
-    "size",
-    "class",
-    "children",
-    "items",
-    "separator",
-  ]);
-
+const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
+  const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
   return (
     <div
       {...others}
-      class={breadcrumbsVariants({
-        size: local.size,
-        class: local.class,
-      })}
+      class={breadcrumbsVariants({ class: local.class })}
     >
-      <Show when={local.items} fallback={safeChildren()}>
-        <ul>
-          <For each={local.items}>
-            {(item, index) => (
-              <li>
-                <Show
-                  when={item.href}
-                  fallback={
-                    <>
-                      {item.icon}
-                      {item.label}
-                    </>
-                  }
-                >
-                  <a href={item.href}>
-                    {item.icon}
-                    {item.label}
-                  </a>
-                </Show>
-              </li>
-            )}
-          </For>
-        </ul>
-      </Show>
+      <ul>{safeChildren()}</ul>
     </div>
   );
 };
+
+export const Breadcrumbs = Object.assign(BreadcrumbsComponent, {
+  Item: BreadcrumbsItem,
+});
