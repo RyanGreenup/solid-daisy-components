@@ -32,11 +32,30 @@ export default function EChartsComponent(props: EChartsComponentProps) {
   let chartRef!: HTMLDivElement;
   let chartInstance: echarts.ECharts | null = null;
   const [isMounted, setIsMounted] = createSignal(false);
+  const [isDarkMode, setIsDarkMode] = createSignal(false);
   const [local, others] = splitProps(props, ["option", "theme", "size", "className", "loading"]);
 
+  // Function to detect dark mode preference
+  const checkDarkMode = () => {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  };
+
+  // Function to get the appropriate theme
+  const getTheme = () => {
+    if (local.theme) {
+      return local.theme; // Use explicitly provided theme
+    }
+    return isDarkMode() ? 'dark' : 'light';
+  };
+
   onMount(() => {
-    // Initialize ECharts instance
-    chartInstance = echarts.init(chartRef, local.theme || 'default');
+    // Set initial dark mode state
+    setIsDarkMode(checkDarkMode());
+
+    // Initialize ECharts instance with proper theme
+    chartInstance = echarts.init(chartRef, getTheme(), {
+      renderer: 'canvas' // Ensure we use canvas renderer
+    });
     
     // Set initial option
     if (local.option) {
@@ -50,6 +69,14 @@ export default function EChartsComponent(props: EChartsComponentProps) {
     
     setIsMounted(true);
 
+    // Listen for dark mode changes
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleDarkModeChange = (e: MediaQueryListEvent) => {
+      setIsDarkMode(e.matches);
+    };
+    
+    darkModeMediaQuery.addEventListener('change', handleDarkModeChange);
+
     // Handle window resize
     const handleResize = () => {
       chartInstance?.resize();
@@ -57,10 +84,37 @@ export default function EChartsComponent(props: EChartsComponentProps) {
     
     window.addEventListener('resize', handleResize);
     
-    // Cleanup resize listener on component unmount
+    // Cleanup listeners on component unmount
     onCleanup(() => {
+      darkModeMediaQuery.removeEventListener('change', handleDarkModeChange);
       window.removeEventListener('resize', handleResize);
     });
+  });
+
+  // Effect to handle dark mode changes
+  createEffect(() => {
+    if (chartInstance && isMounted() && !local.theme) {
+      // Only auto-switch theme if no explicit theme is provided
+      const currentTheme = getTheme();
+      
+      // Dispose current instance and recreate with new theme
+      const currentOption = chartInstance.getOption();
+      chartInstance.dispose();
+      
+      chartInstance = echarts.init(chartRef, currentTheme, {
+        renderer: 'canvas'
+      });
+      
+      // Restore the chart with current option
+      if (currentOption) {
+        chartInstance.setOption(currentOption as any);
+      }
+      
+      // Handle loading state
+      if (local.loading) {
+        chartInstance.showLoading();
+      }
+    }
   });
 
   createEffect(() => {
@@ -96,17 +150,6 @@ export default function EChartsComponent(props: EChartsComponentProps) {
       {...others}
     >
       <div ref={chartRef} style="width: 100%; height: 100%;"></div>
-      <DarkModeEChartsFilter />
     </div>
   );
-}
-
-function DarkModeEChartsFilter() {
-  // ECharts handles dark mode better than Canvas filters, but we can add custom styling if needed
-  const css = `
-    @media (prefers-color-scheme: dark) {
-      /* ECharts dark theme handling - could be enhanced based on theme selection */
-    }
-  `;
-  return <style>{css}</style>;
 }
