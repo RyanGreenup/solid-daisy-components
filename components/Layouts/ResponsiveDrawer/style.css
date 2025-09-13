@@ -6,7 +6,7 @@
 /* todo implement with css modules in solid js as styled components */
 
 /* css variables */
-.layout_wJwQgiMd {
+:root {
   --navbar-height: 60px;
   --bottom-dash-height: 60px;
    /*TODO Probably need clamp() here so it always works on really small screens*/
