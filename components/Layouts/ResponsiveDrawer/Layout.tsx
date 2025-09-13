@@ -1,4 +1,4 @@
-import { children, createEffect, For, JSX, Show, splitProps } from "solid-js";
+import { children, createEffect, createSignal, For, JSX, onCleanup, Show, splitProps } from "solid-js";
 import { useKeybinding } from "../../../utilities/useKeybinding";
 import "./style.css";
 
@@ -166,11 +166,70 @@ export const Sidebar = (props: JSX.IntrinsicElements["aside"]) => {
   const [local, others] = splitProps(props, ["children", "class"]);
   const cls = `sidebar_7doPVoW4 ${local.class}`;
   const safeChildren = children(() => local.children);
+  
+  const [isResizing, setIsResizing] = createSignal(false);
+  let resizeHandleRef: HTMLDivElement;
+
+  // Helper functions for mouse resize
+  const getSidebarWidth = () => {
+    const currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width');
+    return parseFloat(currentWidth) || 17.5;
+  };
+
+  const setSidebarWidth = (widthRem: number) => {
+    const clampedWidth = Math.max(12, Math.min(25, widthRem));
+    document.documentElement.style.setProperty('--sidebar-width', `${clampedWidth}rem`);
+  };
+
+  const handleMouseDown = (e: MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+
+    const startX = e.clientX;
+    const startWidth = getSidebarWidth();
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing()) return;
+      
+      const deltaX = e.clientX - startX;
+      // Convert pixels to rem (assuming 16px = 1rem)
+      const deltaRem = deltaX / 16;
+      const newWidth = startWidth + deltaRem;
+      
+      setSidebarWidth(newWidth);
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  // Clean up event listeners on unmount
+  onCleanup(() => {
+    if (isResizing()) {
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+  });
+
   return (
     <aside {...others} class={cls}>
       {safeChildren()}
 
-      <div class="resize-handle_rj5Mm6Gp">
+      <div 
+        ref={resizeHandleRef!} 
+        class="resize-handle_rj5Mm6Gp"
+        onMouseDown={handleMouseDown}
+      >
         <div class="resize-grip_i8KDTvH0"></div>
       </div>
     </aside>
