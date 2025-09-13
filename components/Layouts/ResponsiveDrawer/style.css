@@ -7,11 +7,10 @@
 
 /* css variables */
 :root {
-  --navbar-height: 60px;
-  --bottom-dash-height: 60px;
-   /*TODO Probably need clamp() here so it always works on really small screens*/
-  --sidebar-width: 280px;
-  --drawer-width: 80%;
+  --navbar-height: clamp(3rem, 4vw, 4rem);
+  --bottom-dash-height: clamp(3rem, 4vw, 4rem);
+  --sidebar-width: clamp(12rem, 20vw, 20rem);
+  --drawer-width: clamp(16rem, 80vw, 24rem);
   --transition-speed: var(--duration-transition-layout);
   --overlay-bg: rgba(0, 0, 0, 0.5);
   --bg-color: light-dark(#ffffff);
