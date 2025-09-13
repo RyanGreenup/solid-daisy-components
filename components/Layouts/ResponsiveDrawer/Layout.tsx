@@ -1,4 +1,4 @@
-import { children, For, JSX, Show, splitProps } from "solid-js";
+import { children, createEffect, For, JSX, Show, splitProps } from "solid-js";
 import { useKeybinding } from "../../../utilities/useKeybinding";
 import "./style.css";
 
@@ -22,12 +22,32 @@ export const Layout = (props: JSX.IntrinsicElements["div"] & {
   const cls = `layout_wJwQgiMd ${local.class || ''}`.trim();
   const safeChildren = children(() => local.children);
 
+
   // Helper function to toggle checkbox state
   const toggleCheckbox = (checkboxId: CheckboxIdType) => {
     const checkbox = document.getElementById(checkboxId) as HTMLInputElement;
     if (checkbox) {
       checkbox.checked = !checkbox.checked;
     }
+  };
+
+  // Helper functions to resize sidebar
+  const getSidebarWidth = () => {
+    const currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width');
+        console.log("Got the sidebar width as ", currentWidth);
+    return parseFloat(currentWidth) || 17.5; // Default to 17.5rem if not set
+  };
+
+  const setSidebarWidth = (widthRem: number) => {
+    // Clamp between 12rem and 25rem for reasonable bounds
+    const clampedWidth = Math.max(12, Math.min(25, widthRem));
+    document.documentElement.style.setProperty('--sidebar-width', `${clampedWidth}rem`);
+  };
+
+  const resizeSidebar = (delta: number) => {
+      console.log("Triggered");
+    const currentWidth = getSidebarWidth();
+    setSidebarWidth(currentWidth + delta);
   };
 
   // Set up keyboard shortcuts if enabled (default: true)
@@ -60,6 +80,24 @@ export const Layout = (props: JSX.IntrinsicElements["div"] & {
     useKeybinding(
       { key: "j", ctrl: true, shift: true },
       () => toggleCheckbox(CheckboxId.BOTTOM_DESKTOP)
+    );
+
+    // Resize sidebar: Ctrl+Shift+[ (decrease width)
+    useKeybinding(
+      { key: "[", ctrl: true},
+      () => resizeSidebar(-6)
+    );
+
+    // Resize sidebar: Ctrl+Shift+] (increase width)
+    useKeybinding(
+      { key: "]", ctrl: true},
+      () => resizeSidebar(6)
+    );
+
+    // Reset sidebar to default width: Ctrl+Shift+0
+    useKeybinding(
+      { key: "0", ctrl: true, alt: true},
+      () => setSidebarWidth(17.5)
     );
   }
 
@@ -189,10 +227,13 @@ export const MainContent = (props: JSX.IntrinsicElements["section"]) => {
 export const KeyboardShortcuts = () => {
   const shortcuts = [
     { keys: "Ctrl + B", description: "Toggle Sidebar" },
-    { keys: "Ctrl + Shift + P", description: "Toggle Right Drawer" },
+    { keys: "Ctrl + Alt + B", description: "Toggle Right Drawer" },
     { keys: "Ctrl + Shift + N", description: "Toggle Navbar" },
     { keys: "Ctrl + J", description: "Toggle Bottom Dock" },
     { keys: "Ctrl + Shift + J", description: "Toggle Bottom Dock (Desktop)" },
+    { keys: "Ctrl + Shift + [", description: "Decrease Sidebar Width" },
+    { keys: "Ctrl + Shift + ]", description: "Increase Sidebar Width" },
+    { keys: "Ctrl + Shift + 0", description: "Reset Sidebar Width" },
   ];
 
   return (
