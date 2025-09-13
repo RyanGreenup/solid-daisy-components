@@ -7,8 +7,11 @@ export const comboboxVariants = tv({
       "inline-flex justify-between w-full outline-none bg-base-100 border border-base-300 rounded-lg text-base-content transition-all duration-200 focus-within:border-primary focus-within:shadow-sm focus-within:shadow-primary/20",
     controlMulti: "flex-wrap",
     inputContainer: "flex flex-wrap items-center gap-1 flex-1 px-1 py-2",
-    input:
+    input: [
       "appearance-none inline-flex outline-none min-w-0 min-h-8 pl-4 text-base bg-transparent rounded-l-lg placeholder:text-base-content/50",
+      // Must have width full to fill parent seamlessly
+      "w-full",
+    ],
     trigger:
       "appearance-none inline-flex justify-center items-center w-auto outline-none rounded-r-lg px-2 bg-base-300 leading-none border-l border-base-300 text-base-content transition-colors duration-150 hover:bg-base-200",
     clearButton:
