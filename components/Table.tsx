@@ -1,5 +1,5 @@
+import { children, JSX, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
-import { splitProps, children, JSX } from "solid-js";
 
 export const tableVariants = tv({
   base: "table",
@@ -34,7 +34,7 @@ export const tableVariants = tv({
 
 type TableVariants = Parameters<typeof tableVariants>[0];
 
-export type TableProps = JSX.TableHTMLAttributes<HTMLTableElement> & TableVariants;
+export type TableProps = JSX.HTMLAttributes<HTMLTableElement> & TableVariants;
 
 export const Table = (props: TableProps) => {
   const [local, others] = splitProps(props, [
