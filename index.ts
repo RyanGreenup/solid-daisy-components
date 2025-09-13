@@ -65,6 +65,12 @@ export { Tooltip } from "./components/Tooltip";
 export { KeybindList } from "./components/KeybindList";
 export { Loading } from "./components/Loading";
 export { Skeleton } from "./components/Skeleton";
+export { 
+  ContextMenu, 
+  useContextMenu,
+  type ContextMenuItem, 
+  type ContextMenuProps 
+} from "./components/ContextMenu";
 export { SingleCombobox } from "./components/Combobox/SingleCombobox";
 export { MultiCombobox } from "./components/Combobox/MultiComboBox";
 export { VirtualList } from "./components/Virtual/VirtualList";
