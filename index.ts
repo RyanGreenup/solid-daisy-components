@@ -1,3 +1,13 @@
+export {
+  Accordion,
+  AccordionRoot,
+  AccordionItem,
+  AccordionHeader,
+  AccordionTrigger,
+  AccordionContent,
+  type AccordionProps,
+  type AccordionItem as AccordionItemType,
+} from "./components/Accordion";
 export { Alert } from "./components/Alert";
 export { Avatar } from "./components/Avatar";
 export { Button } from "./components/Button";
