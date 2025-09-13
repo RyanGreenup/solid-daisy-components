@@ -1,0 +1,200 @@
+.navigationMenuIcon {
+  transition: transform 250ms ease;
+}
+
+.navigationMenuIcon[data-expanded] {
+  transform: rotateX(180deg);
+}
+
+.navigationMenuViewport {
+  width: var(--kb-navigation-menu-viewport-width);
+  height: var(--kb-navigation-menu-viewport-height);
+  z-index: 1000;
+  transform-origin: var(--kb-menu-content-transform-origin);
+  animation: viewportHide 250ms ease-in forwards;
+}
+
+.navigationMenuViewport[data-orientation="vertical"] {
+  overflow-x: visible;
+  overflow-y: clip;
+}
+
+.navigationMenuViewport[data-expanded] {
+  animation: viewportShow 250ms ease-out;
+}
+
+.navigationMenuContent {
+  animation-duration: 250ms;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
+}
+
+.navigationMenuContent[data-motion="from-start"] {
+  animation-name: enterFromLeft;
+}
+
+.navigationMenuContent[data-motion="from-end"] {
+  animation-name: enterFromRight;
+}
+
+.navigationMenuContent[data-motion="to-start"] {
+  animation-name: exitToLeft;
+}
+
+.navigationMenuContent[data-motion="to-end"] {
+  animation-name: exitToRight;
+}
+
+.navigationMenuContent[data-orientation="vertical"][data-motion="from-start"] {
+  animation-name: enterFromTop;
+}
+
+.navigationMenuContent[data-orientation="vertical"][data-motion="from-end"] {
+  animation-name: enterFromBottom;
+}
+
+.navigationMenuContent[data-orientation="vertical"][data-motion="to-start"] {
+  animation-name: exitToTop;
+}
+
+.navigationMenuContent[data-orientation="vertical"][data-motion="to-end"] {
+  animation-name: exitToBottom;
+}
+
+.navigationMenuArrow {
+  transition: transform 250ms;
+}
+
+/* Viewport animations */
+@keyframes viewportShow {
+  from {
+    opacity: 0;
+    transform: rotateX(-20deg) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(0deg) scale(1);
+  }
+}
+
+@keyframes viewportHide {
+  from {
+    opacity: 1;
+    transform: rotateX(0deg) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: rotateX(-10deg) scale(0.96);
+  }
+}
+
+/* Content motion animations - horizontal */
+@keyframes enterFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes enterFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes exitToRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+}
+
+@keyframes exitToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+}
+
+/* Content motion animations - vertical */
+@keyframes enterFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes enterFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes exitToBottom {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(200px);
+  }
+}
+
+@keyframes exitToTop {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-200px);
+  }
+}
+
+/* Content grid layouts */
+.navigationMenuContent.content-1 {
+  width: min(500px, 90dvw);
+  grid-template-columns: 0.75fr 1fr;
+}
+
+.navigationMenuContent.content-2 {
+  width: min(600px, 90dvw);
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 650px) {
+  .navigationMenuContent.content-1,
+  .navigationMenuContent.content-2 {
+    width: min(400px, 95dvw);
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+}
