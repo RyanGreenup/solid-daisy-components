@@ -47,7 +47,7 @@ export const accordionVariants = tv({
 
 export interface AccordionItem {
   value: string;
-  title: string;
+  title: string | JSX.Element;
   content: JSX.Element;
   disabled?: boolean;
 }
