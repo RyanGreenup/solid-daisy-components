@@ -7,7 +7,7 @@ export {
   AccordionContent,
   type AccordionProps,
   type AccordionItem as AccordionItemType,
-} from "./components/Accordion";
+} from "./components/Kobalte/Accordion/Accordion";
 export { Alert } from "./components/Alert";
 export { Avatar } from "./components/Avatar";
 export { Button } from "./components/Button";
