@@ -23,6 +23,14 @@
       "import": "./index.ts",
       "types": "./index.ts"
     },
+    "./components/*": {
+      "import": "./components/*.tsx",
+      "types": "./components/*.tsx"
+    },
+    "./components/*/": {
+      "import": "./components/*/index.tsx",
+      "types": "./components/*/index.tsx"
+    },
     "./presets/*": {
       "import": "./presets/*.ts",
       "types": "./presets/*.ts"
