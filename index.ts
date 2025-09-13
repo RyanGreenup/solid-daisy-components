@@ -73,3 +73,6 @@ export { ScatterChart } from "./components/viz/chart_js/ScatterChart";
 
 // ApexCharts
 export { ApexChart } from "./components/viz/apex/ApexChart";
+
+// Apache ECharts
+export { default as EChartsComponent } from "./components/viz/apache_echarts/EChartsComponent";

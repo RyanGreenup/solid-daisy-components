@@ -44,6 +44,7 @@
     "chart.js": "^4.5.0",
     "cmdk-solid": "^1.1.2",
     "corvu": "^0.7.2",
+    "echarts": "^6.0.0",
     "lucide-solid": "^0.500.0",
     "solid-apexcharts": "^0.6.0",
     "solid-charts": "^0.0.2",
