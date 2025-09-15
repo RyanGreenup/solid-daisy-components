@@ -26,10 +26,11 @@
   --easing-transition-layout: ease;
 
   /* z-index variables */
-  --z-navbar: 1000;
-  --z-overlay: 1000;
-  --z-sidebar: 1001;
-  --z-drawer: 1001;
+  --z-main-content: 1;
+  --z-navbar: 10;
+  --z-overlay: 10;
+  --z-sidebar: 20;
+  --z-drawer: 20;
 }
 
 /* hidden checkbox inputs */
@@ -198,6 +199,8 @@
   margin-left: 0;
   transition: margin-left var(--duration-transition-layout)
     var(--easing-transition-layout);
+  z-index: var(--z-main-content);
+  position: relative;
 }
 
 /* bottom dash */
