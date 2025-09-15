@@ -19,7 +19,7 @@ export const comboboxVariants = tv({
     tag: "inline-flex items-center gap-1 px-2 py-0.5 bg-secondary text-secondary-content text-xs font-medium rounded-md flex-shrink-0",
     tagButton:
       "flex items-center justify-center w-4 h-4 bg-transparent border-none rounded-full cursor-pointer transition-all duration-150 hover:bg-base-content/20",
-    content: `bg-base-100 rounded-lg border border-base-300 shadow-lg transform-gpu origin-[var(--kb-combobox-content-transform-origin)] ${styles.content}`,
+    content: `bg-base-100 rounded-lg border border-base-300 shadow-lg transform-gpu origin-[var(--kb-combobox-content-transform-origin)] z-[var(--z-dropdown,30)] ${styles.content}`,
     listbox: "overflow-y-auto max-h-80 p-4 focus:outline-none",
     item: "text-base-content rounded-lg flex items-center justify-between h-8 px-2 relative select-none outline-none transition-all duration-150 hover:bg-base-200 data-[highlighted]:bg-primary data-[highlighted]:text-primary-content data-[highlighted]:outline-none  data-[disabled]:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:text-base-content/40",
     itemIndicator:

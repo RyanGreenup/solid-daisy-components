@@ -31,6 +31,7 @@
   --z-overlay: 10;
   --z-sidebar: 20;
   --z-drawer: 20;
+  --z-dropdown: 30;
 }
 
 /* hidden checkbox inputs */
