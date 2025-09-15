@@ -7,6 +7,8 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   SortingState,
+  RowData,
+  Column,
 } from "@tanstack/solid-table";
 import { createVirtualizer } from "@tanstack/solid-virtual";
 // @ts-ignore
@@ -17,11 +19,19 @@ import { createMemo, createSignal, For, JSXElement, Show } from "solid-js";
 import DownloadButton from "../DownloadButton";
 
 import { Input } from "../Input";
+import { Select } from "../Select";
 import {
   dataTableVariants,
   sortButtonVariants,
   DataTableVariants,
 } from "./styles";
+
+declare module "@tanstack/solid-table" {
+  interface ColumnMeta<TData extends RowData, TValue> {
+    filterVariant?: "text" | "select";
+    selectOptions?: { value: string; label: string }[];
+  }
+}
 
 type VirtualizedDataTableProps<T> = DataTableVariants & {
   data: T[];
@@ -37,6 +47,39 @@ type VirtualizedDataTableProps<T> = DataTableVariants & {
   overscan?: number;
   class?: string;
 };
+
+function Filter<T>({ column, data }: { column: Column<T, unknown>; data: T[] }) {
+  const columnFilterValue = () => column.getFilterValue();
+  const { filterVariant, selectOptions } = column.columnDef.meta ?? {};
+
+  if (filterVariant === "select") {
+    const options = selectOptions || [];
+    
+    return (
+      <Select
+        size="sm"
+        value={(columnFilterValue() as string) || ""}
+        onChange={(e) => column.setFilterValue(e.currentTarget.value || undefined)}
+        style={{ flex: "1" }}
+      >
+        <option value="">All</option>
+        {options.map((option) => (
+          <option value={option.value}>{option.label}</option>
+        ))}
+      </Select>
+    );
+  }
+
+  return (
+    <Input
+      style={{ flex: "1", padding: "0.25rem" }}
+      type="text"
+      value={(columnFilterValue() as string) || ""}
+      onInput={(e) => column.setFilterValue(e.currentTarget.value)}
+      placeholder="Filter..."
+    />
+  );
+}
 
 export function VirtualizedDataTable<T>(
   props: VirtualizedDataTableProps<T>,
@@ -220,20 +263,7 @@ export function VirtualizedDataTable<T>(
                                 header.column.getCanFilter()
                               }
                             >
-                              <Input
-                                style={{ flex: "1", padding: "0.25rem" }}
-                                type="text"
-                                value={
-                                  (header.column.getFilterValue() as string) ||
-                                  ""
-                                }
-                                onInput={(e) =>
-                                  header.column.setFilterValue(
-                                    e.currentTarget.value,
-                                  )
-                                }
-                                placeholder={"Filter..."}
-                              />
+                              <Filter column={header.column} data={props.data} />
                             </Show>
                           </div>
                         )}
