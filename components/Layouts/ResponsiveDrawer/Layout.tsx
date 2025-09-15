@@ -181,19 +181,19 @@ export const Sidebar = (props: JSX.IntrinsicElements["aside"]) => {
     document.documentElement.style.setProperty('--sidebar-width', `${clampedWidth}rem`);
   };
 
-  const handleMouseDown = (e: MouseEvent) => {
-    e.preventDefault();
+  const handlePointerStart = (startX: number) => {
     setIsResizing(true);
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
+    // Prevent scrolling on touch devices during resize
+    document.body.style.touchAction = 'none';
 
-    const startX = e.clientX;
     const startWidth = getSidebarWidth();
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handlePointerMove = (clientX: number) => {
       if (!isResizing()) return;
       
-      const deltaX = e.clientX - startX;
+      const deltaX = clientX - startX;
       // Convert pixels to rem (assuming 16px = 1rem)
       const deltaRem = deltaX / 16;
       const newWidth = startWidth + deltaRem;
@@ -201,16 +201,59 @@ export const Sidebar = (props: JSX.IntrinsicElements["aside"]) => {
       setSidebarWidth(newWidth);
     };
 
-    const handleMouseUp = () => {
+    const handlePointerEnd = () => {
       setIsResizing(false);
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
+      document.body.style.touchAction = '';
+      
+      // Remove all event listeners
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+      document.removeEventListener('touchcancel', handleTouchEnd);
     };
 
+    // Mouse event handlers
+    const handleMouseMove = (e: MouseEvent) => {
+      handlePointerMove(e.clientX);
+    };
+
+    const handleMouseUp = () => {
+      handlePointerEnd();
+    };
+
+    // Touch event handlers
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault(); // Prevent scrolling
+      if (e.touches.length > 0) {
+        handlePointerMove(e.touches[0].clientX);
+      }
+    };
+
+    const handleTouchEnd = () => {
+      handlePointerEnd();
+    };
+
+    // Add event listeners for both mouse and touch
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd);
+    document.addEventListener('touchcancel', handleTouchEnd);
+  };
+
+  const handleMouseDown = (e: MouseEvent) => {
+    e.preventDefault();
+    handlePointerStart(e.clientX);
+  };
+
+  const handleTouchStart = (e: TouchEvent) => {
+    e.preventDefault();
+    if (e.touches.length > 0) {
+      handlePointerStart(e.touches[0].clientX);
+    }
   };
 
   // Clean up event listeners on unmount
@@ -229,6 +272,7 @@ export const Sidebar = (props: JSX.IntrinsicElements["aside"]) => {
         ref={resizeHandleRef!} 
         class="resize-handle_rj5Mm6Gp"
         onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
       >
         <div class="resize-grip_i8KDTvH0"></div>
       </div>
