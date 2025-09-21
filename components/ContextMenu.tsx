@@ -87,6 +87,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
   ]);
   
   const [focusedIndex, setFocusedIndex] = createSignal(-1);
+  const [menuRendered, setMenuRendered] = createSignal(false);
   let menuRef: HTMLDivElement | undefined;
 
   // Filter out separator-only items for navigation
@@ -177,11 +178,30 @@ export const ContextMenu = (props: ContextMenuProps) => {
     }
   });
 
-  // Adjust position to stay within viewport
-  const getAdjustedPosition = () => {
-    if (!menuRef) return { x: local.x, y: local.y };
+  // Track when menu is rendered to trigger position calculation
+  createEffect(() => {
+    if (local.open && menuRef) {
+      // Trigger re-calculation when menu becomes available
+      setMenuRendered(true);
+    } else {
+      setMenuRendered(false);
+    }
+  });
+
+  // Reactive position calculation that updates when menu dimensions change
+  const position = createMemo(() => {
+    // Access the signal to make this reactive to menu rendering
+    menuRendered();
+    
+    if (!local.open || !menuRef) return { x: local.x, y: local.y };
 
     const rect = menuRef.getBoundingClientRect();
+    
+    // If rect has no dimensions, the menu hasn't rendered yet - return initial position
+    if (rect.width === 0 || rect.height === 0) {
+      return { x: local.x, y: local.y };
+    }
+
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
@@ -193,13 +213,20 @@ export const ContextMenu = (props: ContextMenuProps) => {
       x = viewportWidth - rect.width - 8;
     }
 
-    // Adjust vertical position
-    if (y + rect.height > viewportHeight) {
-      y = viewportHeight - rect.height - 8;
+    // Smart vertical positioning - always keep menu fully visible
+    if (local.y + rect.height > viewportHeight - 8) {
+      // Not enough space below, position above the cursor
+      y = local.y - rect.height;
+    } else {
+      // Enough space below, position below the cursor
+      y = local.y;
     }
 
+    // Final bounds check
+    y = Math.max(8, Math.min(y, viewportHeight - rect.height - 8));
+
     return { x: Math.max(8, x), y: Math.max(8, y) };
-  };
+  });
 
   return (
     <Show when={local.open}>
@@ -212,8 +239,9 @@ export const ContextMenu = (props: ContextMenuProps) => {
             class: local.class
           })}
           style={{
-            left: `${getAdjustedPosition().x}px`,
-            top: `${getAdjustedPosition().y}px`
+            left: `${position().x}px`,
+            top: `${position().y}px`,
+            "z-index": "9999"
           }}
           {...others}
         >
