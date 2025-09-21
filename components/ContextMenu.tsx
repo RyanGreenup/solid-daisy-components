@@ -1,13 +1,14 @@
 import { tv } from "tailwind-variants";
-import { 
-  splitProps, 
-  children, 
-  JSX, 
-  createSignal, 
-  createEffect, 
+import {
+  splitProps,
+  children,
+  JSX,
+  createSignal,
+  createEffect,
   onCleanup,
   Show,
-  For 
+  For,
+  createMemo
 } from "solid-js";
 import { Portal } from "solid-js/web";
 import { useKeybinding } from "../utilities/useKeybinding";
@@ -77,15 +78,15 @@ export type ContextMenuProps = {
 // Context menu component
 export const ContextMenu = (props: ContextMenuProps) => {
   const [local, others] = splitProps(props, [
-    "items", 
-    "open", 
-    "x", 
-    "y", 
-    "onOpenChange", 
-    "size", 
+    "items",
+    "open",
+    "x",
+    "y",
+    "onOpenChange",
+    "size",
     "class"
   ]);
-  
+
   const [focusedIndex, setFocusedIndex] = createSignal(-1);
   const [menuRendered, setMenuRendered] = createSignal(false);
   let menuRef: HTMLDivElement | undefined;
@@ -192,11 +193,11 @@ export const ContextMenu = (props: ContextMenuProps) => {
   const position = createMemo(() => {
     // Access the signal to make this reactive to menu rendering
     menuRendered();
-    
+
     if (!local.open || !menuRef) return { x: local.x, y: local.y };
 
     const rect = menuRef.getBoundingClientRect();
-    
+
     // If rect has no dimensions, the menu hasn't rendered yet - return initial position
     if (rect.width === 0 || rect.height === 0) {
       return { x: local.x, y: local.y };
