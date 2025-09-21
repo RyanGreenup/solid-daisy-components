@@ -8,7 +8,7 @@ import {
   onCleanup,
   Show,
   For,
-  createMemo
+  createMemo,
 } from "solid-js";
 import { Portal } from "solid-js/web";
 import { useKeybinding } from "../utilities/useKeybinding";
@@ -30,38 +30,38 @@ export const contextMenuVariants = tv({
     "fixed z-50 bg-base-100 border border-base-300 rounded-lg shadow-lg",
     "min-w-48 max-w-64 py-2",
     "animate-in fade-in-0 zoom-in-95",
-    "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+    "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
   ],
   variants: {
     size: {
       sm: "min-w-40 text-sm",
       md: "min-w-48",
-      lg: "min-w-56 text-lg"
-    }
+      lg: "min-w-56 text-lg",
+    },
   },
   defaultVariants: {
-    size: "md"
-  }
+    size: "md",
+  },
 });
 
 export const contextMenuItemVariants = tv({
   base: [
     "flex items-center gap-3 px-3 py-2 text-sm cursor-pointer",
     "hover:bg-base-200 focus:bg-base-200 focus:outline-none",
-    "transition-colors duration-150"
+    "transition-colors duration-150",
   ],
   variants: {
     disabled: {
-      true: "opacity-50 cursor-not-allowed hover:bg-transparent focus:bg-transparent"
+      true: "opacity-50 cursor-not-allowed hover:bg-transparent focus:bg-transparent",
     },
     focused: {
-      true: "bg-base-200"
-    }
-  }
+      true: "bg-base-200",
+    },
+  },
 });
 
 export const contextMenuSeparatorVariants = tv({
-  base: "h-px bg-base-300 mx-2 my-1"
+  base: "h-px bg-base-300 mx-2 my-1",
 });
 
 // Component props types
@@ -84,7 +84,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
     "y",
     "onOpenChange",
     "size",
-    "class"
+    "class",
   ]);
 
   const [focusedIndex, setFocusedIndex] = createSignal(-1);
@@ -92,7 +92,9 @@ export const ContextMenu = (props: ContextMenuProps) => {
   let menuRef: HTMLDivElement | undefined;
 
   // Filter out separator-only items for navigation
-  const navigableItems = createMemo(() => local.items.filter(item => !item.separator));
+  const navigableItems = createMemo(() =>
+    local.items.filter((item) => !item.separator),
+  );
 
   // Close menu on escape key (scoped to menu element)
   useKeybinding(
@@ -102,7 +104,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
         local.onOpenChange(false);
       }
     },
-    { ref: () => menuRef }
+    { ref: () => menuRef },
   );
 
   // Navigate with arrow keys (scoped to menu element)
@@ -111,13 +113,13 @@ export const ContextMenu = (props: ContextMenuProps) => {
     () => {
       if (local.open) {
         const items = navigableItems();
-        setFocusedIndex(prev => {
+        setFocusedIndex((prev) => {
           const next = (prev + 1) % items.length;
           return next;
         });
       }
     },
-    { ref: () => menuRef }
+    { ref: () => menuRef },
   );
 
   useKeybinding(
@@ -125,13 +127,13 @@ export const ContextMenu = (props: ContextMenuProps) => {
     () => {
       if (local.open) {
         const items = navigableItems();
-        setFocusedIndex(prev => {
+        setFocusedIndex((prev) => {
           const next = prev <= 0 ? items.length - 1 : prev - 1;
           return next;
         });
       }
     },
-    { ref: () => menuRef }
+    { ref: () => menuRef },
   );
 
   // Execute focused item on Enter (scoped to menu element)
@@ -147,7 +149,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
         }
       }
     },
-    { ref: () => menuRef }
+    { ref: () => menuRef },
   );
 
   // Close on click outside
@@ -237,12 +239,12 @@ export const ContextMenu = (props: ContextMenuProps) => {
           tabindex="-1"
           class={contextMenuVariants({
             size: local.size,
-            class: local.class
+            class: local.class,
           })}
           style={{
             left: `${position().x}px`,
             top: `${position().y}px`,
-            "z-index": "9999"
+            "z-index": "9999",
           }}
           {...others}
         >
@@ -252,14 +254,16 @@ export const ContextMenu = (props: ContextMenuProps) => {
                 return <div class={contextMenuSeparatorVariants()} />;
               }
 
-              const navigableIndex = createMemo(() => navigableItems().findIndex(navItem => navItem.id === item.id));
+              const navigableIndex = createMemo(() =>
+                navigableItems().findIndex((navItem) => navItem.id === item.id),
+              );
               const isFocused = () => focusedIndex() === navigableIndex();
 
               return (
                 <div
                   class={contextMenuItemVariants({
                     disabled: item.disabled,
-                    focused: isFocused()
+                    focused: isFocused(),
                   })}
                   onClick={() => {
                     if (!item.disabled && item.onClick) {
@@ -270,9 +274,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
                   onMouseEnter={() => setFocusedIndex(navigableIndex())}
                 >
                   <Show when={item.icon}>
-                    <span class="flex-shrink-0 w-4 h-4">
-                      {item.icon}
-                    </span>
+                    <span class="flex-shrink-0 w-4 h-4">{item.icon}</span>
                   </Show>
                   <span class="flex-1 truncate">{item.label}</span>
                   <Show when={item.keybind}>
@@ -320,13 +322,13 @@ export const useContextMenu = (options: UseContextMenuOptions) => {
     onOpenChange: (open: boolean) => {
       setIsOpen(open);
       options.onOpenChange?.(open);
-    }
+    },
   });
 
   return {
     isOpen,
     open,
     close,
-    contextMenuProps
+    contextMenuProps,
   };
 };
