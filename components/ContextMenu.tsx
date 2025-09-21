@@ -90,7 +90,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
   let menuRef: HTMLDivElement | undefined;
 
   // Filter out separator-only items for navigation
-  const navigableItems = () => local.items.filter(item => !item.separator);
+  const navigableItems = createMemo(() => local.items.filter(item => !item.separator));
 
   // Close menu on escape key (scoped to menu element)
   useKeybinding(
@@ -223,8 +223,8 @@ export const ContextMenu = (props: ContextMenuProps) => {
                 return <div class={contextMenuSeparatorVariants()} />;
               }
 
-              const navigableIndex = navigableItems().findIndex(navItem => navItem.id === item.id);
-              const isFocused = () => focusedIndex() === navigableIndex;
+              const navigableIndex = createMemo(() => navigableItems().findIndex(navItem => navItem.id === item.id));
+              const isFocused = () => focusedIndex() === navigableIndex();
 
               return (
                 <div
@@ -238,7 +238,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
                       local.onOpenChange(false);
                     }
                   }}
-                  onMouseEnter={() => setFocusedIndex(navigableIndex)}
+                  onMouseEnter={() => setFocusedIndex(navigableIndex())}
                 >
                   <Show when={item.icon}>
                     <span class="flex-shrink-0 w-4 h-4">
