@@ -92,46 +92,60 @@ export const ContextMenu = (props: ContextMenuProps) => {
   // Filter out separator-only items for navigation
   const navigableItems = () => local.items.filter(item => !item.separator);
 
-  // Close menu on escape key
+  // Close menu on escape key (scoped to menu element)
   useKeybinding(
     { key: "Escape" },
-    () => local.onOpenChange(false)
+    () => {
+      if (local.open) {
+        local.onOpenChange(false);
+      }
+    },
+    { ref: () => menuRef }
   );
 
-  // Navigate with arrow keys
+  // Navigate with arrow keys (scoped to menu element)
   useKeybinding(
     { key: "ArrowDown" },
     () => {
-      const items = navigableItems();
-      setFocusedIndex(prev => {
-        const next = (prev + 1) % items.length;
-        return next;
-      });
-    }
+      if (local.open) {
+        const items = navigableItems();
+        setFocusedIndex(prev => {
+          const next = (prev + 1) % items.length;
+          return next;
+        });
+      }
+    },
+    { ref: () => menuRef }
   );
 
   useKeybinding(
     { key: "ArrowUp" },
     () => {
-      const items = navigableItems();
-      setFocusedIndex(prev => {
-        const next = prev <= 0 ? items.length - 1 : prev - 1;
-        return next;
-      });
-    }
+      if (local.open) {
+        const items = navigableItems();
+        setFocusedIndex(prev => {
+          const next = prev <= 0 ? items.length - 1 : prev - 1;
+          return next;
+        });
+      }
+    },
+    { ref: () => menuRef }
   );
 
-  // Execute focused item on Enter
+  // Execute focused item on Enter (scoped to menu element)
   useKeybinding(
     { key: "Enter" },
     () => {
-      const items = navigableItems();
-      const focusedItem = items[focusedIndex()];
-      if (focusedItem && !focusedItem.disabled && focusedItem.onClick) {
-        focusedItem.onClick();
-        local.onOpenChange(false);
+      if (local.open) {
+        const items = navigableItems();
+        const focusedItem = items[focusedIndex()];
+        if (focusedItem && !focusedItem.disabled && focusedItem.onClick) {
+          focusedItem.onClick();
+          local.onOpenChange(false);
+        }
       }
-    }
+    },
+    { ref: () => menuRef }
   );
 
   // Close on click outside
