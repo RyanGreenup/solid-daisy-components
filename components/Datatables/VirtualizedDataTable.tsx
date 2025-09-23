@@ -85,6 +85,8 @@ export function VirtualizedDataTable<T>(
   props: VirtualizedDataTableProps<T>,
 ): JSXElement {
   let parentRef: HTMLTableSectionElement | undefined;
+  let measureRef: HTMLTableRowElement | undefined;
+  const [rowHeights, setRowHeights] = createSignal<Map<number, number>>(new Map());
 
   const styles = dataTableVariants({
     darkHeader: props.darkHeader,
@@ -141,14 +143,36 @@ export function VirtualizedDataTable<T>(
     return rows;
   });
 
+  const measureRowHeight = (index: number): number => {
+    const heights = rowHeights();
+    const cached = heights.get(index);
+    if (cached) return cached;
+    
+    return props.estimateSize?.() || 48;
+  };
+
+  const updateRowHeight = (index: number, height: number) => {
+    setRowHeights(prev => {
+      const newMap = new Map(prev);
+      newMap.set(index, height);
+      return newMap;
+    });
+  };
+
   const rowVirtualizer = createMemo(() =>
     createVirtualizer({
       get count() {
         return filteredRows().length;
       },
       getScrollElement: () => parentRef!,
-      estimateSize: props.estimateSize || (() => 48),
+      estimateSize: measureRowHeight,
       overscan: props.overscan || 5,
+      measureElement: (el, entry) => {
+        const index = entry.index;
+        const height = el.getBoundingClientRect().height;
+        updateRowHeight(index, height);
+        return height;
+      },
     }),
   );
 
@@ -292,9 +316,12 @@ export function VirtualizedDataTable<T>(
 
                 return (
                   <tr
+                    ref={measureRef}
+                    data-index={virtualItem.index}
                     class={styles.row()}
                     style={{
-                      height: `${virtualItem.size}px`,
+                      height: "auto",
+                      "min-height": `${virtualItem.size}px`,
                       transform: `translateY(${virtualItem.start}px)`,
                       position: "absolute",
                       top: "0",
@@ -312,6 +339,13 @@ export function VirtualizedDataTable<T>(
                               ? `${cell.column.columnDef.size}px`
                               : "auto",
                             flex: cell.column.columnDef.size ? "none" : "1",
+                            "word-wrap": "break-word",
+                            "word-break": "break-word",
+                            "white-space": "pre-wrap",
+                            "overflow-wrap": "break-word",
+                            "align-items": "flex-start",
+                            display: "flex",
+                            padding: "0.5rem",
                           }}
                         >
                           {flexRender(
