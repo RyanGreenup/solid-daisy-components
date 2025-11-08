@@ -209,6 +209,7 @@
   height: var(--bottom-dash-height);
   border-top: 1px solid #dee2e6;
   display: flex;
+  z-index: var(--z-navbar);
   align-items: center;
   padding: 0 20px;
   transition: transform var(--duration-transition-layout)
