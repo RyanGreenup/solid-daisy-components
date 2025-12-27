@@ -12,8 +12,10 @@ export const filterResetVariants = tv({
 type FilterVariants = Parameters<typeof filterVariants>[0];
 type FilterResetVariants = Parameters<typeof filterResetVariants>[0];
 
-type FilterDivProps = JSX.HTMLAttributes<HTMLDivElement> & FilterVariants & { as?: "div" };
-type FilterFormProps = JSX.FormHTMLAttributes<HTMLFormElement> & FilterVariants & { as: "form" };
+type FilterDivProps = JSX.HTMLAttributes<HTMLDivElement> &
+  FilterVariants & { as?: "div" };
+type FilterFormProps = JSX.FormHTMLAttributes<HTMLFormElement> &
+  FilterVariants & { as: "form" };
 
 export type FilterProps = FilterDivProps | FilterFormProps;
 
@@ -70,7 +72,10 @@ function FilterAsDiv(props: FilterDivProps) {
 
 const FilterComponent = (props: FilterProps) => {
   return (
-    <Show when={props.as === "form"} fallback={<FilterAsDiv {...(props as FilterDivProps)} />}>
+    <Show
+      when={props.as === "form"}
+      fallback={<FilterAsDiv {...(props as FilterDivProps)} />}
+    >
       <FilterAsForm {...(props as FilterFormProps)} />
     </Show>
   );

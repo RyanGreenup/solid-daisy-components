@@ -83,11 +83,7 @@ export const CalendarMonth = (props: CalendarMonthProps) => {
   const [local] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
-  return (
-    <calendar-month class={local.class}>
-      {safeChildren()}
-    </calendar-month>
-  );
+  return <calendar-month class={local.class}>{safeChildren()}</calendar-month>;
 };
 
 const CalendarComponent = CalendarDate;

@@ -75,7 +75,10 @@ export const collapsibleIconVariants = tv({
 
 type CollapsibleVariants = Parameters<typeof collapsibleVariants>[0];
 
-export type CollapsibleProps = Omit<JSX.HTMLAttributes<HTMLDivElement>, "title" | "onToggle"> &
+export type CollapsibleProps = Omit<
+  JSX.HTMLAttributes<HTMLDivElement>,
+  "title" | "onToggle"
+> &
   CollapsibleVariants & {
     title?: JSX.Element;
     subtitle?: JSX.Element;

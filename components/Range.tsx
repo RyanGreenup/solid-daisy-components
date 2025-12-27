@@ -53,7 +53,10 @@ export const Range = (props: RangeProps) => {
   const [wheelAccumulator, setWheelAccumulator] = createSignal(0);
   const WHEEL_THRESHOLD = 50; // Require 50 deltaY units before triggering a step
 
-  const handleInput: JSX.InputEventHandlerUnion<HTMLInputElement, InputEvent> = (e) => {
+  const handleInput: JSX.InputEventHandlerUnion<
+    HTMLInputElement,
+    InputEvent
+  > = (e) => {
     const target = e.target as HTMLInputElement;
     const numValue = Number(target.value);
 
@@ -66,7 +69,9 @@ export const Range = (props: RangeProps) => {
     }
   };
 
-  const handleChange: JSX.ChangeEventHandlerUnion<HTMLInputElement, Event> = (e) => {
+  const handleChange: JSX.ChangeEventHandlerUnion<HTMLInputElement, Event> = (
+    e,
+  ) => {
     if (typeof local.onChange === "function") {
       local.onChange(e);
     }
@@ -110,7 +115,10 @@ export const Range = (props: RangeProps) => {
         if (typeof local.onChange === "function") {
           const syntheticChangeEvent = new Event("change", {
             bubbles: true,
-          }) as Event & { currentTarget: HTMLInputElement; target: HTMLInputElement };
+          }) as Event & {
+            currentTarget: HTMLInputElement;
+            target: HTMLInputElement;
+          };
           Object.defineProperty(syntheticChangeEvent, "target", {
             value: target,
             enumerable: true,
@@ -128,7 +136,9 @@ export const Range = (props: RangeProps) => {
     }
 
     if (typeof local.onWheel === "function") {
-      local.onWheel(e as WheelEvent & { currentTarget: HTMLInputElement; target: Element });
+      local.onWheel(
+        e as WheelEvent & { currentTarget: HTMLInputElement; target: Element },
+      );
     }
   };
 
