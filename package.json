@@ -40,7 +40,8 @@
     "src"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@kobalte/core": "^0.13.11",
@@ -60,5 +61,8 @@
     "solid-transition-group": "^0.3.0",
     "tailwind-merge": "^3.3.1",
     "tailwind-variants": "^3.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
   }
 }
