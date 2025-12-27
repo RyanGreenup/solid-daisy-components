@@ -36,7 +36,8 @@ export const fileInputVariants = tv({
 
 type FileInputVariants = Parameters<typeof fileInputVariants>[0];
 
-export type FileInputProps = JSX.InputHTMLAttributes<HTMLInputElement> & FileInputVariants;
+export type FileInputProps = JSX.InputHTMLAttributes<HTMLInputElement> &
+  FileInputVariants;
 
 export const FileInput = (props: FileInputProps) => {
   const [local, others] = splitProps(props, [

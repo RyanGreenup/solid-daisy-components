@@ -1,4 +1,4 @@
-import * as echarts from 'echarts';
+import * as echarts from "echarts";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { tv } from "tailwind-variants";
 import { splitProps } from "solid-js";
@@ -8,14 +8,14 @@ export const echartsVariants = tv({
   variants: {
     size: {
       sm: "h-64",
-      md: "h-80", 
+      md: "h-80",
       lg: "h-96",
-      xl: "h-[500px]"
-    }
+      xl: "h-[500px]",
+    },
   },
   defaultVariants: {
-    size: "md"
-  }
+    size: "md",
+  },
 });
 
 type EChartsVariants = Parameters<typeof echartsVariants>[0];
@@ -33,11 +33,20 @@ export default function EChartsComponent(props: EChartsComponentProps) {
   let chartInstance: echarts.ECharts | null = null;
   const [isMounted, setIsMounted] = createSignal(false);
   const [isDarkMode, setIsDarkMode] = createSignal(false);
-  const [local, others] = splitProps(props, ["option", "theme", "size", "className", "loading"]);
+  const [local, others] = splitProps(props, [
+    "option",
+    "theme",
+    "size",
+    "className",
+    "loading",
+  ]);
 
   // Function to detect dark mode preference
   const checkDarkMode = () => {
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    );
   };
 
   // Function to get the appropriate theme
@@ -45,7 +54,7 @@ export default function EChartsComponent(props: EChartsComponentProps) {
     if (local.theme) {
       return local.theme; // Use explicitly provided theme
     }
-    return isDarkMode() ? 'dark' : 'light';
+    return isDarkMode() ? "dark" : "light";
   };
 
   onMount(() => {
@@ -54,40 +63,42 @@ export default function EChartsComponent(props: EChartsComponentProps) {
 
     // Initialize ECharts instance with proper theme
     chartInstance = echarts.init(chartRef, getTheme(), {
-      renderer: 'canvas' // Ensure we use canvas renderer
+      renderer: "canvas", // Ensure we use canvas renderer
     });
-    
+
     // Set initial option
     if (local.option) {
       chartInstance.setOption(local.option);
     }
-    
+
     // Handle loading state
     if (local.loading) {
       chartInstance.showLoading();
     }
-    
+
     setIsMounted(true);
 
     // Listen for dark mode changes
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeMediaQuery = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    );
     const handleDarkModeChange = (e: MediaQueryListEvent) => {
       setIsDarkMode(e.matches);
     };
-    
-    darkModeMediaQuery.addEventListener('change', handleDarkModeChange);
+
+    darkModeMediaQuery.addEventListener("change", handleDarkModeChange);
 
     // Handle window resize
     const handleResize = () => {
       chartInstance?.resize();
     };
-    
-    window.addEventListener('resize', handleResize);
-    
+
+    window.addEventListener("resize", handleResize);
+
     // Cleanup listeners on component unmount
     onCleanup(() => {
-      darkModeMediaQuery.removeEventListener('change', handleDarkModeChange);
-      window.removeEventListener('resize', handleResize);
+      darkModeMediaQuery.removeEventListener("change", handleDarkModeChange);
+      window.removeEventListener("resize", handleResize);
     });
   });
 
@@ -96,20 +107,20 @@ export default function EChartsComponent(props: EChartsComponentProps) {
     if (chartInstance && isMounted() && !local.theme) {
       // Only auto-switch theme if no explicit theme is provided
       const currentTheme = getTheme();
-      
+
       // Dispose current instance and recreate with new theme
       const currentOption = chartInstance.getOption();
       chartInstance.dispose();
-      
+
       chartInstance = echarts.init(chartRef, currentTheme, {
-        renderer: 'canvas'
+        renderer: "canvas",
       });
-      
+
       // Restore the chart with current option
       if (currentOption) {
         chartInstance.setOption(currentOption as any);
       }
-      
+
       // Handle loading state
       if (local.loading) {
         chartInstance.showLoading();
@@ -123,7 +134,7 @@ export default function EChartsComponent(props: EChartsComponentProps) {
       if (local.option) {
         chartInstance.setOption(local.option, true); // true = notMerge for complete replacement
       }
-      
+
       // Handle loading state
       if (local.loading) {
         chartInstance.showLoading();
@@ -137,18 +148,14 @@ export default function EChartsComponent(props: EChartsComponentProps) {
     chartInstance?.dispose();
   });
 
-  const containerClass = () => 
+  const containerClass = () =>
     echartsVariants({
       size: local.size,
-      class: local.className
+      class: local.className,
     });
 
   return (
-    <div
-      class={containerClass()}
-      style="min-height: 300px;"
-      {...others}
-    >
+    <div class={containerClass()} style="min-height: 300px;" {...others}>
       <div ref={chartRef} style="width: 100%; height: 100%;"></div>
     </div>
   );

@@ -1,26 +1,44 @@
-import { SolidApexCharts } from 'solid-apexcharts';
+import { SolidApexCharts } from "solid-apexcharts";
 import { tv } from "tailwind-variants";
-import { splitProps, createMemo, JSX, createSignal, createEffect } from "solid-js";
+import {
+  splitProps,
+  createMemo,
+  JSX,
+  createSignal,
+  createEffect,
+} from "solid-js";
 
 export const apexChartVariants = tv({
   base: "w-full",
   variants: {
     size: {
       sm: "h-64",
-      md: "h-80", 
+      md: "h-80",
       lg: "h-96",
-      xl: "h-[500px]"
-    }
+      xl: "h-[500px]",
+    },
   },
   defaultVariants: {
-    size: "md"
-  }
+    size: "md",
+  },
 });
 
 type ApexChartVariants = Parameters<typeof apexChartVariants>[0];
 
 export interface ApexChartProps extends ApexChartVariants {
-  type: 'line' | 'area' | 'bar' | 'pie' | 'donut' | 'scatter' | 'bubble' | 'heatmap' | 'radialBar' | 'candlestick' | 'polarArea' | 'boxPlot';
+  type:
+    | "line"
+    | "area"
+    | "bar"
+    | "pie"
+    | "donut"
+    | "scatter"
+    | "bubble"
+    | "heatmap"
+    | "radialBar"
+    | "candlestick"
+    | "polarArea"
+    | "boxPlot";
   series: any[];
   options?: any;
   width?: string | number;
@@ -30,8 +48,16 @@ export interface ApexChartProps extends ApexChartVariants {
 }
 
 export const ApexChart = (props: ApexChartProps) => {
-  const [local, others] = splitProps(props, ["type", "series", "options", "width", "height", "size", "class"]);
-  
+  const [local, others] = splitProps(props, [
+    "type",
+    "series",
+    "options",
+    "width",
+    "height",
+    "size",
+    "class",
+  ]);
+
   // Create stable references for the chart to prevent unnecessary re-renders
   const [chartKey, setChartKey] = createSignal(0);
   const [isUpdating, setIsUpdating] = createSignal(false);
@@ -41,48 +67,49 @@ export const ApexChart = (props: ApexChartProps) => {
     const newOptions = {
       chart: {
         type: local.type,
-        background: 'transparent',
-        fontFamily: 'inherit',
+        background: "transparent",
+        fontFamily: "inherit",
         redrawOnParentResize: true,
         redrawOnWindowResize: true,
-        ...local.options?.chart
+        ...local.options?.chart,
       },
       theme: {
-        mode: 'light' as const,
-        ...local.options?.theme
+        mode: "light" as const,
+        ...local.options?.theme,
       },
-      ...local.options
+      ...local.options,
     };
-    
+
     // Force re-render if chart type changes to prevent ApexCharts internal state issues
-    if (prev && (
-      prev.chart?.type !== newOptions.chart.type || 
-      prev.chart?.id !== newOptions.chart?.id
-    )) {
+    if (
+      prev &&
+      (prev.chart?.type !== newOptions.chart.type ||
+        prev.chart?.id !== newOptions.chart?.id)
+    ) {
       // Use a more aggressive re-creation strategy
       setIsUpdating(true);
       setTimeout(() => {
-        setChartKey(k => k + 1);
+        setChartKey((k) => k + 1);
         setTimeout(() => setIsUpdating(false), 50);
       }, 10);
     }
-    
+
     return newOptions;
   });
 
-  const containerClass = createMemo(() => 
+  const containerClass = createMemo(() =>
     apexChartVariants({
       size: local.size,
-      class: local.class
-    })
+      class: local.class,
+    }),
   );
 
   // Ensure series is stable and properly formatted
   const stableSeries = createMemo(() => {
     if (!local.series) return [];
-    return Array.isArray(local.series) ? 
-      local.series.map(s => ({ ...s })) : // Deep copy to prevent reference issues
-      local.series;
+    return Array.isArray(local.series)
+      ? local.series.map((s) => ({ ...s })) // Deep copy to prevent reference issues
+      : local.series;
   });
 
   return (

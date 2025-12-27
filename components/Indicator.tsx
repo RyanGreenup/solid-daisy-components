@@ -28,9 +28,11 @@ export const indicatorItemVariants = tv({
 type IndicatorVariants = Parameters<typeof indicatorVariants>[0];
 type IndicatorItemVariants = Parameters<typeof indicatorItemVariants>[0];
 
-export type IndicatorProps = JSX.HTMLAttributes<HTMLDivElement> & IndicatorVariants;
+export type IndicatorProps = JSX.HTMLAttributes<HTMLDivElement> &
+  IndicatorVariants;
 
-export type IndicatorItemProps = JSX.HTMLAttributes<HTMLSpanElement> & IndicatorItemVariants;
+export type IndicatorItemProps = JSX.HTMLAttributes<HTMLSpanElement> &
+  IndicatorItemVariants;
 
 export const IndicatorItem = (props: IndicatorItemProps) => {
   const [local, others] = splitProps(props, [
@@ -61,10 +63,7 @@ const IndicatorComponent = (props: IndicatorProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={indicatorVariants({ class: local.class })}
-    >
+    <div {...others} class={indicatorVariants({ class: local.class })}>
       {safeChildren()}
     </div>
   );

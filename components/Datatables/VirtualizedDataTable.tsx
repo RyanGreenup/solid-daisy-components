@@ -48,18 +48,26 @@ type VirtualizedDataTableProps<T> = DataTableVariants & {
   class?: string;
 };
 
-function Filter<T>({ column, data }: { column: Column<T, unknown>; data: T[] }) {
+function Filter<T>({
+  column,
+  data,
+}: {
+  column: Column<T, unknown>;
+  data: T[];
+}) {
   const columnFilterValue = () => column.getFilterValue();
   const { filterVariant, selectOptions } = column.columnDef.meta ?? {};
 
   if (filterVariant === "select") {
     const options = selectOptions || [];
-    
+
     return (
       <Select
         size="sm"
         value={(columnFilterValue() as string) || ""}
-        onChange={(e) => column.setFilterValue(e.currentTarget.value || undefined)}
+        onChange={(e) =>
+          column.setFilterValue(e.currentTarget.value || undefined)
+        }
         style={{ flex: "1" }}
       >
         <option value="">All</option>
@@ -263,7 +271,10 @@ export function VirtualizedDataTable<T>(
                                 header.column.getCanFilter()
                               }
                             >
-                              <Filter column={header.column} data={props.data} />
+                              <Filter
+                                column={header.column}
+                                data={props.data}
+                              />
                             </Show>
                           </div>
                         )}

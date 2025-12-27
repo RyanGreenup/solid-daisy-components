@@ -9,12 +9,13 @@ type CalendarVariants = Parameters<typeof calendarVariants>[0];
 
 export type CalendarProps = JSX.HTMLAttributes<HTMLElement> & CalendarVariants;
 
-export type CalendarDateProps = JSX.HTMLAttributes<HTMLElement> & CalendarVariants & {
-  value?: string;
-  min?: string;
-  max?: string;
-  onDateChange?: (value: string) => void;
-};
+export type CalendarDateProps = JSX.HTMLAttributes<HTMLElement> &
+  CalendarVariants & {
+    value?: string;
+    min?: string;
+    max?: string;
+    onDateChange?: (value: string) => void;
+  };
 
 export type CalendarMonthProps = JSX.HTMLAttributes<HTMLElement>;
 
@@ -22,13 +23,13 @@ export type CalendarMonthProps = JSX.HTMLAttributes<HTMLElement>;
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      'calendar-date': JSX.HTMLAttributes<HTMLElement> & {
+      "calendar-date": JSX.HTMLAttributes<HTMLElement> & {
         value?: string;
         min?: string;
         max?: string;
-        'on:change'?: (event: CustomEvent) => void;
+        "on:change"?: (event: CustomEvent) => void;
       };
-      'calendar-month': JSX.HTMLAttributes<HTMLElement>;
+      "calendar-month": JSX.HTMLAttributes<HTMLElement>;
     }
   }
 }
@@ -75,10 +76,7 @@ export const CalendarMonth = (props: CalendarMonthProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <calendar-month
-      {...others}
-      class={local.class}
-    >
+    <calendar-month {...others} class={local.class}>
       {safeChildren()}
     </calendar-month>
   );

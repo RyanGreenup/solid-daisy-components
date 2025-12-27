@@ -7,12 +7,13 @@ export const radialProgressVariants = tv({
 
 type RadialProgressVariants = Parameters<typeof radialProgressVariants>[0];
 
-export type RadialProgressProps = JSX.HTMLAttributes<HTMLDivElement> & RadialProgressVariants & {
-  value: number;
-  size?: string;
-  thickness?: string;
-  max?: number;
-};
+export type RadialProgressProps = JSX.HTMLAttributes<HTMLDivElement> &
+  RadialProgressVariants & {
+    value: number;
+    size?: string;
+    thickness?: string;
+    max?: number;
+  };
 
 export const RadialProgress = (props: RadialProgressProps) => {
   const [local, others] = splitProps(props, [
@@ -30,7 +31,7 @@ export const RadialProgress = (props: RadialProgressProps) => {
 
   const safeChildren = children(() => local.children);
   const maxValue = () => local.max ?? 100;
-  
+
   const customStyle = createMemo(() => {
     const baseStyle = {
       "--value": local.value.toString(),

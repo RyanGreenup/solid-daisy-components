@@ -41,9 +41,11 @@ export const inputWrapperVariants = tv({
 type TextInputVariants = Parameters<typeof textInputVariants>[0];
 type InputWrapperVariants = Parameters<typeof inputWrapperVariants>[0];
 
-export type TextInputProps = JSX.InputHTMLAttributes<HTMLInputElement> & TextInputVariants;
+export type TextInputProps = JSX.InputHTMLAttributes<HTMLInputElement> &
+  TextInputVariants;
 
-export type InputWrapperProps = JSX.LabelHTMLAttributes<HTMLLabelElement> & InputWrapperVariants;
+export type InputWrapperProps = JSX.LabelHTMLAttributes<HTMLLabelElement> &
+  InputWrapperVariants;
 
 const TextInputComponent = (props: TextInputProps) => {
   const [local, others] = splitProps(props, [
@@ -71,10 +73,7 @@ export const InputWrapper = (props: InputWrapperProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <label
-      {...others}
-      class={inputWrapperVariants({ class: local.class })}
-    >
+    <label {...others} class={inputWrapperVariants({ class: local.class })}>
       {safeChildren()}
     </label>
   );

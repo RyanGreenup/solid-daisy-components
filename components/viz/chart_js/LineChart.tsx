@@ -17,7 +17,7 @@ export interface LineChartProps {
   };
   title?: string;
   className?: string;
-  options?: ChartConfiguration['options'];
+  options?: ChartConfiguration["options"];
 }
 
 export const LineChart = (props: LineChartProps) => {
@@ -25,61 +25,63 @@ export const LineChart = (props: LineChartProps) => {
   // This ensures the ChartComponent re-renders when props change
   const chartConfig = createMemo<ChartConfiguration>(() => {
     return {
-      type: 'line',
+      type: "line",
       data: {
         // Create new array references to ensure reactivity
         labels: [...props.data.labels],
-        datasets: props.data.datasets.map(dataset => ({
+        datasets: props.data.datasets.map((dataset) => ({
           ...dataset,
           data: [...dataset.data], // Create new array reference
-        }))
+        })),
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         interaction: {
-          mode: 'nearest' as const,
+          mode: "nearest" as const,
           intersect: false,
-          axis: 'x' as const
+          axis: "x" as const,
         },
         plugins: {
           legend: {
             display: true,
-            position: 'top' as const
+            position: "top" as const,
           },
           tooltip: {
-            mode: 'nearest' as const,
-            intersect: false
+            mode: "nearest" as const,
+            intersect: false,
           },
           ...(props.title && {
             title: {
               display: true,
-              text: props.title
-            }
+              text: props.title,
+            },
           }),
           // Merge any additional plugin options
-          ...(props.options?.plugins && props.options.plugins)
+          ...(props.options?.plugins && props.options.plugins),
         },
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
           },
           // Merge any additional scale options
-          ...(props.options?.scales && props.options.scales)
+          ...(props.options?.scales && props.options.scales),
         },
         elements: {
           point: {
             radius: 0,
-            hoverRadius: 6
+            hoverRadius: 6,
           },
           // Merge any additional element options
-          ...(props.options?.elements && props.options.elements)
+          ...(props.options?.elements && props.options.elements),
         },
         // Merge any other top-level options
-        ...props.options
-      }
+        ...props.options,
+      },
     };
   });
 
-  return <ChartComponent chartConfig={chartConfig()} className={props.className} />;
+  return (
+    <ChartComponent chartConfig={chartConfig()} className={props.className} />
+  );
 };

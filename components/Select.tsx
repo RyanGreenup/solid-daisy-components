@@ -36,7 +36,8 @@ export const selectVariants = tv({
 
 type SelectVariants = Parameters<typeof selectVariants>[0];
 
-export type SelectProps = JSX.SelectHTMLAttributes<HTMLSelectElement> & SelectVariants;
+export type SelectProps = JSX.SelectHTMLAttributes<HTMLSelectElement> &
+  SelectVariants;
 
 export const Select = (props: SelectProps) => {
   const [local, others] = splitProps(props, [

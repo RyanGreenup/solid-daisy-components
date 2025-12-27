@@ -1,6 +1,6 @@
 import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
-import { Dynamic } from "solid-js/web"
+import { Dynamic } from "solid-js/web";
 
 export const tabsVariants = tv({
   base: "tabs",
@@ -56,20 +56,24 @@ type TabsVariants = Parameters<typeof tabsVariants>[0];
 type TabVariants = Parameters<typeof tabVariants>[0];
 type TabContentVariants = Parameters<typeof tabContentVariants>[0];
 
-export type TabsProps = JSX.HTMLAttributes<HTMLDivElement> & TabsVariants & {
-  role?: string;
-};
+export type TabsProps = JSX.HTMLAttributes<HTMLDivElement> &
+  TabsVariants & {
+    role?: string;
+  };
 
-export type TabProps = JSX.HTMLAttributes<HTMLElement> & TabVariants & {
-  role?: string;
-  as?: "button" | "a" | "div" | "label";
-};
+export type TabProps = JSX.HTMLAttributes<HTMLElement> &
+  TabVariants & {
+    role?: string;
+    as?: "button" | "a" | "div" | "label";
+  };
 
-export type TabInputProps = JSX.InputHTMLAttributes<HTMLInputElement> & TabVariants & {
-  role?: string;
-};
+export type TabInputProps = JSX.InputHTMLAttributes<HTMLInputElement> &
+  TabVariants & {
+    role?: string;
+  };
 
-export type TabContentProps = JSX.HTMLAttributes<HTMLDivElement> & TabContentVariants;
+export type TabContentProps = JSX.HTMLAttributes<HTMLDivElement> &
+  TabContentVariants;
 
 export const Tab = (props: TabProps) => {
   const [local, others] = splitProps(props, [
@@ -86,7 +90,7 @@ export const Tab = (props: TabProps) => {
   return (
     <Dynamic
       component={local.as || "button"}
-      {...others}
+      {...(others as any)}
       role={local.role || "tab"}
       class={tabVariants({
         active: local.active,
@@ -127,10 +131,7 @@ export const TabContent = (props: TabContentProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={tabContentVariants({ class: local.class })}
-    >
+    <div {...others} class={tabContentVariants({ class: local.class })}>
       {safeChildren()}
     </div>
   );

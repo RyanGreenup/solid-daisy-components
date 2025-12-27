@@ -13,11 +13,13 @@ export const filterResetVariants = tv({
 type FilterVariants = Parameters<typeof filterVariants>[0];
 type FilterResetVariants = Parameters<typeof filterResetVariants>[0];
 
-export type FilterProps = JSX.HTMLAttributes<HTMLDivElement | HTMLFormElement> & FilterVariants & {
-  as?: "form" | "div";
-};
+export type FilterProps = JSX.HTMLAttributes<HTMLDivElement | HTMLFormElement> &
+  FilterVariants & {
+    as?: "form" | "div";
+  };
 
-export type FilterResetProps = JSX.InputHTMLAttributes<HTMLInputElement> & FilterResetVariants;
+export type FilterResetProps = JSX.InputHTMLAttributes<HTMLInputElement> &
+  FilterResetVariants;
 
 export type FilterInputProps = JSX.InputHTMLAttributes<HTMLInputElement>;
 

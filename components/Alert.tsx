@@ -36,9 +36,10 @@ export const alertVariants = tv({
 
 type AlertVariants = Parameters<typeof alertVariants>[0];
 
-export type AlertProps = JSX.HTMLAttributes<HTMLDivElement> & AlertVariants & {
-  showIcon?: boolean;
-};
+export type AlertProps = JSX.HTMLAttributes<HTMLDivElement> &
+  AlertVariants & {
+    showIcon?: boolean;
+  };
 
 const AlertComponent = (props: AlertProps) => {
   const [local, others] = splitProps(props, [

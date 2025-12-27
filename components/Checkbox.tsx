@@ -31,15 +31,11 @@ export const checkboxVariants = tv({
 
 type CheckboxVariants = Parameters<typeof checkboxVariants>[0];
 
-export type CheckboxProps = JSX.InputHTMLAttributes<HTMLInputElement> & CheckboxVariants;
+export type CheckboxProps = JSX.InputHTMLAttributes<HTMLInputElement> &
+  CheckboxVariants;
 
 const CheckboxComponent = (props: CheckboxProps) => {
-  const [local, others] = splitProps(props, [
-    "color",
-    "size",
-    "class",
-    "type",
-  ]);
+  const [local, others] = splitProps(props, ["color", "size", "class", "type"]);
 
   return (
     <input

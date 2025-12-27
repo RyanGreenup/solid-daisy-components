@@ -7,14 +7,18 @@ import styles from "./navigation-menu.module.css";
 export const navigationMenuVariants = tv({
   slots: {
     root: "flex justify-center items-center p-1 bg-base-100 w-max rounded-lg shadow-sm border border-base-300",
-    trigger: "flex items-center justify-center gap-2 px-4 py-3 bg-base-100 text-base-content font-medium rounded-md transition-colors hover:bg-base-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 data-[highlighted]:bg-base-200 text-sm border-none cursor-pointer",
+    trigger:
+      "flex items-center justify-center gap-2 px-4 py-3 bg-base-100 text-base-content font-medium rounded-md transition-colors hover:bg-base-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 data-[highlighted]:bg-base-200 text-sm border-none cursor-pointer",
     triggerLink: "text-primary no-underline",
     icon: "h-4 w-4 transition-transform duration-200 ease-in-out",
-    viewport: "relative flex justify-center items-center bg-base-100 border border-base-300 rounded-lg shadow-lg overflow-hidden transition-all duration-250 ease-out opacity-0 pointer-events-none data-[expanded]:opacity-100 data-[expanded]:pointer-events-auto",
+    viewport:
+      "relative flex justify-center items-center bg-base-100 border border-base-300 rounded-lg shadow-lg overflow-hidden transition-all duration-250 ease-out opacity-0 pointer-events-none data-[expanded]:opacity-100 data-[expanded]:pointer-events-auto",
     arrow: "fill-base-100 transition-transform duration-200",
-    content: "absolute top-0 left-0 p-6 grid gap-3 grid-auto-flow-col grid-rows-3 animate-duration-250 animate-timing-ease animate-fill-forwards pointer-events-none data-[expanded]:pointer-events-auto",
+    content:
+      "absolute top-0 left-0 p-6 grid gap-3 grid-auto-flow-col grid-rows-3 animate-duration-250 animate-timing-ease animate-fill-forwards pointer-events-none data-[expanded]:pointer-events-auto",
     item: "block outline-none no-underline select-none p-3 rounded-md text-sm leading-tight hover:bg-base-200 focus:bg-base-200",
-    itemCallout: "flex flex-col justify-end w-full h-full bg-gradient-to-br from-primary to-secondary rounded-md p-6 no-underline outline-none select-none row-span-3 focus:outline-2 focus:outline-primary/50",
+    itemCallout:
+      "flex flex-col justify-end w-full h-full bg-gradient-to-br from-primary to-secondary rounded-md p-6 no-underline outline-none select-none row-span-3 focus:outline-2 focus:outline-primary/50",
     itemLabel: "text-base mb-2 font-medium text-base-content leading-tight",
     itemLabelCallout: "mt-4 text-xl text-primary-content",
     itemDescription: "text-sm opacity-80 text-base-content leading-snug",
@@ -50,7 +54,10 @@ export const navigationMenuVariants = tv({
   },
 });
 
-export interface NavigationMenuProps extends Omit<JSX.HTMLAttributes<HTMLElement>, "onChange"> {
+export interface NavigationMenuProps extends Omit<
+  JSX.HTMLAttributes<HTMLElement>,
+  "onChange"
+> {
   orientation?: "horizontal" | "vertical";
   size?: "sm" | "md" | "lg";
   defaultValue?: string;
@@ -115,7 +122,8 @@ export const NavigationMenuPortal = KobalteNavigationMenu.Portal;
 export const NavigationMenuContent = KobalteNavigationMenu.Content;
 export const NavigationMenuItem = KobalteNavigationMenu.Item;
 export const NavigationMenuItemLabel = KobalteNavigationMenu.ItemLabel;
-export const NavigationMenuItemDescription = KobalteNavigationMenu.ItemDescription;
+export const NavigationMenuItemDescription =
+  KobalteNavigationMenu.ItemDescription;
 export const NavigationMenuSeparator = KobalteNavigationMenu.Separator;
 export const NavigationMenuGroup = KobalteNavigationMenu.Group;
 export const NavigationMenuGroupLabel = KobalteNavigationMenu.GroupLabel;
