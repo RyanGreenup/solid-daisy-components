@@ -20,12 +20,12 @@ export const echartsVariants = tv({
 
 type EChartsVariants = Parameters<typeof echartsVariants>[0];
 
-export interface EChartsComponentProps extends EChartsVariants {
+export interface EChartsComponentProps {
   option: any; // ECharts option configuration object
   theme?: string | object;
   className?: string;
   loading?: boolean;
-  [key: string]: any;
+  size?: EChartsVariants["size"];
 }
 
 export default function EChartsComponent(props: EChartsComponentProps) {
@@ -155,7 +155,7 @@ export default function EChartsComponent(props: EChartsComponentProps) {
     });
 
   return (
-    <div class={containerClass()} style="min-height: 300px;" {...others}>
+    <div class={containerClass()} style="min-height: 300px;">
       <div ref={chartRef} style="width: 100%; height: 100%;"></div>
     </div>
   );

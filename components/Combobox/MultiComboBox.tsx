@@ -108,12 +108,12 @@ export function MultiCombobox(props: MultiComboboxProps): JSX.Element {
 
 const TransitionAnim = (props: { children: JSXElement }) => (
   <Transition
+    enterActiveClass="transition-all duration-200 ease-out"
     enterClass="opacity-0 scale-75 -translate-x-2"
     enterToClass="opacity-100 scale-100 translate-x-0"
+    exitActiveClass="transition-all duration-150 ease-out"
     exitClass="opacity-100 scale-100 translate-x-0"
     exitToClass="opacity-0 scale-75 -translate-x-2"
-    enterDuration={200}
-    exitDuration={150}
   >
     {props.children}
   </Transition>

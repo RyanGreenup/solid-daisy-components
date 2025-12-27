@@ -45,7 +45,7 @@ export const keybindListItemVariants = tv({
 type KeybindListVariants = Parameters<typeof keybindListVariants>[0];
 
 export type KeybindListProps<T = string> =
-  JSX.HTMLAttributes<HTMLUListElement> &
+  Omit<JSX.HTMLAttributes<HTMLUListElement>, "onSelect" | "onFocused" | "children"> &
     KeybindListVariants & {
       items: T[];
       onSelect?: (item: T, index: number) => void;

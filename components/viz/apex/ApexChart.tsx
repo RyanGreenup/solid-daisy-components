@@ -25,7 +25,7 @@ export const apexChartVariants = tv({
 
 type ApexChartVariants = Parameters<typeof apexChartVariants>[0];
 
-export interface ApexChartProps extends ApexChartVariants {
+export interface ApexChartProps {
   type:
     | "line"
     | "area"
@@ -40,15 +40,15 @@ export interface ApexChartProps extends ApexChartVariants {
     | "polarArea"
     | "boxPlot";
   series: any[];
-  options?: any;
+  options?: ApexCharts.ApexOptions;
   width?: string | number;
   height?: string | number;
   class?: string;
-  [key: string]: any;
+  size?: ApexChartVariants["size"];
 }
 
 export const ApexChart = (props: ApexChartProps) => {
-  const [local, others] = splitProps(props, [
+  const [local] = splitProps(props, [
     "type",
     "series",
     "options",
@@ -63,8 +63,8 @@ export const ApexChart = (props: ApexChartProps) => {
   const [isUpdating, setIsUpdating] = createSignal(false);
 
   // Create reactive memo for chart options with better stability
-  const chartOptions = createMemo((prev) => {
-    const newOptions = {
+  const chartOptions = createMemo((prev: ApexCharts.ApexOptions | undefined) => {
+    const newOptions: ApexCharts.ApexOptions = {
       chart: {
         type: local.type,
         background: "transparent",
@@ -83,7 +83,7 @@ export const ApexChart = (props: ApexChartProps) => {
     // Force re-render if chart type changes to prevent ApexCharts internal state issues
     if (
       prev &&
-      (prev.chart?.type !== newOptions.chart.type ||
+      (prev.chart?.type !== newOptions.chart?.type ||
         prev.chart?.id !== newOptions.chart?.id)
     ) {
       // Use a more aggressive re-creation strategy
@@ -122,7 +122,6 @@ export const ApexChart = (props: ApexChartProps) => {
           options={chartOptions()}
           width={local.width || "100%"}
           height={local.height || "100%"}
-          {...others}
         />
       )}
       {isUpdating() && (
