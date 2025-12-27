@@ -1,23 +1,12 @@
-import { ChartConfiguration } from "chart.js";
+import { ChartConfiguration, ChartData } from "chart.js";
 import ChartComponent from "./ChartComponent";
-import { JSX, createMemo } from "solid-js";
+import { createMemo } from "solid-js";
 
 export interface LineChartProps {
-  data: {
-    labels: string[];
-    datasets: {
-      label: string;
-      data: number[];
-      borderColor?: string;
-      backgroundColor?: string;
-      borderWidth?: number;
-      fill?: boolean;
-      tension?: number;
-    }[];
-  };
+  data: ChartData<"line">;
   title?: string;
   className?: string;
-  options?: ChartConfiguration["options"];
+  options?: ChartConfiguration<"line">["options"];
 }
 
 export const LineChart = (props: LineChartProps) => {

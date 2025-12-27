@@ -1,21 +1,12 @@
-import { ChartConfiguration } from "chart.js";
+import { ChartConfiguration, ChartData } from "chart.js";
 import ChartComponent from "./ChartComponent";
 import { createMemo } from "solid-js";
 
 export interface DoughnutChartProps {
-  data: {
-    labels: string[];
-    datasets: {
-      label?: string;
-      data: number[];
-      backgroundColor?: string[];
-      borderColor?: string[];
-      borderWidth?: number;
-    }[];
-  };
+  data: ChartData<"doughnut">;
   title?: string;
   className?: string;
-  options?: ChartConfiguration["options"];
+  options?: ChartConfiguration<"doughnut">["options"];
   cutout?: string | number;
 }
 

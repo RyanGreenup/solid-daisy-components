@@ -1,21 +1,12 @@
-import { ChartConfiguration } from "chart.js";
+import { ChartConfiguration, ChartData } from "chart.js";
 import ChartComponent from "./ChartComponent";
 import { createMemo } from "solid-js";
 
 export interface BarChartProps {
-  data: {
-    labels: string[];
-    datasets: {
-      label: string;
-      data: number[];
-      backgroundColor?: string | string[];
-      borderColor?: string | string[];
-      borderWidth?: number;
-    }[];
-  };
+  data: ChartData<"bar">;
   title?: string;
   className?: string;
-  options?: ChartConfiguration["options"];
+  options?: ChartConfiguration<"bar">["options"];
   horizontal?: boolean;
 }
 
