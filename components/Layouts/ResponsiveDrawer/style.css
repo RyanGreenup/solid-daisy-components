@@ -10,7 +10,7 @@
   --navbar-height: 4rem;
   --bottom-dash-height: clamp(3rem, 4vw, 4rem);
   --drawer-width: clamp(16rem, 80vw, 24rem);
-  --sidebar-width: clamp(12rem, 20vw, 20rem);
+  --sidebar-width: clamp(16rem, 20vw, 20rem);
   --transition-speed: var(--duration-transition-layout);
   --overlay-bg: rgba(0, 0, 0, 0.5);
   --bg-color: light-dark(#ffffff);
