@@ -45,8 +45,8 @@ export const avatarImageVariants = tv({
 type AvatarVariants = Parameters<typeof avatarVariants>[0];
 type AvatarImageVariants = Parameters<typeof avatarImageVariants>[0];
 
-export type AvatarProps = JSX.HTMLAttributes<HTMLDivElement> & 
-  AvatarVariants & 
+export type AvatarProps = JSX.HTMLAttributes<HTMLDivElement> &
+  AvatarVariants &
   AvatarImageVariants & {
     src?: string;
     alt?: string;

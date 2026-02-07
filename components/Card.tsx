@@ -62,21 +62,21 @@ type CardActionsVariants = Parameters<typeof cardActionsVariants>[0];
 
 export type CardProps = JSX.HTMLAttributes<HTMLDivElement> & CardVariants;
 
-export type CardBodyProps = JSX.HTMLAttributes<HTMLDivElement> & CardBodyVariants;
+export type CardBodyProps = JSX.HTMLAttributes<HTMLDivElement> &
+  CardBodyVariants;
 
-export type CardTitleProps = JSX.HTMLAttributes<HTMLHeadingElement> & CardTitleVariants;
+export type CardTitleProps = JSX.HTMLAttributes<HTMLHeadingElement> &
+  CardTitleVariants;
 
-export type CardActionsProps = JSX.HTMLAttributes<HTMLDivElement> & CardActionsVariants;
+export type CardActionsProps = JSX.HTMLAttributes<HTMLDivElement> &
+  CardActionsVariants;
 
 export const CardBody = (props: CardBodyProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={cardBodyVariants({ class: local.class })}
-    >
+    <div {...others} class={cardBodyVariants({ class: local.class })}>
       {safeChildren()}
     </div>
   );
@@ -87,10 +87,7 @@ export const CardTitle = (props: CardTitleProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <h2
-      {...others}
-      class={cardTitleVariants({ class: local.class })}
-    >
+    <h2 {...others} class={cardTitleVariants({ class: local.class })}>
       {safeChildren()}
     </h2>
   );

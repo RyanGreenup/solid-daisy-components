@@ -1,13 +1,13 @@
 import { JSX, For, mergeProps, Show } from "solid-js";
-import { 
-  Axis, 
-  AxisCursor, 
-  AxisGrid, 
-  AxisLabel, 
-  AxisTooltip, 
-  Bar, 
-  Chart 
-} from 'solid-charts';
+import {
+  Axis,
+  AxisCursor,
+  AxisGrid,
+  AxisLabel,
+  AxisTooltip,
+  Bar,
+  Chart,
+} from "solid-charts";
 
 export interface BarData {
   [key: string]: any;
@@ -37,17 +37,20 @@ export interface BarChartProps {
 }
 
 export const BarChart = (props: BarChartProps) => {
-  const merged = mergeProps({
-    width: "w-125",
-    height: "h-62.5",
-    showGrid: true,
-    showTooltip: true,
-    showCursor: true,
-    showYAxisLabels: true,
-    showXAxisLabels: true,
-    layout: "dodge" as const,
-    stackId: "defaultStack",
-  }, props);
+  const merged = mergeProps(
+    {
+      width: "w-125",
+      height: "h-62.5",
+      showGrid: true,
+      showTooltip: true,
+      showCursor: true,
+      showYAxisLabels: true,
+      showXAxisLabels: true,
+      layout: "dodge" as const,
+      stackId: "defaultStack",
+    },
+    props,
+  );
 
   // For dodge layout, we don't use stackId. For stack layout, we use the same stackId for all bars
   const getStackId = (index: number) => {
@@ -59,23 +62,25 @@ export const BarChart = (props: BarChartProps) => {
   };
 
   return (
-    <div class={`${merged.height} text-sm ${merged.width} m-6 ${merged.class || ""}`}>
+    <div
+      class={`${merged.height} text-sm ${merged.width} m-6 ${merged.class || ""}`}
+    >
       <Chart data={merged.data}>
         <Axis axis="y" position="left">
           {merged.showYAxisLabels && <AxisLabel />}
           {merged.showGrid && <AxisGrid class="opacity-20" />}
         </Axis>
-        
+
         <For each={merged.bars}>
           {(bar, index) => (
-            <Bar 
-              dataKey={bar.dataKey} 
+            <Bar
+              dataKey={bar.dataKey}
               stackId={getStackId(index())}
               class={bar.class || bar.color || "fill-primary"}
             />
           )}
         </For>
-        
+
         <Axis axis="x" position="bottom" dataKey={merged.xAxisKey}>
           {merged.showXAxisLabels && <AxisLabel />}
           {merged.showCursor && (
@@ -95,7 +100,9 @@ export const BarChart = (props: BarChartProps) => {
                   <For each={merged.bars}>
                     {(bar) => (
                       <div class="flex items-center px-2 py-1">
-                        <div class={`rounded-full size-2 ${bar.color?.replace('fill-', 'bg-') || 'bg-primary'}`} />
+                        <div
+                          class={`rounded-full size-2 ${bar.color?.replace("fill-", "bg-") || "bg-primary"}`}
+                        />
                         <p class="grow ml-1.5">{bar.label || bar.dataKey}</p>
                         <p class="ml-3">{tooltipProps.data[bar.dataKey]}</p>
                       </div>

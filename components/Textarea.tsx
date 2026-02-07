@@ -36,7 +36,8 @@ export const textareaVariants = tv({
 
 type TextareaVariants = Parameters<typeof textareaVariants>[0];
 
-export type TextareaProps = JSX.TextareaHTMLAttributes<HTMLTextAreaElement> & TextareaVariants;
+export type TextareaProps = JSX.TextareaHTMLAttributes<HTMLTextAreaElement> &
+  TextareaVariants;
 
 export const Textarea = (props: TextareaProps) => {
   const [local, others] = splitProps(props, [

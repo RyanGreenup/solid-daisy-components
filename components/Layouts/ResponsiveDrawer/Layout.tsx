@@ -1,4 +1,13 @@
-import { children, createEffect, createSignal, For, JSX, onCleanup, Show, splitProps } from "solid-js";
+import {
+  children,
+  createEffect,
+  createSignal,
+  For,
+  JSX,
+  onCleanup,
+  Show,
+  splitProps,
+} from "solid-js";
 import { useKeybinding } from "../../../utilities/useKeybinding";
 import "./style.css";
 
@@ -15,13 +24,18 @@ type CheckboxIdType = (typeof CheckboxId)[keyof typeof CheckboxId];
 const InputLayout = (props: { id: CheckboxIdType }) => {
   return <input type="checkbox" id={props.id} class="sr-only_iKj3qpqk" />;
 };
-export const Layout = (props: JSX.IntrinsicElements["div"] & {
-  enableKeyboardShortcuts?: boolean;
-}) => {
-  const [local, others] = splitProps(props, ["children", "class", "enableKeyboardShortcuts"]);
-  const cls = `layout_wJwQgiMd ${local.class || ''}`.trim();
+export const Layout = (
+  props: JSX.IntrinsicElements["div"] & {
+    enableKeyboardShortcuts?: boolean;
+  },
+) => {
+  const [local, others] = splitProps(props, [
+    "children",
+    "class",
+    "enableKeyboardShortcuts",
+  ]);
+  const cls = `layout_wJwQgiMd ${local.class || ""}`.trim();
   const safeChildren = children(() => local.children);
-
 
   // Helper function to toggle checkbox state
   const toggleCheckbox = (checkboxId: CheckboxIdType) => {
@@ -33,19 +47,24 @@ export const Layout = (props: JSX.IntrinsicElements["div"] & {
 
   // Helper functions to resize sidebar
   const getSidebarWidth = () => {
-    const currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width');
-        console.log("Got the sidebar width as ", currentWidth);
+    const currentWidth = getComputedStyle(
+      document.documentElement,
+    ).getPropertyValue("--sidebar-width");
+    console.log("Got the sidebar width as ", currentWidth);
     return parseFloat(currentWidth) || 17.5; // Default to 17.5rem if not set
   };
 
   const setSidebarWidth = (widthRem: number) => {
     // Clamp between 12rem and 25rem for reasonable bounds
     const clampedWidth = Math.max(12, Math.min(25, widthRem));
-    document.documentElement.style.setProperty('--sidebar-width', `${clampedWidth}rem`);
+    document.documentElement.style.setProperty(
+      "--sidebar-width",
+      `${clampedWidth}rem`,
+    );
   };
 
   const resizeSidebar = (delta: number) => {
-      console.log("Triggered");
+    console.log("Triggered");
     const currentWidth = getSidebarWidth();
     setSidebarWidth(currentWidth + delta);
   };
@@ -53,51 +72,39 @@ export const Layout = (props: JSX.IntrinsicElements["div"] & {
   // Set up keyboard shortcuts if enabled (default: true)
   if (local.enableKeyboardShortcuts !== false) {
     // Toggle sidebar: Ctrl+B (like VS Code)
-    useKeybinding(
-      { key: "b", ctrl: true },
-      () => toggleCheckbox(CheckboxId.SIDEBAR)
+    useKeybinding({ key: "b", ctrl: true }, () =>
+      toggleCheckbox(CheckboxId.SIDEBAR),
     );
 
     // Toggle right drawer: Ctrl+Shift+P (like command palette)
-    useKeybinding(
-      { key: "b", ctrl: true, alt: true },
-      () => toggleCheckbox(CheckboxId.RIGHT_DRAWER)
+    useKeybinding({ key: "b", ctrl: true, alt: true }, () =>
+      toggleCheckbox(CheckboxId.RIGHT_DRAWER),
     );
 
     // Toggle navbar: Ctrl+Shift+N
-    useKeybinding(
-      { key: "n", ctrl: true, shift: true },
-      () => toggleCheckbox(CheckboxId.NAVBAR)
+    useKeybinding({ key: "n", ctrl: true, shift: true }, () =>
+      toggleCheckbox(CheckboxId.NAVBAR),
     );
 
     // Toggle bottom dock: Ctrl+J (like VS Code terminal)
-    useKeybinding(
-      { key: "j", ctrl: true },
-      () => toggleCheckbox(CheckboxId.BOTTOM)
+    useKeybinding({ key: "j", ctrl: true }, () =>
+      toggleCheckbox(CheckboxId.BOTTOM),
     );
 
     // Toggle bottom dock (desktop): Ctrl+Shift+J
-    useKeybinding(
-      { key: "j", ctrl: true, shift: true },
-      () => toggleCheckbox(CheckboxId.BOTTOM_DESKTOP)
+    useKeybinding({ key: "j", ctrl: true, shift: true }, () =>
+      toggleCheckbox(CheckboxId.BOTTOM_DESKTOP),
     );
 
     // Resize sidebar: Ctrl+Shift+[ (decrease width)
-    useKeybinding(
-      { key: "[", ctrl: true},
-      () => resizeSidebar(-6)
-    );
+    useKeybinding({ key: "[", ctrl: true }, () => resizeSidebar(-6));
 
     // Resize sidebar: Ctrl+Shift+] (increase width)
-    useKeybinding(
-      { key: "]", ctrl: true},
-      () => resizeSidebar(6)
-    );
+    useKeybinding({ key: "]", ctrl: true }, () => resizeSidebar(6));
 
     // Reset sidebar to default width: Ctrl+Shift+0
-    useKeybinding(
-      { key: "0", ctrl: true, alt: true},
-      () => setSidebarWidth(17.5)
+    useKeybinding({ key: "0", ctrl: true, alt: true }, () =>
+      setSidebarWidth(17.5),
     );
   }
 
@@ -152,7 +159,10 @@ export const MainWrapper = (props: JSX.IntrinsicElements["main"]) => {
   const safeChildren = children(() => local.children);
   return (
     <main {...others} class={cls}>
-      <label for={CheckboxId.SIDEBAR} class="overlay_g8Z82nUf left-overlay_LHPeXu4H"></label>
+      <label
+        for={CheckboxId.SIDEBAR}
+        class="overlay_g8Z82nUf left-overlay_LHPeXu4H"
+      ></label>
       <label
         for={CheckboxId.RIGHT_DRAWER}
         class="overlay_g8Z82nUf right-overlay_IZyMDE88"
@@ -166,53 +176,58 @@ export const Sidebar = (props: JSX.IntrinsicElements["aside"]) => {
   const [local, others] = splitProps(props, ["children", "class"]);
   const cls = `sidebar_7doPVoW4 ${local.class}`;
   const safeChildren = children(() => local.children);
-  
+
   const [isResizing, setIsResizing] = createSignal(false);
   let resizeHandleRef: HTMLDivElement;
 
   // Helper functions for mouse resize
   const getSidebarWidth = () => {
-    const currentWidth = getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width');
+    const currentWidth = getComputedStyle(
+      document.documentElement,
+    ).getPropertyValue("--sidebar-width");
     return parseFloat(currentWidth) || 17.5;
   };
 
   const setSidebarWidth = (widthRem: number) => {
     const clampedWidth = Math.max(12, Math.min(25, widthRem));
-    document.documentElement.style.setProperty('--sidebar-width', `${clampedWidth}rem`);
+    document.documentElement.style.setProperty(
+      "--sidebar-width",
+      `${clampedWidth}rem`,
+    );
   };
 
   const handlePointerStart = (startX: number) => {
     setIsResizing(true);
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
     // Prevent scrolling on touch devices during resize
-    document.body.style.touchAction = 'none';
+    document.body.style.touchAction = "none";
 
     const startWidth = getSidebarWidth();
 
     const handlePointerMove = (clientX: number) => {
       if (!isResizing()) return;
-      
+
       const deltaX = clientX - startX;
       // Convert pixels to rem (assuming 16px = 1rem)
       const deltaRem = deltaX / 16;
       const newWidth = startWidth + deltaRem;
-      
+
       setSidebarWidth(newWidth);
     };
 
     const handlePointerEnd = () => {
       setIsResizing(false);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-      document.body.style.touchAction = '';
-      
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+      document.body.style.touchAction = "";
+
       // Remove all event listeners
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('touchmove', handleTouchMove);
-      document.removeEventListener('touchend', handleTouchEnd);
-      document.removeEventListener('touchcancel', handleTouchEnd);
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+      document.removeEventListener("touchcancel", handleTouchEnd);
     };
 
     // Mouse event handlers
@@ -237,11 +252,11 @@ export const Sidebar = (props: JSX.IntrinsicElements["aside"]) => {
     };
 
     // Add event listeners for both mouse and touch
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-    document.addEventListener('touchmove', handleTouchMove, { passive: false });
-    document.addEventListener('touchend', handleTouchEnd);
-    document.addEventListener('touchcancel', handleTouchEnd);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
+    document.addEventListener("touchend", handleTouchEnd);
+    document.addEventListener("touchcancel", handleTouchEnd);
   };
 
   const handleMouseDown = (e: MouseEvent) => {
@@ -259,8 +274,8 @@ export const Sidebar = (props: JSX.IntrinsicElements["aside"]) => {
   // Clean up event listeners on unmount
   onCleanup(() => {
     if (isResizing()) {
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
     }
   });
 
@@ -268,8 +283,8 @@ export const Sidebar = (props: JSX.IntrinsicElements["aside"]) => {
     <aside {...others} class={cls}>
       {safeChildren()}
 
-      <div 
-        ref={resizeHandleRef!} 
+      <div
+        ref={resizeHandleRef!}
         class="resize-handle_rj5Mm6Gp"
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}

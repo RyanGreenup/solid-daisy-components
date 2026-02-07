@@ -17,22 +17,24 @@ export const paginationVariants = tv({
 
 type PaginationVariants = Parameters<typeof paginationVariants>[0];
 
-export type PaginationProps = JSX.HTMLAttributes<HTMLDivElement> & PaginationVariants & {
-  currentPage?: number;
-  totalPages?: number;
-  onPageChange?: (page: number) => void;
-  showFirstLast?: boolean;
-  showPrevNext?: boolean;
-  maxVisiblePages?: number;
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
-  disabled?: boolean;
-};
+export type PaginationProps = JSX.HTMLAttributes<HTMLDivElement> &
+  PaginationVariants & {
+    currentPage?: number;
+    totalPages?: number;
+    onPageChange?: (page: number) => void;
+    showFirstLast?: boolean;
+    showPrevNext?: boolean;
+    maxVisiblePages?: number;
+    size?: "xs" | "sm" | "md" | "lg" | "xl";
+    disabled?: boolean;
+  };
 
-export type PaginationButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
-  active?: boolean;
-  page?: number;
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
-};
+export type PaginationButtonProps =
+  JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
+    active?: boolean;
+    page?: number;
+    size?: "xs" | "sm" | "md" | "lg" | "xl";
+  };
 
 export const PaginationButton = (props: PaginationButtonProps) => {
   const [local, others] = splitProps(props, [
@@ -81,7 +83,7 @@ const PaginationComponent = (props: PaginationProps) => {
     const total = totalPages();
     const current = currentPage();
     const max = maxVisible();
-    
+
     if (total <= max) {
       return Array.from({ length: total }, (_, i) => i + 1);
     }
@@ -170,8 +172,15 @@ const PaginationComponent = (props: PaginationProps) => {
         )}
       </For>
 
-      <Show when={local.showFirstLast && visiblePages()[visiblePages().length - 1] < totalPages()}>
-        <Show when={visiblePages()[visiblePages().length - 1] < totalPages() - 1}>
+      <Show
+        when={
+          local.showFirstLast &&
+          visiblePages()[visiblePages().length - 1] < totalPages()
+        }
+      >
+        <Show
+          when={visiblePages()[visiblePages().length - 1] < totalPages() - 1}
+        >
           <PaginationButton size={local.size} disabled>
             ...
           </PaginationButton>

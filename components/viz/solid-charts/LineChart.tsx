@@ -1,5 +1,5 @@
 import { JSX, For, mergeProps } from "solid-js";
-import { Axis, AxisGrid, AxisLabel, AxisLine, Chart, Line } from 'solid-charts';
+import { Axis, AxisGrid, AxisLabel, AxisLine, Chart, Line } from "solid-charts";
 
 export interface LineData {
   [key: string]: any;
@@ -26,15 +26,18 @@ export interface LineChartProps {
 }
 
 export const LineChart = (props: LineChartProps) => {
-  const merged = mergeProps({
-    width: "w-125",
-    height: "h-37.5",
-    showGrid: true,
-    showXAxisLine: true,
-    showYAxisLabels: true,
-    showXAxisLabels: true,
-    strokeWidth: 3,
-  }, props);
+  const merged = mergeProps(
+    {
+      width: "w-125",
+      height: "h-37.5",
+      showGrid: true,
+      showXAxisLine: true,
+      showYAxisLabels: true,
+      showXAxisLabels: true,
+      strokeWidth: 3,
+    },
+    props,
+  );
 
   return (
     <div class={`${merged.height} ${merged.width} ${merged.class || ""}`}>
@@ -49,8 +52,8 @@ export const LineChart = (props: LineChartProps) => {
         </Axis>
         <For each={merged.lines}>
           {(line) => (
-            <Line 
-              dataKey={line.dataKey} 
+            <Line
+              dataKey={line.dataKey}
               stroke-width={line.strokeWidth || merged.strokeWidth}
               class={line.class || line.color || "stroke-primary"}
             />

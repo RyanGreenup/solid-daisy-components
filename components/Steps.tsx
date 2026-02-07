@@ -46,17 +46,15 @@ export type StepsProps = JSX.HTMLAttributes<HTMLUListElement> & StepsVariants;
 
 export type StepProps = JSX.LiHTMLAttributes<HTMLLIElement> & StepVariants;
 
-export type StepIconProps = JSX.HTMLAttributes<HTMLSpanElement> & StepIconVariants;
+export type StepIconProps = JSX.HTMLAttributes<HTMLSpanElement> &
+  StepIconVariants;
 
 export const StepIcon = (props: StepIconProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
   return (
-    <span
-      {...others}
-      class={stepIconVariants({ class: local.class })}
-    >
+    <span {...others} class={stepIconVariants({ class: local.class })}>
       {safeChildren()}
     </span>
   );

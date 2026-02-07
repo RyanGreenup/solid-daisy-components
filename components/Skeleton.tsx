@@ -7,7 +7,8 @@ export const skeletonVariants = tv({
 
 type SkeletonVariants = Parameters<typeof skeletonVariants>[0];
 
-export type SkeletonProps = JSX.HTMLAttributes<HTMLDivElement> & SkeletonVariants;
+export type SkeletonProps = JSX.HTMLAttributes<HTMLDivElement> &
+  SkeletonVariants;
 
 export const Skeleton = (props: SkeletonProps) => {
   const [local, others] = splitProps(props, ["class"]);

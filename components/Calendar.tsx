@@ -1,5 +1,5 @@
 import { tv } from "tailwind-variants";
-import { splitProps, children, JSX, onMount } from "solid-js";
+import { splitProps, children, ComponentProps, onMount } from "solid-js";
 
 export const calendarVariants = tv({
   base: "cally",
@@ -7,34 +7,44 @@ export const calendarVariants = tv({
 
 type CalendarVariants = Parameters<typeof calendarVariants>[0];
 
-export type CalendarProps = JSX.HTMLAttributes<HTMLElement> & CalendarVariants;
+export type CalendarProps = ComponentProps<"div"> & CalendarVariants;
 
-export type CalendarDateProps = JSX.HTMLAttributes<HTMLElement> & CalendarVariants & {
+export type CalendarDateProps = ComponentProps<"div"> &
+  CalendarVariants & {
+    value?: string;
+    min?: string;
+    max?: string;
+    onDateChange?: (value: string) => void;
+  };
+
+export type CalendarMonthProps = ComponentProps<"div">;
+
+// Define types for the Cally web components
+interface CalendarDateElementProps {
   value?: string;
   min?: string;
   max?: string;
-  onDateChange?: (value: string) => void;
-};
+  class?: string;
+  children?: any;
+  "on:change"?: (event: CustomEvent) => void;
+}
 
-export type CalendarMonthProps = JSX.HTMLAttributes<HTMLElement>;
+interface CalendarMonthElementProps {
+  class?: string;
+  children?: any;
+}
 
-// Define types for the Cally web components
-declare global {
+declare module "solid-js" {
   namespace JSX {
     interface IntrinsicElements {
-      'calendar-date': JSX.HTMLAttributes<HTMLElement> & {
-        value?: string;
-        min?: string;
-        max?: string;
-        'on:change'?: (event: CustomEvent) => void;
-      };
-      'calendar-month': JSX.HTMLAttributes<HTMLElement>;
+      "calendar-date": CalendarDateElementProps;
+      "calendar-month": CalendarMonthElementProps;
     }
   }
 }
 
 export const CalendarDate = (props: CalendarDateProps) => {
-  const [local, others] = splitProps(props, [
+  const [local] = splitProps(props, [
     "class",
     "children",
     "value",
@@ -52,13 +62,12 @@ export const CalendarDate = (props: CalendarDateProps) => {
 
   const handleChange = (event: CustomEvent) => {
     if (local.onDateChange) {
-      local.onDateChange(event.target.value);
+      local.onDateChange((event.target as HTMLInputElement).value);
     }
   };
 
   return (
     <calendar-date
-      {...others}
       class={calendarVariants({ class: local.class })}
       value={local.value}
       min={local.min}
@@ -71,17 +80,10 @@ export const CalendarDate = (props: CalendarDateProps) => {
 };
 
 export const CalendarMonth = (props: CalendarMonthProps) => {
-  const [local, others] = splitProps(props, ["class", "children"]);
+  const [local] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
-  return (
-    <calendar-month
-      {...others}
-      class={local.class}
-    >
-      {safeChildren()}
-    </calendar-month>
-  );
+  return <calendar-month class={local.class}>{safeChildren()}</calendar-month>;
 };
 
 const CalendarComponent = CalendarDate;

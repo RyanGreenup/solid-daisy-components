@@ -17,21 +17,21 @@ type FieldsetVariants = Parameters<typeof fieldsetVariants>[0];
 type FieldsetLegendVariants = Parameters<typeof fieldsetLegendVariants>[0];
 type LabelVariants = Parameters<typeof labelVariants>[0];
 
-export type FieldsetProps = JSX.FieldsetHTMLAttributes<HTMLFieldSetElement> & FieldsetVariants;
+export type FieldsetProps = JSX.FieldsetHTMLAttributes<HTMLFieldSetElement> &
+  FieldsetVariants;
 
-export type FieldsetLegendProps = JSX.HTMLAttributes<HTMLLegendElement> & FieldsetLegendVariants;
+export type FieldsetLegendProps = JSX.HTMLAttributes<HTMLLegendElement> &
+  FieldsetLegendVariants;
 
-export type LabelProps = JSX.LabelHTMLAttributes<HTMLLabelElement> & LabelVariants;
+export type LabelProps = JSX.LabelHTMLAttributes<HTMLLabelElement> &
+  LabelVariants;
 
 export const FieldsetLegend = (props: FieldsetLegendProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
   return (
-    <legend
-      {...others}
-      class={fieldsetLegendVariants({ class: local.class })}
-    >
+    <legend {...others} class={fieldsetLegendVariants({ class: local.class })}>
       {safeChildren()}
     </legend>
   );
@@ -42,10 +42,7 @@ export const Label = (props: LabelProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <label
-      {...others}
-      class={labelVariants({ class: local.class })}
-    >
+    <label {...others} class={labelVariants({ class: local.class })}>
       {safeChildren()}
     </label>
   );
@@ -56,10 +53,7 @@ const FieldsetComponent = (props: FieldsetProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <fieldset
-      {...others}
-      class={fieldsetVariants({ class: local.class })}
-    >
+    <fieldset {...others} class={fieldsetVariants({ class: local.class })}>
       {safeChildren()}
     </fieldset>
   );

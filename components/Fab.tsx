@@ -30,14 +30,21 @@ export type FabProps = JSX.HTMLAttributes<HTMLDivElement> & FabVariants;
 
 export type FabTriggerProps = JSX.HTMLAttributes<HTMLDivElement>;
 
-export type FabCloseProps = JSX.HTMLAttributes<HTMLDivElement> & FabCloseVariants;
+export type FabCloseProps = JSX.HTMLAttributes<HTMLDivElement> &
+  FabCloseVariants;
 
-export type FabMainActionProps = JSX.HTMLAttributes<HTMLDivElement> & FabMainActionVariants;
+export type FabMainActionProps = JSX.HTMLAttributes<HTMLDivElement> &
+  FabMainActionVariants;
 
 export type FabItemProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const FabTrigger = (props: FabTriggerProps) => {
-  const [local, others] = splitProps(props, ["class", "children", "tabindex", "role"]);
+  const [local, others] = splitProps(props, [
+    "class",
+    "children",
+    "tabindex",
+    "role",
+  ]);
   const safeChildren = children(() => local.children);
 
   return (
@@ -57,10 +64,7 @@ export const FabClose = (props: FabCloseProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={fabCloseVariants({ class: local.class })}
-    >
+    <div {...others} class={fabCloseVariants({ class: local.class })}>
       {safeChildren()}
     </div>
   );
@@ -71,10 +75,7 @@ export const FabMainAction = (props: FabMainActionProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={fabMainActionVariants({ class: local.class })}
-    >
+    <div {...others} class={fabMainActionVariants({ class: local.class })}>
       {safeChildren()}
     </div>
   );
@@ -85,21 +86,14 @@ export const FabItem = (props: FabItemProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={local.class}
-    >
+    <div {...others} class={local.class}>
       {safeChildren()}
     </div>
   );
 };
 
 const FabComponent = (props: FabProps) => {
-  const [local, others] = splitProps(props, [
-    "flower",
-    "class",
-    "children",
-  ]);
+  const [local, others] = splitProps(props, ["flower", "class", "children"]);
 
   const safeChildren = children(() => local.children);
 

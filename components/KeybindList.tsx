@@ -44,19 +44,21 @@ export const keybindListItemVariants = tv({
 
 type KeybindListVariants = Parameters<typeof keybindListVariants>[0];
 
-export type KeybindListProps<T = string> =
-  JSX.HTMLAttributes<HTMLUListElement> &
-    KeybindListVariants & {
-      items: T[];
-      onSelect?: (item: T, index: number) => void;
-      onFocused?: (item: T, index: number) => void;
-      selectedIndex?: number;
-      children?: (
-        item: T,
-        index: () => number,
-        state: { focused: boolean; selected: boolean },
-      ) => JSX.Element;
-    };
+export type KeybindListProps<T = string> = Omit<
+  JSX.HTMLAttributes<HTMLUListElement>,
+  "onSelect" | "onFocused" | "children"
+> &
+  KeybindListVariants & {
+    items: T[];
+    onSelect?: (item: T, index: number) => void;
+    onFocused?: (item: T, index: number) => void;
+    selectedIndex?: number;
+    children?: (
+      item: T,
+      index: () => number,
+      state: { focused: boolean; selected: boolean },
+    ) => JSX.Element;
+  };
 
 export function KeybindList<T = string>(props: KeybindListProps<T>) {
   const [local, others] = splitProps(props, [

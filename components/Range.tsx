@@ -31,10 +31,11 @@ export const rangeVariants = tv({
 
 type RangeVariants = Parameters<typeof rangeVariants>[0];
 
-export type RangeProps = JSX.InputHTMLAttributes<HTMLInputElement> & RangeVariants & {
-  valueSignal?: [Accessor<number>, Setter<number>];
-  wheelToChange?: boolean;
-};
+export type RangeProps = JSX.InputHTMLAttributes<HTMLInputElement> &
+  RangeVariants & {
+    valueSignal?: [Accessor<number>, Setter<number>];
+    wheelToChange?: boolean;
+  };
 
 export const Range = (props: RangeProps) => {
   const [local, others] = splitProps(props, [
@@ -52,58 +53,80 @@ export const Range = (props: RangeProps) => {
   const [wheelAccumulator, setWheelAccumulator] = createSignal(0);
   const WHEEL_THRESHOLD = 50; // Require 50 deltaY units before triggering a step
 
-  const handleInput = (e: Event) => {
+  const handleInput: JSX.InputEventHandlerUnion<
+    HTMLInputElement,
+    InputEvent
+  > = (e) => {
     const target = e.target as HTMLInputElement;
     const numValue = Number(target.value);
-    
+
     if (local.valueSignal) {
       local.valueSignal[1](numValue);
     }
-    
-    if (local.onInput) {
-      local.onInput(e as InputEvent);
+
+    if (typeof local.onInput === "function") {
+      local.onInput(e);
     }
   };
 
-  const handleChange = (e: Event) => {
-    if (local.onChange) {
-      local.onChange(e as Event & { target: HTMLInputElement });
+  const handleChange: JSX.ChangeEventHandlerUnion<HTMLInputElement, Event> = (
+    e,
+  ) => {
+    if (typeof local.onChange === "function") {
+      local.onChange(e);
     }
   };
 
   const handleWheel = (e: WheelEvent) => {
     const shouldHandleWheel = local.wheelToChange !== false;
-    
+
     if (shouldHandleWheel) {
       e.preventDefault();
-      
+
       // Accumulate wheel delta until threshold is reached
       const newAccumulator = wheelAccumulator() + Math.abs(e.deltaY);
-      
+
       if (newAccumulator >= WHEEL_THRESHOLD) {
         // Reset accumulator and trigger value change
         setWheelAccumulator(0);
-        
+
         const target = e.target as HTMLInputElement;
         const min = Number(target.min) || 0;
         const max = Number(target.max) || 100;
         const step = Number(target.step) || 1;
-        
-        const currentValue = local.valueSignal ? local.valueSignal[0]() : Number(target.value);
+
+        const currentValue = local.valueSignal
+          ? local.valueSignal[0]()
+          : Number(target.value);
         const direction = e.deltaY > 0 ? -1 : 1;
-        const newValue = Math.min(max, Math.max(min, currentValue + (direction * step)));
-        
+        const newValue = Math.min(
+          max,
+          Math.max(min, currentValue + direction * step),
+        );
+
         if (local.valueSignal) {
           local.valueSignal[1](newValue);
         } else {
           target.value = String(newValue);
-          const syntheticEvent = new Event('input', { bubbles: true });
+          const syntheticEvent = new Event("input", { bubbles: true });
           target.dispatchEvent(syntheticEvent);
         }
-        
-        if (local.onChange) {
-          const syntheticChangeEvent = new Event('change', { bubbles: true }) as Event & { target: HTMLInputElement };
-          Object.defineProperty(syntheticChangeEvent, 'target', { value: target, enumerable: true });
+
+        if (typeof local.onChange === "function") {
+          const syntheticChangeEvent = new Event("change", {
+            bubbles: true,
+          }) as Event & {
+            currentTarget: HTMLInputElement;
+            target: HTMLInputElement;
+          };
+          Object.defineProperty(syntheticChangeEvent, "target", {
+            value: target,
+            enumerable: true,
+          });
+          Object.defineProperty(syntheticChangeEvent, "currentTarget", {
+            value: target,
+            enumerable: true,
+          });
           local.onChange(syntheticChangeEvent);
         }
       } else {
@@ -111,9 +134,11 @@ export const Range = (props: RangeProps) => {
         setWheelAccumulator(newAccumulator);
       }
     }
-    
-    if (local.onWheel) {
-      local.onWheel(e);
+
+    if (typeof local.onWheel === "function") {
+      local.onWheel(
+        e as WheelEvent & { currentTarget: HTMLInputElement; target: Element },
+      );
     }
   };
 

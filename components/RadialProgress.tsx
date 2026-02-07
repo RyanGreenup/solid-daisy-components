@@ -7,12 +7,13 @@ export const radialProgressVariants = tv({
 
 type RadialProgressVariants = Parameters<typeof radialProgressVariants>[0];
 
-export type RadialProgressProps = JSX.HTMLAttributes<HTMLDivElement> & RadialProgressVariants & {
-  value: number;
-  size?: string;
-  thickness?: string;
-  max?: number;
-};
+export type RadialProgressProps = JSX.HTMLAttributes<HTMLDivElement> &
+  RadialProgressVariants & {
+    value: number;
+    size?: string;
+    thickness?: string;
+    max?: number;
+  };
 
 export const RadialProgress = (props: RadialProgressProps) => {
   const [local, others] = splitProps(props, [
@@ -30,15 +31,24 @@ export const RadialProgress = (props: RadialProgressProps) => {
 
   const safeChildren = children(() => local.children);
   const maxValue = () => local.max ?? 100;
-  
-  const customStyle = createMemo(() => {
-    const baseStyle = {
-      "--value": local.value.toString(),
-      ...(local.size && { "--size": local.size }),
-      ...(local.thickness && { "--thickness": local.thickness }),
-    } as JSX.CSSProperties;
 
-    return local.style ? { ...baseStyle, ...local.style } : baseStyle;
+  const customStyle = createMemo((): JSX.CSSProperties => {
+    const baseStyle: JSX.CSSProperties = {
+      "--value": local.value.toString(),
+    };
+
+    if (local.size) {
+      baseStyle["--size"] = local.size;
+    }
+    if (local.thickness) {
+      baseStyle["--thickness"] = local.thickness;
+    }
+
+    if (local.style && typeof local.style === "object") {
+      return { ...baseStyle, ...local.style };
+    }
+
+    return baseStyle;
   });
 
   return (

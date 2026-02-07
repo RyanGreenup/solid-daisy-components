@@ -40,21 +40,20 @@ export const tooltipContentVariants = tv({
 type TooltipVariants = Parameters<typeof tooltipVariants>[0];
 type TooltipContentVariants = Parameters<typeof tooltipContentVariants>[0];
 
-export type TooltipProps = JSX.HTMLAttributes<HTMLDivElement> & TooltipVariants & {
-  tip?: string;
-};
+export type TooltipProps = JSX.HTMLAttributes<HTMLDivElement> &
+  TooltipVariants & {
+    tip?: string;
+  };
 
-export type TooltipContentProps = JSX.HTMLAttributes<HTMLDivElement> & TooltipContentVariants;
+export type TooltipContentProps = JSX.HTMLAttributes<HTMLDivElement> &
+  TooltipContentVariants;
 
 export const TooltipContent = (props: TooltipContentProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={tooltipContentVariants({ class: local.class })}
-    >
+    <div {...others} class={tooltipContentVariants({ class: local.class })}>
       {safeChildren()}
     </div>
   );

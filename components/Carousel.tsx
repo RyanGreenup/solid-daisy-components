@@ -27,19 +27,18 @@ export const carouselItemVariants = tv({
 type CarouselVariants = Parameters<typeof carouselVariants>[0];
 type CarouselItemVariants = Parameters<typeof carouselItemVariants>[0];
 
-export type CarouselProps = JSX.HTMLAttributes<HTMLDivElement> & CarouselVariants;
+export type CarouselProps = JSX.HTMLAttributes<HTMLDivElement> &
+  CarouselVariants;
 
-export type CarouselItemProps = JSX.HTMLAttributes<HTMLDivElement> & CarouselItemVariants;
+export type CarouselItemProps = JSX.HTMLAttributes<HTMLDivElement> &
+  CarouselItemVariants;
 
 export const CarouselItem = (props: CarouselItemProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={carouselItemVariants({ class: local.class })}
-    >
+    <div {...others} class={carouselItemVariants({ class: local.class })}>
       {safeChildren()}
     </div>
   );

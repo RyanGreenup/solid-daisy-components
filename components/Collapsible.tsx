@@ -1,5 +1,12 @@
 import { tv } from "tailwind-variants";
-import { splitProps, children, JSX, createSignal, Show, createEffect } from "solid-js";
+import {
+  splitProps,
+  children,
+  JSX,
+  createSignal,
+  Show,
+  createEffect,
+} from "solid-js";
 import { Transition } from "solid-transition-group";
 import ChevronDown from "lucide-solid/icons/chevron-down";
 
@@ -10,7 +17,8 @@ export const collapsibleVariants = tv({
       default: "border border-base-300 rounded-box overflow-hidden",
       ghost: "bg-transparent",
       card: "bg-base-100 shadow-sm border border-base-200 rounded-box overflow-hidden",
-      outline: "border-2 border-base-300 rounded-box overflow-hidden bg-transparent",
+      outline:
+        "border-2 border-base-300 rounded-box overflow-hidden bg-transparent",
     },
   },
   defaultVariants: {
@@ -67,7 +75,10 @@ export const collapsibleIconVariants = tv({
 
 type CollapsibleVariants = Parameters<typeof collapsibleVariants>[0];
 
-export type CollapsibleProps = JSX.HTMLAttributes<HTMLDivElement> & 
+export type CollapsibleProps = Omit<
+  JSX.HTMLAttributes<HTMLDivElement>,
+  "title" | "onToggle"
+> &
   CollapsibleVariants & {
     title?: JSX.Element;
     subtitle?: JSX.Element;
@@ -84,7 +95,7 @@ export const Collapsible = (props: CollapsibleProps) => {
     "class",
     "children",
     "title",
-    "subtitle", 
+    "subtitle",
     "defaultExpanded",
     "expanded",
     "onToggle",
@@ -95,27 +106,30 @@ export const Collapsible = (props: CollapsibleProps) => {
   const safeChildren = children(() => local.children);
 
   // Internal state for uncontrolled mode
-  const [internalExpanded, setInternalExpanded] = createSignal(local.defaultExpanded ?? false);
-  
+  const [internalExpanded, setInternalExpanded] = createSignal(
+    local.defaultExpanded ?? false,
+  );
+
   // Use controlled prop if provided, otherwise use internal state
-  const isExpanded = () => local.expanded !== undefined ? local.expanded : internalExpanded();
-  
+  const isExpanded = () =>
+    local.expanded !== undefined ? local.expanded : internalExpanded();
+
   const handleToggle = () => {
     if (local.disabled) return;
-    
+
     const newExpanded = !isExpanded();
-    
+
     // Update internal state if uncontrolled
     if (local.expanded === undefined) {
       setInternalExpanded(newExpanded);
     }
-    
+
     // Call onToggle callback
     local.onToggle?.(newExpanded);
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       handleToggle();
     }
@@ -142,17 +156,15 @@ export const Collapsible = (props: CollapsibleProps) => {
         aria-controls="collapsible-content"
       >
         <div class="flex-1 text-left">
-          <div class="font-medium text-base-content">
-            {local.title}
-          </div>
+          <div class="font-medium text-base-content">{local.title}</div>
           {local.subtitle && (
             <div class="text-sm text-base-content/70 mt-1">
               {local.subtitle}
             </div>
           )}
         </div>
-        
-        {(local.showIcon !== false) && (
+
+        {local.showIcon !== false && (
           <ChevronDown
             size={20}
             class={collapsibleIconVariants({

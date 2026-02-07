@@ -1,6 +1,5 @@
 import { tv } from "tailwind-variants";
-import { splitProps, children, JSX } from "solid-js";
-import { Dynamic } from "solid-js/web";
+import { splitProps, children, JSX, Show } from "solid-js";
 
 export const filterVariants = tv({
   base: "filter",
@@ -13,11 +12,15 @@ export const filterResetVariants = tv({
 type FilterVariants = Parameters<typeof filterVariants>[0];
 type FilterResetVariants = Parameters<typeof filterResetVariants>[0];
 
-export type FilterProps = JSX.HTMLAttributes<HTMLDivElement | HTMLFormElement> & FilterVariants & {
-  as?: "form" | "div";
-};
+type FilterDivProps = JSX.HTMLAttributes<HTMLDivElement> &
+  FilterVariants & { as?: "div" };
+type FilterFormProps = JSX.FormHTMLAttributes<HTMLFormElement> &
+  FilterVariants & { as: "form" };
 
-export type FilterResetProps = JSX.InputHTMLAttributes<HTMLInputElement> & FilterResetVariants;
+export type FilterProps = FilterDivProps | FilterFormProps;
+
+export type FilterResetProps = JSX.InputHTMLAttributes<HTMLInputElement> &
+  FilterResetVariants;
 
 export type FilterInputProps = JSX.InputHTMLAttributes<HTMLInputElement>;
 
@@ -45,18 +48,36 @@ export const FilterInput = (props: FilterInputProps) => {
   );
 };
 
-const FilterComponent = (props: FilterProps) => {
+function FilterAsForm(props: FilterFormProps) {
   const [local, others] = splitProps(props, ["as", "class", "children"]);
   const safeChildren = children(() => local.children);
 
   return (
-    <Dynamic
-      component={local.as || "div"}
-      {...others}
-      class={filterVariants({ class: local.class })}
-    >
+    <form {...others} class={filterVariants({ class: local.class })}>
       {safeChildren()}
-    </Dynamic>
+    </form>
+  );
+}
+
+function FilterAsDiv(props: FilterDivProps) {
+  const [local, others] = splitProps(props, ["as", "class", "children"]);
+  const safeChildren = children(() => local.children);
+
+  return (
+    <div {...others} class={filterVariants({ class: local.class })}>
+      {safeChildren()}
+    </div>
+  );
+}
+
+const FilterComponent = (props: FilterProps) => {
+  return (
+    <Show
+      when={props.as === "form"}
+      fallback={<FilterAsDiv {...(props as FilterDivProps)} />}
+    >
+      <FilterAsForm {...(props as FilterFormProps)} />
+    </Show>
   );
 };
 

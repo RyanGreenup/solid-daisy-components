@@ -31,15 +31,11 @@ export const toggleVariants = tv({
 
 type ToggleVariants = Parameters<typeof toggleVariants>[0];
 
-export type ToggleProps = JSX.InputHTMLAttributes<HTMLInputElement> & ToggleVariants;
+export type ToggleProps = JSX.InputHTMLAttributes<HTMLInputElement> &
+  ToggleVariants;
 
 export const Toggle = (props: ToggleProps) => {
-  const [local, others] = splitProps(props, [
-    "color",
-    "size",
-    "class",
-    "type",
-  ]);
+  const [local, others] = splitProps(props, ["color", "size", "class", "type"]);
 
   return (
     <input

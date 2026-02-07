@@ -29,26 +29,27 @@ type HeroOverlayVariants = Parameters<typeof heroOverlayVariants>[0];
 
 export type HeroProps = JSX.HTMLAttributes<HTMLDivElement> & HeroVariants;
 
-export type HeroContentProps = JSX.HTMLAttributes<HTMLDivElement> & HeroContentVariants & {
-  title?: string;
-  description?: string;
-};
+export type HeroContentProps = JSX.HTMLAttributes<HTMLDivElement> &
+  HeroContentVariants & {
+    title?: string;
+    description?: string;
+  };
 
-export type HeroTitleProps = JSX.HTMLAttributes<HTMLHeadingElement> & HeroTitleVariants;
+export type HeroTitleProps = JSX.HTMLAttributes<HTMLHeadingElement> &
+  HeroTitleVariants;
 
-export type HeroDescriptionProps = JSX.HTMLAttributes<HTMLParagraphElement> & HeroDescriptionVariants;
+export type HeroDescriptionProps = JSX.HTMLAttributes<HTMLParagraphElement> &
+  HeroDescriptionVariants;
 
-export type HeroOverlayProps = JSX.HTMLAttributes<HTMLDivElement> & HeroOverlayVariants;
+export type HeroOverlayProps = JSX.HTMLAttributes<HTMLDivElement> &
+  HeroOverlayVariants;
 
 export const HeroTitle = (props: HeroTitleProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
   return (
-    <h1
-      {...others}
-      class={heroTitleVariants({ class: local.class })}
-    >
+    <h1 {...others} class={heroTitleVariants({ class: local.class })}>
       {safeChildren()}
     </h1>
   );
@@ -59,24 +60,23 @@ export const HeroDescription = (props: HeroDescriptionProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <p
-      {...others}
-      class={heroDescriptionVariants({ class: local.class })}
-    >
+    <p {...others} class={heroDescriptionVariants({ class: local.class })}>
       {safeChildren()}
     </p>
   );
 };
 
 export const HeroContent = (props: HeroContentProps) => {
-  const [local, others] = splitProps(props, ["class", "children", "title", "description"]);
+  const [local, others] = splitProps(props, [
+    "class",
+    "children",
+    "title",
+    "description",
+  ]);
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={heroContentVariants({ class: local.class })}
-    >
+    <div {...others} class={heroContentVariants({ class: local.class })}>
       <Show when={local.title || local.description} fallback={safeChildren()}>
         <div class="max-w-md">
           <Show when={local.title}>
@@ -97,10 +97,7 @@ export const HeroOverlay = (props: HeroOverlayProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={heroOverlayVariants({ class: local.class })}
-    >
+    <div {...others} class={heroOverlayVariants({ class: local.class })}>
       {safeChildren()}
     </div>
   );
@@ -111,10 +108,7 @@ const HeroComponent = (props: HeroProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={heroVariants({ class: local.class })}
-    >
+    <div {...others} class={heroVariants({ class: local.class })}>
       {safeChildren()}
     </div>
   );

@@ -64,25 +64,27 @@ type TimelineStartVariants = Parameters<typeof timelineStartVariants>[0];
 type TimelineMiddleVariants = Parameters<typeof timelineMiddleVariants>[0];
 type TimelineEndVariants = Parameters<typeof timelineEndVariants>[0];
 
-export type TimelineProps = JSX.HTMLAttributes<HTMLUListElement> & TimelineVariants;
+export type TimelineProps = JSX.HTMLAttributes<HTMLUListElement> &
+  TimelineVariants;
 
-export type TimelineItemProps = JSX.LiHTMLAttributes<HTMLLIElement> & TimelineItemVariants;
+export type TimelineItemProps = JSX.LiHTMLAttributes<HTMLLIElement> &
+  TimelineItemVariants;
 
-export type TimelineStartProps = JSX.HTMLAttributes<HTMLDivElement> & TimelineStartVariants;
+export type TimelineStartProps = JSX.HTMLAttributes<HTMLDivElement> &
+  TimelineStartVariants;
 
-export type TimelineMiddleProps = JSX.HTMLAttributes<HTMLDivElement> & TimelineMiddleVariants;
+export type TimelineMiddleProps = JSX.HTMLAttributes<HTMLDivElement> &
+  TimelineMiddleVariants;
 
-export type TimelineEndProps = JSX.HTMLAttributes<HTMLDivElement> & TimelineEndVariants;
+export type TimelineEndProps = JSX.HTMLAttributes<HTMLDivElement> &
+  TimelineEndVariants;
 
 export const TimelineItem = (props: TimelineItemProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
   return (
-    <li
-      {...others}
-      class={timelineItemVariants({ class: local.class })}
-    >
+    <li {...others} class={timelineItemVariants({ class: local.class })}>
       {safeChildren()}
     </li>
   );
@@ -110,10 +112,7 @@ export const TimelineMiddle = (props: TimelineMiddleProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={timelineMiddleVariants({ class: local.class })}
-    >
+    <div {...others} class={timelineMiddleVariants({ class: local.class })}>
       {safeChildren()}
     </div>
   );

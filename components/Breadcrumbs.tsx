@@ -25,10 +25,7 @@ const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   const safeChildren = children(() => local.children);
 
   return (
-    <div
-      {...others}
-      class={breadcrumbsVariants({ class: local.class })}
-    >
+    <div {...others} class={breadcrumbsVariants({ class: local.class })}>
       <ul>{safeChildren()}</ul>
     </div>
   );

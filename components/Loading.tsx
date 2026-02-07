@@ -28,14 +28,11 @@ export const loadingVariants = tv({
 
 type LoadingVariants = Parameters<typeof loadingVariants>[0];
 
-export type LoadingProps = JSX.HTMLAttributes<HTMLSpanElement> & LoadingVariants;
+export type LoadingProps = JSX.HTMLAttributes<HTMLSpanElement> &
+  LoadingVariants;
 
 export const Loading = (props: LoadingProps) => {
-  const [local, others] = splitProps(props, [
-    "variant",
-    "size",
-    "class",
-  ]);
+  const [local, others] = splitProps(props, ["variant", "size", "class"]);
 
   return (
     <span
