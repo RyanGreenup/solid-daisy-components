@@ -2,7 +2,7 @@ import { Combobox, ComboboxTriggerMode } from "@kobalte/core/combobox";
 
 // @ts-ignore
 import Check from "lucide-solid/icons/check";
-import { createSignal, For, createEffect, JSX, Show } from "solid-js";
+import { createSignal, createEffect, JSX, Show } from "solid-js";
 
 // @ts-ignore
 import ChevronsUpDown from "lucide-solid/icons/chevrons-up-down";
@@ -12,13 +12,20 @@ import "./comboboxStyle.module.css";
 const styles = comboboxStyles();
 
 interface SingleComboboxProps {
-  options: string[];
+  options: any[];
   placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
   label?: string;
   ref?: (el: HTMLInputElement) => void;
   triggerMode?: ComboboxTriggerMode;
+  /** Key to extract the value from object options */
+  optionValue?: string;
+  /** Key to extract the display label from object options */
+  optionLabel?: string;
+  /** Key to extract searchable text from object options (defaults to optionLabel) */
+  optionTextValue?: string;
+  class?: string;
 }
 
 export function SingleCombobox(props: SingleComboboxProps): JSX.Element {
@@ -29,24 +36,48 @@ export function SingleCombobox(props: SingleComboboxProps): JSX.Element {
     setValue(props.value || "");
   });
 
-  const handleChange = (newValue: string | null) => {
-    const val = newValue || "";
+  // Object option helpers
+  const extractValue = (opt: any): string =>
+    props.optionValue ? opt[props.optionValue] : opt;
+
+  const extractLabel = (opt: any): string =>
+    props.optionLabel ? opt[props.optionLabel] : String(opt);
+
+  const findOption = (val: string) =>
+    props.optionValue
+      ? props.options.find((opt) => opt[props.optionValue!] === val) ?? null
+      : val;
+
+  // Kobalte expects the full object in object mode, string in string mode
+  const kobalteValue = () => findOption(value());
+
+  const handleChange = (newValue: any | null) => {
+    const val = newValue ? extractValue(newValue) : "";
     setValue(val);
     props.onChange?.(val);
   };
 
   return (
-    <div style={{ width: "100%", "max-width": "20rem" }}>
-      <Combobox<string>
+    <div class={props.class ?? "w-full max-w-xs"}>
+      <Combobox
         multiple={false}
         options={props.options}
-        value={value()}
+        value={kobalteValue()}
         onChange={handleChange}
         placeholder={props.placeholder || "Search..."}
         triggerMode={props.triggerMode ?? "input"}
-        itemComponent={(itemProps) => (
+        {...(props.optionValue
+          ? {
+              optionValue: props.optionValue,
+              optionLabel: props.optionLabel,
+              optionTextValue: props.optionTextValue ?? props.optionLabel,
+            }
+          : {})}
+        itemComponent={(itemProps: any) => (
           <Combobox.Item item={itemProps.item} class={styles.item}>
-            <Combobox.ItemLabel>{itemProps.item.rawValue}</Combobox.ItemLabel>
+            <Combobox.ItemLabel>
+              {extractLabel(itemProps.item.rawValue)}
+            </Combobox.ItemLabel>
             <Combobox.ItemIndicator class={styles.itemIndicator}>
               <Check />
             </Combobox.ItemIndicator>
@@ -56,7 +87,10 @@ export function SingleCombobox(props: SingleComboboxProps): JSX.Element {
         <Show when={props.label}>
           <Combobox.Label>{props.label}</Combobox.Label>
         </Show>
-        <Combobox.Control class={styles.control} aria-label="Fruit">
+        <Combobox.Control
+          class={styles.control}
+          aria-label={props.label || "Select"}
+        >
           <Combobox.Input class={styles.input} ref={props.ref} />
           <Combobox.Trigger class={styles.trigger}>
             <Combobox.Icon class={styles.icon}>

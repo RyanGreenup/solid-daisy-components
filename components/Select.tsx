@@ -46,6 +46,7 @@ export const Select = (props: SelectProps) => {
     "variant",
     "class",
     "children",
+    "value",
   ]);
 
   const safeChildren = children(() => local.children);
@@ -53,6 +54,7 @@ export const Select = (props: SelectProps) => {
   return (
     <select
       {...others}
+      value={local.value}
       class={selectVariants({
         color: local.color,
         size: local.size,
