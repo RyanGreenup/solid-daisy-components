@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, ComponentProps, onMount } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const calendarVariants = tv({
   base: "cally",
@@ -44,14 +44,7 @@ declare module "solid-js" {
 }
 
 export const CalendarDate = (props: CalendarDateProps) => {
-  const [local] = splitProps(props, [
-    "class",
-    "children",
-    "value",
-    "min",
-    "max",
-    "onDateChange",
-  ]);
+  const [local] = splitProps(props, ["class", "children", "value", "min", "max", "onDateChange"]);
 
   const safeChildren = children(() => local.children);
 

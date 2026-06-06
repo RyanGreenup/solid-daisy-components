@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const buttonVariants = tv({
   base: "btn",
@@ -58,8 +58,7 @@ export const buttonVariants = tv({
 
 type ButtonVariants = Parameters<typeof buttonVariants>[0];
 
-export type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> &
-  ButtonVariants;
+export type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & ButtonVariants;
 
 export const Button = (props: ButtonProps) => {
   const [local, others] = splitProps(props, [

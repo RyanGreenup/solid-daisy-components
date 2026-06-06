@@ -1,7 +1,8 @@
+import { ColumnDef } from "@tanstack/solid-table";
 // @ts-ignore
 import Download from "lucide-solid/icons/download";
 import { createSignal, Show, splitProps } from "solid-js";
-import { ColumnDef } from "@tanstack/solid-table";
+
 import { exportTableToCsv } from "../lib/utils/csv-export";
 import { Button, ButtonProps } from "./Button";
 
@@ -45,13 +46,7 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
     "loadingTimeout",
   ]);
 
-  const {
-    data,
-    columns,
-    filename = "data.csv",
-    onExport,
-    loadingTimeout = 1000,
-  } = downloadProps;
+  const { data, columns, filename = "data.csv", onExport, loadingTimeout = 1000 } = downloadProps;
 
   const handleDownload = async (
     e: MouseEvent & { currentTarget: HTMLButtonElement; target: Element },
@@ -106,10 +101,7 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
       onClick={handleDownload}
       disabled={isDisabled()}
     >
-      <Show
-        when={!isDownloading()}
-        fallback={<span class="loading loading-spinner loading-xs" />}
-      >
+      <Show when={!isDownloading()} fallback={<span class="loading loading-spinner loading-xs" />}>
         <Download class="w-4 h-4" />
       </Show>
       <Show

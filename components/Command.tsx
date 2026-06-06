@@ -1,21 +1,9 @@
-import type {
-  Component,
-  ComponentProps,
-  ParentProps,
-  VoidProps,
-  JSXElement,
-} from "solid-js";
-import {
-  splitProps,
-  Show,
-  createSignal,
-  createEffect,
-  onMount,
-  onCleanup,
-} from "solid-js";
-import { Portal } from "solid-js/web";
 import * as CommandPrimitive from "cmdk-solid";
+import { splitProps, Show, createSignal, createEffect, onMount, onCleanup } from "solid-js";
+import { Portal } from "solid-js/web";
 import { tv } from "tailwind-variants";
+
+import type { Component, ComponentProps, ParentProps, VoidProps, JSXElement } from "solid-js";
 
 const commandVariants = tv({
   base: "flex h-full w-full flex-col overflow-hidden rounded-lg bg-base-100 text-base-content shadow-lg",
@@ -49,29 +37,19 @@ const commandShortcutVariants = tv({
   base: "ml-auto text-xs tracking-widest text-base-content/50",
 });
 
-const Command: Component<ParentProps<CommandPrimitive.CommandRootProps>> = (
-  props,
-) => {
+const Command: Component<ParentProps<CommandPrimitive.CommandRootProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
   return (
-    <CommandPrimitive.CommandRoot
-      class={commandVariants({ class: local.class })}
-      {...others}
-    />
+    <CommandPrimitive.CommandRoot class={commandVariants({ class: local.class })} {...others} />
   );
 };
 
-const CommandInput: Component<VoidProps<CommandPrimitive.CommandInputProps>> = (
-  props,
-) => {
+const CommandInput: Component<VoidProps<CommandPrimitive.CommandInputProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
   return (
-    <div
-      class="flex items-center border-b border-base-300 px-3"
-      cmdk-input-wrapper=""
-    >
+    <div class="flex items-center border-b border-base-300 px-3" cmdk-input-wrapper="">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -93,22 +71,15 @@ const CommandInput: Component<VoidProps<CommandPrimitive.CommandInputProps>> = (
   );
 };
 
-const CommandList: Component<ParentProps<CommandPrimitive.CommandListProps>> = (
-  props,
-) => {
+const CommandList: Component<ParentProps<CommandPrimitive.CommandListProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
   return (
-    <CommandPrimitive.CommandList
-      class={commandListVariants({ class: local.class })}
-      {...others}
-    />
+    <CommandPrimitive.CommandList class={commandListVariants({ class: local.class })} {...others} />
   );
 };
 
-const CommandEmpty: Component<
-  ParentProps<CommandPrimitive.CommandEmptyProps>
-> = (props) => {
+const CommandEmpty: Component<ParentProps<CommandPrimitive.CommandEmptyProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
   return (
@@ -119,9 +90,7 @@ const CommandEmpty: Component<
   );
 };
 
-const CommandGroup: Component<
-  ParentProps<CommandPrimitive.CommandGroupProps>
-> = (props) => {
+const CommandGroup: Component<ParentProps<CommandPrimitive.CommandGroupProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
   return (
@@ -132,9 +101,7 @@ const CommandGroup: Component<
   );
 };
 
-const CommandSeparator: Component<
-  VoidProps<CommandPrimitive.CommandSeparatorProps>
-> = (props) => {
+const CommandSeparator: Component<VoidProps<CommandPrimitive.CommandSeparatorProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
   return (
@@ -145,25 +112,18 @@ const CommandSeparator: Component<
   );
 };
 
-const CommandItem: Component<ParentProps<CommandPrimitive.CommandItemProps>> = (
-  props,
-) => {
+const CommandItem: Component<ParentProps<CommandPrimitive.CommandItemProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
   return (
-    <CommandPrimitive.CommandItem
-      class={commandItemVariants({ class: local.class })}
-      {...others}
-    />
+    <CommandPrimitive.CommandItem class={commandItemVariants({ class: local.class })} {...others} />
   );
 };
 
 const CommandShortcut: Component<ComponentProps<"span">> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
-  return (
-    <span class={commandShortcutVariants({ class: local.class })} {...others} />
-  );
+  return <span class={commandShortcutVariants({ class: local.class })} {...others} />;
 };
 
 type CommandDialogProps = {
@@ -174,8 +134,7 @@ type CommandDialogProps = {
 };
 
 const CommandDialog: Component<CommandDialogProps> = (props) => {
-  const [previousFocusElement, setPreviousFocusElement] =
-    createSignal<HTMLElement | null>(null);
+  const [previousFocusElement, setPreviousFocusElement] = createSignal<HTMLElement | null>(null);
   let commandInputRef: HTMLElement | undefined;
 
   const handleClose = () => {
@@ -206,9 +165,7 @@ const CommandDialog: Component<CommandDialogProps> = (props) => {
       }
       // Focus the command input
       setTimeout(() => {
-        const input = document.querySelector(
-          "[cmdk-input]",
-        ) as HTMLInputElement;
+        const input = document.querySelector("[cmdk-input]") as HTMLInputElement;
         if (input) {
           input.focus();
         }
@@ -240,10 +197,7 @@ const CommandDialog: Component<CommandDialogProps> = (props) => {
           class="fixed inset-0 z-50 flex items-start justify-center pt-[10vh] bg-black/50"
           onClick={handleClose}
         >
-          <div
-            class="w-full max-w-lg mx-4"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div class="w-full max-w-lg mx-4" onClick={(e) => e.stopPropagation()}>
             {props.children}
           </div>
         </div>

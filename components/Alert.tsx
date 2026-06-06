@@ -1,9 +1,9 @@
-import { tv } from "tailwind-variants";
-import { splitProps, children, JSX, Show } from "solid-js";
-import InfoCircle from "lucide-solid/icons/info";
-import CheckCircle from "lucide-solid/icons/check-circle";
 import AlertTriangle from "lucide-solid/icons/alert-triangle";
+import CheckCircle from "lucide-solid/icons/check-circle";
+import InfoCircle from "lucide-solid/icons/info";
 import XCircle from "lucide-solid/icons/x-circle";
+import { splitProps, children, JSX, Show } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const alertVariants = tv({
   base: "alert",

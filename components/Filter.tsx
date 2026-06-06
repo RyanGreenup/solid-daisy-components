@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX, Show } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const filterVariants = tv({
   base: "filter",
@@ -12,15 +12,12 @@ export const filterResetVariants = tv({
 type FilterVariants = Parameters<typeof filterVariants>[0];
 type FilterResetVariants = Parameters<typeof filterResetVariants>[0];
 
-type FilterDivProps = JSX.HTMLAttributes<HTMLDivElement> &
-  FilterVariants & { as?: "div" };
-type FilterFormProps = JSX.FormHTMLAttributes<HTMLFormElement> &
-  FilterVariants & { as: "form" };
+type FilterDivProps = JSX.HTMLAttributes<HTMLDivElement> & FilterVariants & { as?: "div" };
+type FilterFormProps = JSX.FormHTMLAttributes<HTMLFormElement> & FilterVariants & { as: "form" };
 
 export type FilterProps = FilterDivProps | FilterFormProps;
 
-export type FilterResetProps = JSX.InputHTMLAttributes<HTMLInputElement> &
-  FilterResetVariants;
+export type FilterResetProps = JSX.InputHTMLAttributes<HTMLInputElement> & FilterResetVariants;
 
 export type FilterInputProps = JSX.InputHTMLAttributes<HTMLInputElement>;
 
@@ -39,13 +36,7 @@ export const FilterReset = (props: FilterResetProps) => {
 export const FilterInput = (props: FilterInputProps) => {
   const [local, others] = splitProps(props, ["class", "type"]);
 
-  return (
-    <input
-      {...others}
-      type={local.type || "radio"}
-      class={`btn ${local.class || ""}`}
-    />
-  );
+  return <input {...others} type={local.type || "radio"} class={`btn ${local.class || ""}`} />;
 };
 
 function FilterAsForm(props: FilterFormProps) {
@@ -72,10 +63,7 @@ function FilterAsDiv(props: FilterDivProps) {
 
 const FilterComponent = (props: FilterProps) => {
   return (
-    <Show
-      when={props.as === "form"}
-      fallback={<FilterAsDiv {...(props as FilterDivProps)} />}
-    >
+    <Show when={props.as === "form"} fallback={<FilterAsDiv {...(props as FilterDivProps)} />}>
       <FilterAsForm {...(props as FilterFormProps)} />
     </Show>
   );

@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const fileInputVariants = tv({
   base: "file-input",
@@ -36,17 +36,10 @@ export const fileInputVariants = tv({
 
 type FileInputVariants = Parameters<typeof fileInputVariants>[0];
 
-export type FileInputProps = JSX.InputHTMLAttributes<HTMLInputElement> &
-  FileInputVariants;
+export type FileInputProps = JSX.InputHTMLAttributes<HTMLInputElement> & FileInputVariants;
 
 export const FileInput = (props: FileInputProps) => {
-  const [local, others] = splitProps(props, [
-    "color",
-    "size",
-    "variant",
-    "class",
-    "type",
-  ]);
+  const [local, others] = splitProps(props, ["color", "size", "variant", "class", "type"]);
 
   return (
     <input

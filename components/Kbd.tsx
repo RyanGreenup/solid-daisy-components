@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const kbdVariants = tv({
   base: "kbd",

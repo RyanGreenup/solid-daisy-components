@@ -1,12 +1,12 @@
 import { Combobox, ComboboxTriggerMode } from "@kobalte/core/combobox";
 // @ts-ignore
 import Check from "lucide-solid/icons/check";
+import ChevronsUpDown from "lucide-solid/icons/chevrons-up-down";
 // @ts-ignore
 import X from "lucide-solid/icons/x";
 import { createSignal, For, JSXElement, Show, JSX } from "solid-js";
 import { Transition } from "solid-transition-group";
 
-import ChevronsUpDown from "lucide-solid/icons/chevrons-up-down";
 import { comboboxStyles } from "./style";
 import "./comboboxStyle.module.css";
 
@@ -57,10 +57,7 @@ export function MultiCombobox(props: MultiComboboxProps): JSX.Element {
               <div class={`${styles.inputContainer} px-1 py-2`}>
                 <For each={state.selectedOptions()}>
                   {(option) => (
-                    <div
-                      onPointerDown={(e) => e.stopPropagation()}
-                      class={styles.tag}
-                    >
+                    <div onPointerDown={(e) => e.stopPropagation()} class={styles.tag}>
                       {option}
                       <button
                         class={styles.tagButton}

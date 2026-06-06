@@ -1,5 +1,6 @@
 import { createSignal, For, JSX, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
 import { useKeybinding } from "../utilities/useKeybinding";
 
 export const keybindListVariants = tv({
@@ -94,8 +95,7 @@ export function KeybindList<T = string>(props: KeybindListProps<T>) {
     useKeybinding(
       { key },
       () => {
-        const newIndex =
-          (focusedIndex() - 1 + local.items.length) % local.items.length;
+        const newIndex = (focusedIndex() - 1 + local.items.length) % local.items.length;
         setFocusedIndex(newIndex);
         local.onFocused?.(local.items[newIndex], newIndex);
       },

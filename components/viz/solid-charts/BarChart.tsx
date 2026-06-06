@@ -1,13 +1,5 @@
+import { Axis, AxisCursor, AxisGrid, AxisLabel, AxisTooltip, Bar, Chart } from "solid-charts";
 import { JSX, For, mergeProps, Show } from "solid-js";
-import {
-  Axis,
-  AxisCursor,
-  AxisGrid,
-  AxisLabel,
-  AxisTooltip,
-  Bar,
-  Chart,
-} from "solid-charts";
 
 export interface BarData {
   [key: string]: any;
@@ -62,9 +54,7 @@ export const BarChart = (props: BarChartProps) => {
   };
 
   return (
-    <div
-      class={`${merged.height} text-sm ${merged.width} m-6 ${merged.class || ""}`}
-    >
+    <div class={`${merged.height} text-sm ${merged.width} m-6 ${merged.class || ""}`}>
       <Chart data={merged.data}>
         <Axis axis="y" position="left">
           {merged.showYAxisLabels && <AxisLabel />}

@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const textareaVariants = tv({
   base: "textarea",
@@ -36,16 +36,10 @@ export const textareaVariants = tv({
 
 type TextareaVariants = Parameters<typeof textareaVariants>[0];
 
-export type TextareaProps = JSX.TextareaHTMLAttributes<HTMLTextAreaElement> &
-  TextareaVariants;
+export type TextareaProps = JSX.TextareaHTMLAttributes<HTMLTextAreaElement> & TextareaVariants;
 
 export const Textarea = (props: TextareaProps) => {
-  const [local, others] = splitProps(props, [
-    "color",
-    "size",
-    "variant",
-    "class",
-  ]);
+  const [local, others] = splitProps(props, ["color", "size", "variant", "class"]);
 
   return (
     <textarea

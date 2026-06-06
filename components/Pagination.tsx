@@ -1,5 +1,6 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX, For, Show, createMemo } from "solid-js";
+import { tv } from "tailwind-variants";
+
 import { Button } from "./Button";
 
 export const paginationVariants = tv({
@@ -29,21 +30,14 @@ export type PaginationProps = JSX.HTMLAttributes<HTMLDivElement> &
     disabled?: boolean;
   };
 
-export type PaginationButtonProps =
-  JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
-    active?: boolean;
-    page?: number;
-    size?: "xs" | "sm" | "md" | "lg" | "xl";
-  };
+export type PaginationButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
+  active?: boolean;
+  page?: number;
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
+};
 
 export const PaginationButton = (props: PaginationButtonProps) => {
-  const [local, others] = splitProps(props, [
-    "active",
-    "page",
-    "size",
-    "class",
-    "children",
-  ]);
+  const [local, others] = splitProps(props, ["active", "page", "size", "class", "children"]);
 
   const safeChildren = children(() => local.children);
 
@@ -172,15 +166,8 @@ const PaginationComponent = (props: PaginationProps) => {
         )}
       </For>
 
-      <Show
-        when={
-          local.showFirstLast &&
-          visiblePages()[visiblePages().length - 1] < totalPages()
-        }
-      >
-        <Show
-          when={visiblePages()[visiblePages().length - 1] < totalPages() - 1}
-        >
+      <Show when={local.showFirstLast && visiblePages()[visiblePages().length - 1] < totalPages()}>
+        <Show when={visiblePages()[visiblePages().length - 1] < totalPages() - 1}>
           <PaginationButton size={local.size} disabled>
             ...
           </PaginationButton>

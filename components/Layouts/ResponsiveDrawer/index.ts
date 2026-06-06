@@ -10,6 +10,5 @@ export {
   MainContent,
   UnstyledExample,
   KeyboardShortcuts,
-  CheckboxId
-} from './Layout';
-
+  CheckboxId,
+} from "./Layout";

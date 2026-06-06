@@ -12,19 +12,15 @@ import {
 } from "@tanstack/solid-table";
 import { createVirtualizer } from "@tanstack/solid-virtual";
 // @ts-ignore
-import ChevronUp from "lucide-solid/icons/chevron-up";
-// @ts-ignore
 import ChevronDown from "lucide-solid/icons/chevron-down";
+// @ts-ignore
+import ChevronUp from "lucide-solid/icons/chevron-up";
 import { createMemo, createSignal, For, JSXElement, Show } from "solid-js";
-import DownloadButton from "../DownloadButton";
 
+import DownloadButton from "../DownloadButton";
 import { Input } from "../Input";
 import { Select } from "../Select";
-import {
-  dataTableVariants,
-  sortButtonVariants,
-  DataTableVariants,
-} from "./styles";
+import { dataTableVariants, sortButtonVariants, DataTableVariants } from "./styles";
 
 declare module "@tanstack/solid-table" {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -48,13 +44,7 @@ type VirtualizedDataTableProps<T> = DataTableVariants & {
   class?: string;
 };
 
-function Filter<T>({
-  column,
-  data,
-}: {
-  column: Column<T, unknown>;
-  data: T[];
-}) {
+function Filter<T>({ column, data }: { column: Column<T, unknown>; data: T[] }) {
   const columnFilterValue = () => column.getFilterValue();
   const { filterVariant, selectOptions } = column.columnDef.meta ?? {};
 
@@ -65,9 +55,7 @@ function Filter<T>({
       <Select
         size="sm"
         value={(columnFilterValue() as string) || ""}
-        onChange={(e) =>
-          column.setFilterValue(e.currentTarget.value || undefined)
-        }
+        onChange={(e) => column.setFilterValue(e.currentTarget.value || undefined)}
         style={{ flex: "1" }}
       >
         <option value="">All</option>
@@ -89,9 +77,7 @@ function Filter<T>({
   );
 }
 
-export function VirtualizedDataTable<T>(
-  props: VirtualizedDataTableProps<T>,
-): JSXElement {
+export function VirtualizedDataTable<T>(props: VirtualizedDataTableProps<T>): JSXElement {
   let parentRef: HTMLTableSectionElement | undefined;
 
   const styles = dataTableVariants({
@@ -105,9 +91,7 @@ export function VirtualizedDataTable<T>(
   });
 
   const [sorting, setSorting] = createSignal<SortingState>([]);
-  const [columnFilters, setColumnFilters] = createSignal<ColumnFiltersState>(
-    [],
-  );
+  const [columnFilters, setColumnFilters] = createSignal<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = createSignal("");
 
   const table = createSolidTable({
@@ -129,13 +113,10 @@ export function VirtualizedDataTable<T>(
       },
     },
     onSortingChange: props.enableSorting !== false ? setSorting : () => {},
-    onColumnFiltersChange:
-      props.enableColumnFilters !== false ? setColumnFilters : () => {},
-    onGlobalFilterChange:
-      props.enableGlobalFilter !== false ? setGlobalFilter : () => {},
+    onColumnFiltersChange: props.enableColumnFilters !== false ? setColumnFilters : () => {},
+    onGlobalFilterChange: props.enableGlobalFilter !== false ? setGlobalFilter : () => {},
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel:
-      props.enableSorting !== false ? getSortedRowModel() : getCoreRowModel(),
+    getSortedRowModel: props.enableSorting !== false ? getSortedRowModel() : getCoreRowModel(),
     getFilteredRowModel:
       props.enableGlobalFilter !== false || props.enableColumnFilters !== false
         ? getFilteredRowModel()
@@ -162,11 +143,7 @@ export function VirtualizedDataTable<T>(
 
   return (
     <div class={styles.container()}>
-      <Show
-        when={
-          props.enableGlobalFilter !== false || props.enableDownload !== false
-        }
-      >
+      <Show when={props.enableGlobalFilter !== false || props.enableDownload !== false}>
         <div class={styles.outerHeader()}>
           <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <Show when={props.enableGlobalFilter !== false}>
@@ -174,9 +151,7 @@ export function VirtualizedDataTable<T>(
                 <Input
                   value={globalFilter()}
                   onInput={(e) => setGlobalFilter(e.currentTarget.value)}
-                  placeholder={
-                    props.searchPlaceholder || "Search all columns..."
-                  }
+                  placeholder={props.searchPlaceholder || "Search all columns..."}
                   class={styles.globalSearchInput()}
                 />
               </div>
@@ -184,9 +159,7 @@ export function VirtualizedDataTable<T>(
             <Show when={props.enableDownload !== false}>
               <DownloadButton
                 data={() => {
-                  const downloadData = filteredRows().map(
-                    (row) => row.original,
-                  );
+                  const downloadData = filteredRows().map((row) => row.original);
 
                   return downloadData;
                 }}
@@ -246,35 +219,23 @@ export function VirtualizedDataTable<T>(
                               class={sortButtonVariants()}
                               onClick={header.column.getToggleSortingHandler()}
                               disabled={
-                                !header.column.getCanSort() ||
-                                props.enableSorting === false
+                                !header.column.getCanSort() || props.enableSorting === false
                               }
                             >
                               <span>
-                                {flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext(),
-                                )}
+                                {flexRender(header.column.columnDef.header, header.getContext())}
                               </span>
                               {props.enableSorting !== false &&
-                                header.column.getIsSorted() === "asc" && (
-                                  <ChevronUp size={16} />
-                                )}
+                                header.column.getIsSorted() === "asc" && <ChevronUp size={16} />}
                               {props.enableSorting !== false &&
-                                header.column.getIsSorted() === "desc" && (
-                                  <ChevronDown size={16} />
-                                )}
+                                header.column.getIsSorted() === "desc" && <ChevronDown size={16} />}
                             </button>
                             <Show
                               when={
-                                props.enableColumnFilters !== false &&
-                                header.column.getCanFilter()
+                                props.enableColumnFilters !== false && header.column.getCanFilter()
                               }
                             >
-                              <Filter
-                                column={header.column}
-                                data={props.data}
-                              />
+                              <Filter column={header.column} data={props.data} />
                             </Show>
                           </div>
                         )}
@@ -325,10 +286,7 @@ export function VirtualizedDataTable<T>(
                             flex: cell.column.columnDef.size ? "none" : "1",
                           }}
                         >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </td>
                       )}
                     </For>
@@ -360,10 +318,7 @@ export function VirtualizedDataTable<T>(
             Showing {filteredRows().length} of {props.data.length} rows
           </span>
           <Show
-            when={
-              props.enableDownload !== false &&
-              filteredRows().length !== props.data.length
-            }
+            when={props.enableDownload !== false && filteredRows().length !== props.data.length}
           >
             <span class="text-sm text-base-content/60">
               Download includes {filteredRows().length} filtered rows

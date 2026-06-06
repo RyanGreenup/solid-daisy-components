@@ -1,6 +1,7 @@
 import { ChartConfiguration, ChartData } from "chart.js";
-import ChartComponent from "./ChartComponent";
 import { createMemo } from "solid-js";
+
+import ChartComponent from "./ChartComponent";
 
 export interface DoughnutChartProps {
   data: ChartData<"doughnut">;
@@ -34,10 +35,7 @@ export const DoughnutChart = (props: DoughnutChartProps) => {
           tooltip: {
             callbacks: {
               label: (context) => {
-                const total = context.dataset.data.reduce(
-                  (a: any, b: any) => a + b,
-                  0,
-                );
+                const total = context.dataset.data.reduce((a: any, b: any) => a + b, 0);
                 const percentage = ((context.parsed / total) * 100).toFixed(1);
                 return `${context.label}: ${context.formattedValue} (${percentage}%)`;
               },
@@ -59,7 +57,5 @@ export const DoughnutChart = (props: DoughnutChartProps) => {
     };
   });
 
-  return (
-    <ChartComponent chartConfig={chartConfig()} className={props.className} />
-  );
+  return <ChartComponent chartConfig={chartConfig()} className={props.className} />;
 };

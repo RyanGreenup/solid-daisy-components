@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX, Show } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const statsVariants = tv({
   base: "stats",
@@ -46,12 +46,7 @@ export type StatFigureProps = JSX.HTMLAttributes<HTMLDivElement>;
 export type StatActionsProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const Stats = (props: StatsProps) => {
-  const [local, others] = splitProps(props, [
-    "direction",
-    "variant",
-    "class",
-    "children",
-  ]);
+  const [local, others] = splitProps(props, ["direction", "variant", "class", "children"]);
 
   const safeChildren = children(() => local.children);
 

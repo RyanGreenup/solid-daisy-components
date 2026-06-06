@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX, createMemo } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const radialProgressVariants = tv({
   base: "radial-progress",

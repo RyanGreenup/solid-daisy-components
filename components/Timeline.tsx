@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const timelineVariants = tv({
   base: "timeline",
@@ -64,20 +64,15 @@ type TimelineStartVariants = Parameters<typeof timelineStartVariants>[0];
 type TimelineMiddleVariants = Parameters<typeof timelineMiddleVariants>[0];
 type TimelineEndVariants = Parameters<typeof timelineEndVariants>[0];
 
-export type TimelineProps = JSX.HTMLAttributes<HTMLUListElement> &
-  TimelineVariants;
+export type TimelineProps = JSX.HTMLAttributes<HTMLUListElement> & TimelineVariants;
 
-export type TimelineItemProps = JSX.LiHTMLAttributes<HTMLLIElement> &
-  TimelineItemVariants;
+export type TimelineItemProps = JSX.LiHTMLAttributes<HTMLLIElement> & TimelineItemVariants;
 
-export type TimelineStartProps = JSX.HTMLAttributes<HTMLDivElement> &
-  TimelineStartVariants;
+export type TimelineStartProps = JSX.HTMLAttributes<HTMLDivElement> & TimelineStartVariants;
 
-export type TimelineMiddleProps = JSX.HTMLAttributes<HTMLDivElement> &
-  TimelineMiddleVariants;
+export type TimelineMiddleProps = JSX.HTMLAttributes<HTMLDivElement> & TimelineMiddleVariants;
 
-export type TimelineEndProps = JSX.HTMLAttributes<HTMLDivElement> &
-  TimelineEndVariants;
+export type TimelineEndProps = JSX.HTMLAttributes<HTMLDivElement> & TimelineEndVariants;
 
 export const TimelineItem = (props: TimelineItemProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);

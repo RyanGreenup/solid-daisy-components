@@ -1,7 +1,8 @@
 import { NavigationMenu as KobalteNavigationMenu } from "@kobalte/core/navigation-menu";
-import { tv } from "tailwind-variants";
-import { splitProps, children, JSX } from "solid-js";
 import ChevronDown from "lucide-solid/icons/chevron-down";
+import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
+
 import styles from "./navigation-menu.module.css";
 
 export const navigationMenuVariants = tv({
@@ -54,10 +55,7 @@ export const navigationMenuVariants = tv({
   },
 });
 
-export interface NavigationMenuProps extends Omit<
-  JSX.HTMLAttributes<HTMLElement>,
-  "onChange"
-> {
+export interface NavigationMenuProps extends Omit<JSX.HTMLAttributes<HTMLElement>, "onChange"> {
   orientation?: "horizontal" | "vertical";
   size?: "sm" | "md" | "lg";
   defaultValue?: string;
@@ -122,8 +120,7 @@ export const NavigationMenuPortal = KobalteNavigationMenu.Portal;
 export const NavigationMenuContent = KobalteNavigationMenu.Content;
 export const NavigationMenuItem = KobalteNavigationMenu.Item;
 export const NavigationMenuItemLabel = KobalteNavigationMenu.ItemLabel;
-export const NavigationMenuItemDescription =
-  KobalteNavigationMenu.ItemDescription;
+export const NavigationMenuItemDescription = KobalteNavigationMenu.ItemDescription;
 export const NavigationMenuSeparator = KobalteNavigationMenu.Separator;
 export const NavigationMenuGroup = KobalteNavigationMenu.Group;
 export const NavigationMenuGroupLabel = KobalteNavigationMenu.GroupLabel;

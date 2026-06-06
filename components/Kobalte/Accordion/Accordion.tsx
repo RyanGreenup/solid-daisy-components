@@ -1,7 +1,8 @@
 import { Accordion as KobalteAccordion } from "@kobalte/core/accordion";
-import { tv } from "tailwind-variants";
-import { JSX, children, For } from "solid-js";
 import ChevronDown from "lucide-solid/icons/chevron-down";
+import { JSX, children, For } from "solid-js";
+import { tv } from "tailwind-variants";
+
 import styles from "./accordion.module.css";
 
 export const accordionVariants = tv({
@@ -90,15 +91,10 @@ export function Accordion(props: AccordionProps): JSX.Element {
             <KobalteAccordion.Header class={tvStyles.header()}>
               <KobalteAccordion.Trigger class={tvStyles.trigger()}>
                 {item.title}
-                <ChevronDown
-                  class={`${tvStyles.icon()} ${styles.accordionIcon}`}
-                  aria-hidden
-                />
+                <ChevronDown class={`${tvStyles.icon()} ${styles.accordionIcon}`} aria-hidden />
               </KobalteAccordion.Trigger>
             </KobalteAccordion.Header>
-            <KobalteAccordion.Content
-              class={`${tvStyles.content()} ${styles.accordionContent}`}
-            >
+            <KobalteAccordion.Content class={`${tvStyles.content()} ${styles.accordionContent}`}>
               <div class={tvStyles.contentText()}>{item.content}</div>
             </KobalteAccordion.Content>
           </KobalteAccordion.Item>

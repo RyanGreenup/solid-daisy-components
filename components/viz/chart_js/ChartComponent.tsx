@@ -84,10 +84,7 @@ export default function ChartComponent(props: ChartComponentProps) {
   });
 
   return (
-    <div
-      class={`relative w-full ${props.className || ""}`}
-      style="min-height: 300px;"
-    >
+    <div class={`relative w-full ${props.className || ""}`} style="min-height: 300px;">
       <canvas ref={chartRef}></canvas>
       <DarkModeCanvasFilter />
     </div>

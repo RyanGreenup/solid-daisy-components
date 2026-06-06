@@ -1,5 +1,5 @@
-import { JSX, For, mergeProps } from "solid-js";
 import { Axis, AxisGrid, AxisLabel, AxisLine, Chart, Line } from "solid-charts";
+import { JSX, For, mergeProps } from "solid-js";
 
 export interface LineData {
   [key: string]: any;

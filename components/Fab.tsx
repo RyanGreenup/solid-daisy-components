@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const fabVariants = tv({
   base: "fab",
@@ -30,21 +30,14 @@ export type FabProps = JSX.HTMLAttributes<HTMLDivElement> & FabVariants;
 
 export type FabTriggerProps = JSX.HTMLAttributes<HTMLDivElement>;
 
-export type FabCloseProps = JSX.HTMLAttributes<HTMLDivElement> &
-  FabCloseVariants;
+export type FabCloseProps = JSX.HTMLAttributes<HTMLDivElement> & FabCloseVariants;
 
-export type FabMainActionProps = JSX.HTMLAttributes<HTMLDivElement> &
-  FabMainActionVariants;
+export type FabMainActionProps = JSX.HTMLAttributes<HTMLDivElement> & FabMainActionVariants;
 
 export type FabItemProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const FabTrigger = (props: FabTriggerProps) => {
-  const [local, others] = splitProps(props, [
-    "class",
-    "children",
-    "tabindex",
-    "role",
-  ]);
+  const [local, others] = splitProps(props, ["class", "children", "tabindex", "role"]);
   const safeChildren = children(() => local.children);
 
   return (

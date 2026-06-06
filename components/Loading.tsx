@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const loadingVariants = tv({
   base: "loading",
@@ -28,8 +28,7 @@ export const loadingVariants = tv({
 
 type LoadingVariants = Parameters<typeof loadingVariants>[0];
 
-export type LoadingProps = JSX.HTMLAttributes<HTMLSpanElement> &
-  LoadingVariants;
+export type LoadingProps = JSX.HTMLAttributes<HTMLSpanElement> & LoadingVariants;
 
 export const Loading = (props: LoadingProps) => {
   const [local, others] = splitProps(props, ["variant", "size", "class"]);

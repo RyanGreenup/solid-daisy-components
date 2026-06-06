@@ -1,12 +1,6 @@
 import { SolidApexCharts } from "solid-apexcharts";
+import { splitProps, createMemo, JSX, createSignal, createEffect } from "solid-js";
 import { tv } from "tailwind-variants";
-import {
-  splitProps,
-  createMemo,
-  JSX,
-  createSignal,
-  createEffect,
-} from "solid-js";
 
 export const apexChartVariants = tv({
   base: "w-full",
@@ -63,41 +57,38 @@ export const ApexChart = (props: ApexChartProps) => {
   const [isUpdating, setIsUpdating] = createSignal(false);
 
   // Create reactive memo for chart options with better stability
-  const chartOptions = createMemo(
-    (prev: ApexCharts.ApexOptions | undefined) => {
-      const newOptions: ApexCharts.ApexOptions = {
-        chart: {
-          type: local.type,
-          background: "transparent",
-          fontFamily: "inherit",
-          redrawOnParentResize: true,
-          redrawOnWindowResize: true,
-          ...local.options?.chart,
-        },
-        theme: {
-          mode: "light" as const,
-          ...local.options?.theme,
-        },
-        ...local.options,
-      };
+  const chartOptions = createMemo((prev: ApexCharts.ApexOptions | undefined) => {
+    const newOptions: ApexCharts.ApexOptions = {
+      chart: {
+        type: local.type,
+        background: "transparent",
+        fontFamily: "inherit",
+        redrawOnParentResize: true,
+        redrawOnWindowResize: true,
+        ...local.options?.chart,
+      },
+      theme: {
+        mode: "light" as const,
+        ...local.options?.theme,
+      },
+      ...local.options,
+    };
 
-      // Force re-render if chart type changes to prevent ApexCharts internal state issues
-      if (
-        prev &&
-        (prev.chart?.type !== newOptions.chart?.type ||
-          prev.chart?.id !== newOptions.chart?.id)
-      ) {
-        // Use a more aggressive re-creation strategy
-        setIsUpdating(true);
-        setTimeout(() => {
-          setChartKey((k) => k + 1);
-          setTimeout(() => setIsUpdating(false), 50);
-        }, 10);
-      }
+    // Force re-render if chart type changes to prevent ApexCharts internal state issues
+    if (
+      prev &&
+      (prev.chart?.type !== newOptions.chart?.type || prev.chart?.id !== newOptions.chart?.id)
+    ) {
+      // Use a more aggressive re-creation strategy
+      setIsUpdating(true);
+      setTimeout(() => {
+        setChartKey((k) => k + 1);
+        setTimeout(() => setIsUpdating(false), 50);
+      }, 10);
+    }
 
-      return newOptions;
-    },
-  );
+    return newOptions;
+  });
 
   const containerClass = createMemo(() =>
     apexChartVariants({

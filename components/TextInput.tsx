@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const textInputVariants = tv({
   base: "input",
@@ -41,19 +41,12 @@ export const inputWrapperVariants = tv({
 type TextInputVariants = Parameters<typeof textInputVariants>[0];
 type InputWrapperVariants = Parameters<typeof inputWrapperVariants>[0];
 
-export type TextInputProps = JSX.InputHTMLAttributes<HTMLInputElement> &
-  TextInputVariants;
+export type TextInputProps = JSX.InputHTMLAttributes<HTMLInputElement> & TextInputVariants;
 
-export type InputWrapperProps = JSX.LabelHTMLAttributes<HTMLLabelElement> &
-  InputWrapperVariants;
+export type InputWrapperProps = JSX.LabelHTMLAttributes<HTMLLabelElement> & InputWrapperVariants;
 
 const TextInputComponent = (props: TextInputProps) => {
-  const [local, others] = splitProps(props, [
-    "color",
-    "size",
-    "variant",
-    "class",
-  ]);
+  const [local, others] = splitProps(props, ["color", "size", "variant", "class"]);
 
   return (
     <input

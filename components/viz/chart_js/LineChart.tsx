@@ -1,6 +1,7 @@
 import { ChartConfiguration, ChartData } from "chart.js";
-import ChartComponent from "./ChartComponent";
 import { createMemo } from "solid-js";
+
+import ChartComponent from "./ChartComponent";
 
 export interface LineChartProps {
   data: ChartData<"line">;
@@ -70,7 +71,5 @@ export const LineChart = (props: LineChartProps) => {
     };
   });
 
-  return (
-    <ChartComponent chartConfig={chartConfig()} className={props.className} />
-  );
+  return <ChartComponent chartConfig={chartConfig()} className={props.className} />;
 };

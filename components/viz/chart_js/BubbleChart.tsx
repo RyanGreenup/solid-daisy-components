@@ -1,6 +1,7 @@
 import { ChartConfiguration } from "chart.js";
-import ChartComponent from "./ChartComponent";
 import { createMemo } from "solid-js";
+
+import ChartComponent from "./ChartComponent";
 
 export interface BubbleChartProps {
   data: {
@@ -88,7 +89,5 @@ export const BubbleChart = (props: BubbleChartProps) => {
     };
   });
 
-  return (
-    <ChartComponent chartConfig={chartConfig()} className={props.className} />
-  );
+  return <ChartComponent chartConfig={chartConfig()} className={props.className} />;
 };

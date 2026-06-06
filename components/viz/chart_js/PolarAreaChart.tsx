@@ -1,6 +1,7 @@
 import { ChartConfiguration } from "chart.js";
-import ChartComponent from "./ChartComponent";
 import { JSX, createMemo } from "solid-js";
+
+import ChartComponent from "./ChartComponent";
 
 export interface PolarAreaChartProps {
   data: {
@@ -78,7 +79,5 @@ export const PolarAreaChart = (props: PolarAreaChartProps) => {
     };
   });
 
-  return (
-    <ChartComponent chartConfig={chartConfig()} className={props.className} />
-  );
+  return <ChartComponent chartConfig={chartConfig()} className={props.className} />;
 };

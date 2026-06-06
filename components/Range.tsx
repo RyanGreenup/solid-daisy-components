@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, JSX, Accessor, Setter, createSignal } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const rangeVariants = tv({
   base: "range",
@@ -53,10 +53,7 @@ export const Range = (props: RangeProps) => {
   const [wheelAccumulator, setWheelAccumulator] = createSignal(0);
   const WHEEL_THRESHOLD = 50; // Require 50 deltaY units before triggering a step
 
-  const handleInput: JSX.InputEventHandlerUnion<
-    HTMLInputElement,
-    InputEvent
-  > = (e) => {
+  const handleInput: JSX.InputEventHandlerUnion<HTMLInputElement, InputEvent> = (e) => {
     const target = e.target as HTMLInputElement;
     const numValue = Number(target.value);
 
@@ -69,9 +66,7 @@ export const Range = (props: RangeProps) => {
     }
   };
 
-  const handleChange: JSX.ChangeEventHandlerUnion<HTMLInputElement, Event> = (
-    e,
-  ) => {
+  const handleChange: JSX.ChangeEventHandlerUnion<HTMLInputElement, Event> = (e) => {
     if (typeof local.onChange === "function") {
       local.onChange(e);
     }
@@ -95,14 +90,9 @@ export const Range = (props: RangeProps) => {
         const max = Number(target.max) || 100;
         const step = Number(target.step) || 1;
 
-        const currentValue = local.valueSignal
-          ? local.valueSignal[0]()
-          : Number(target.value);
+        const currentValue = local.valueSignal ? local.valueSignal[0]() : Number(target.value);
         const direction = e.deltaY > 0 ? -1 : 1;
-        const newValue = Math.min(
-          max,
-          Math.max(min, currentValue + direction * step),
-        );
+        const newValue = Math.min(max, Math.max(min, currentValue + direction * step));
 
         if (local.valueSignal) {
           local.valueSignal[1](newValue);
@@ -136,9 +126,7 @@ export const Range = (props: RangeProps) => {
     }
 
     if (typeof local.onWheel === "function") {
-      local.onWheel(
-        e as WheelEvent & { currentTarget: HTMLInputElement; target: Element },
-      );
+      local.onWheel(e as WheelEvent & { currentTarget: HTMLInputElement; target: Element });
     }
   };
 

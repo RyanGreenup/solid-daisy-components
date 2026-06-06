@@ -1,6 +1,6 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
 import { Dynamic } from "solid-js/web";
+import { tv } from "tailwind-variants";
 
 export const tabsVariants = tv({
   base: "tabs",
@@ -72,8 +72,7 @@ export type TabInputProps = JSX.InputHTMLAttributes<HTMLInputElement> &
     role?: string;
   };
 
-export type TabContentProps = JSX.HTMLAttributes<HTMLDivElement> &
-  TabContentVariants;
+export type TabContentProps = JSX.HTMLAttributes<HTMLDivElement> & TabContentVariants;
 
 export const Tab = (props: TabProps) => {
   const [local, others] = splitProps(props, [
@@ -104,13 +103,7 @@ export const Tab = (props: TabProps) => {
 };
 
 export const TabInput = (props: TabInputProps) => {
-  const [local, others] = splitProps(props, [
-    "active",
-    "disabled",
-    "class",
-    "role",
-    "type",
-  ]);
+  const [local, others] = splitProps(props, ["active", "disabled", "class", "role", "type"]);
 
   return (
     <input

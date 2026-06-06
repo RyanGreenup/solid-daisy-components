@@ -1,11 +1,10 @@
 import { Combobox, ComboboxTriggerMode } from "@kobalte/core/combobox";
-
 // @ts-ignore
 import Check from "lucide-solid/icons/check";
-import { createSignal, createEffect, JSX, Show } from "solid-js";
-
 // @ts-ignore
 import ChevronsUpDown from "lucide-solid/icons/chevrons-up-down";
+import { createSignal, createEffect, JSX, Show } from "solid-js";
+
 import { comboboxStyles } from "./style";
 import "./comboboxStyle.module.css";
 
@@ -37,15 +36,14 @@ export function SingleCombobox(props: SingleComboboxProps): JSX.Element {
   });
 
   // Object option helpers
-  const extractValue = (opt: any): string =>
-    props.optionValue ? opt[props.optionValue] : opt;
+  const extractValue = (opt: any): string => (props.optionValue ? opt[props.optionValue] : opt);
 
   const extractLabel = (opt: any): string =>
     props.optionLabel ? opt[props.optionLabel] : String(opt);
 
   const findOption = (val: string) =>
     props.optionValue
-      ? props.options.find((opt) => opt[props.optionValue!] === val) ?? null
+      ? (props.options.find((opt) => opt[props.optionValue!] === val) ?? null)
       : val;
 
   // Kobalte expects the full object in object mode, string in string mode
@@ -75,9 +73,7 @@ export function SingleCombobox(props: SingleComboboxProps): JSX.Element {
           : {})}
         itemComponent={(itemProps: any) => (
           <Combobox.Item item={itemProps.item} class={styles.item}>
-            <Combobox.ItemLabel>
-              {extractLabel(itemProps.item.rawValue)}
-            </Combobox.ItemLabel>
+            <Combobox.ItemLabel>{extractLabel(itemProps.item.rawValue)}</Combobox.ItemLabel>
             <Combobox.ItemIndicator class={styles.itemIndicator}>
               <Check />
             </Combobox.ItemIndicator>
@@ -87,10 +83,7 @@ export function SingleCombobox(props: SingleComboboxProps): JSX.Element {
         <Show when={props.label}>
           <Combobox.Label>{props.label}</Combobox.Label>
         </Show>
-        <Combobox.Control
-          class={styles.control}
-          aria-label={props.label || "Select"}
-        >
+        <Combobox.Control class={styles.control} aria-label={props.label || "Select"}>
           <Combobox.Input class={styles.input} ref={props.ref} />
           <Combobox.Trigger class={styles.trigger}>
             <Combobox.Icon class={styles.icon}>

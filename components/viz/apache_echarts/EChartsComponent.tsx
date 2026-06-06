@@ -1,7 +1,7 @@
 import * as echarts from "echarts";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
-import { tv } from "tailwind-variants";
 import { splitProps } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const echartsVariants = tv({
   base: "relative w-full",
@@ -33,20 +33,11 @@ export default function EChartsComponent(props: EChartsComponentProps) {
   let chartInstance: echarts.ECharts | null = null;
   const [isMounted, setIsMounted] = createSignal(false);
   const [isDarkMode, setIsDarkMode] = createSignal(false);
-  const [local, others] = splitProps(props, [
-    "option",
-    "theme",
-    "size",
-    "className",
-    "loading",
-  ]);
+  const [local, others] = splitProps(props, ["option", "theme", "size", "className", "loading"]);
 
   // Function to detect dark mode preference
   const checkDarkMode = () => {
-    return (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    );
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
   };
 
   // Function to get the appropriate theme
@@ -79,9 +70,7 @@ export default function EChartsComponent(props: EChartsComponentProps) {
     setIsMounted(true);
 
     // Listen for dark mode changes
-    const darkModeMediaQuery = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    );
+    const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleDarkModeChange = (e: MediaQueryListEvent) => {
       setIsDarkMode(e.matches);
     };

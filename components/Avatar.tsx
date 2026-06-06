@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const avatarVariants = tv({
   base: "avatar",
@@ -82,11 +82,7 @@ export const Avatar = (props: AvatarProps) => {
           shape: local.shape,
         })}
       >
-        {local.src ? (
-          <img src={local.src} alt={local.alt || "Avatar"} />
-        ) : (
-          safeChildren()
-        )}
+        {local.src ? <img src={local.src} alt={local.alt || "Avatar"} /> : safeChildren()}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const toggleVariants = tv({
   base: "toggle",
@@ -31,8 +31,7 @@ export const toggleVariants = tv({
 
 type ToggleVariants = Parameters<typeof toggleVariants>[0];
 
-export type ToggleProps = JSX.InputHTMLAttributes<HTMLInputElement> &
-  ToggleVariants;
+export type ToggleProps = JSX.InputHTMLAttributes<HTMLInputElement> & ToggleVariants;
 
 export const Toggle = (props: ToggleProps) => {
   const [local, others] = splitProps(props, ["color", "size", "class", "type"]);

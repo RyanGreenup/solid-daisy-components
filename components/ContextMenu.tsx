@@ -1,4 +1,3 @@
-import { tv } from "tailwind-variants";
 import {
   splitProps,
   children,
@@ -11,6 +10,8 @@ import {
   createMemo,
 } from "solid-js";
 import { Portal } from "solid-js/web";
+import { tv } from "tailwind-variants";
+
 import { useKeybinding } from "../utilities/useKeybinding";
 
 // Context menu item types
@@ -92,9 +93,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
   let menuRef: HTMLDivElement | undefined;
 
   // Filter out separator-only items for navigation
-  const navigableItems = createMemo(() =>
-    local.items.filter((item) => !item.separator),
-  );
+  const navigableItems = createMemo(() => local.items.filter((item) => !item.separator));
 
   // Close menu on escape key (scoped to menu element)
   useKeybinding(
@@ -278,9 +277,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
                   </Show>
                   <span class="flex-1 truncate">{item.label}</span>
                   <Show when={item.keybind}>
-                    <span class="flex-shrink-0 text-xs opacity-60">
-                      {item.keybind}
-                    </span>
+                    <span class="flex-shrink-0 text-xs opacity-60">{item.keybind}</span>
                   </Show>
                 </div>
               );

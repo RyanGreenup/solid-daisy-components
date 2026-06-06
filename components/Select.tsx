@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const selectVariants = tv({
   base: "select",
@@ -36,8 +36,7 @@ export const selectVariants = tv({
 
 type SelectVariants = Parameters<typeof selectVariants>[0];
 
-export type SelectProps = JSX.SelectHTMLAttributes<HTMLSelectElement> &
-  SelectVariants;
+export type SelectProps = JSX.SelectHTMLAttributes<HTMLSelectElement> & SelectVariants;
 
 export const Select = (props: SelectProps) => {
   const [local, others] = splitProps(props, [

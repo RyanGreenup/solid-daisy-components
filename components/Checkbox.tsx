@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const checkboxVariants = tv({
   base: "checkbox",
@@ -31,8 +31,7 @@ export const checkboxVariants = tv({
 
 type CheckboxVariants = Parameters<typeof checkboxVariants>[0];
 
-export type CheckboxProps = JSX.InputHTMLAttributes<HTMLInputElement> &
-  CheckboxVariants;
+export type CheckboxProps = JSX.InputHTMLAttributes<HTMLInputElement> & CheckboxVariants;
 
 const CheckboxComponent = (props: CheckboxProps) => {
   const [local, others] = splitProps(props, ["color", "size", "class", "type"]);

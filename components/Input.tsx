@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, JSX, createSignal, createEffect } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const inputVariants = tv({
   base: "input",

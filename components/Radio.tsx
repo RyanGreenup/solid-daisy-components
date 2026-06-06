@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const radioVariants = tv({
   base: "radio",
@@ -31,8 +31,7 @@ export const radioVariants = tv({
 
 type RadioVariants = Parameters<typeof radioVariants>[0];
 
-export type RadioProps = JSX.InputHTMLAttributes<HTMLInputElement> &
-  RadioVariants;
+export type RadioProps = JSX.InputHTMLAttributes<HTMLInputElement> & RadioVariants;
 
 export const Radio = (props: RadioProps) => {
   const [local, others] = splitProps(props, ["color", "size", "class", "type"]);

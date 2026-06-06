@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const skeletonVariants = tv({
   base: "skeleton",
@@ -7,8 +7,7 @@ export const skeletonVariants = tv({
 
 type SkeletonVariants = Parameters<typeof skeletonVariants>[0];
 
-export type SkeletonProps = JSX.HTMLAttributes<HTMLDivElement> &
-  SkeletonVariants;
+export type SkeletonProps = JSX.HTMLAttributes<HTMLDivElement> & SkeletonVariants;
 
 export const Skeleton = (props: SkeletonProps) => {
   const [local, others] = splitProps(props, ["class"]);

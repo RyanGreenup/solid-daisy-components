@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const cardVariants = tv({
   base: "card",
@@ -62,14 +62,11 @@ type CardActionsVariants = Parameters<typeof cardActionsVariants>[0];
 
 export type CardProps = JSX.HTMLAttributes<HTMLDivElement> & CardVariants;
 
-export type CardBodyProps = JSX.HTMLAttributes<HTMLDivElement> &
-  CardBodyVariants;
+export type CardBodyProps = JSX.HTMLAttributes<HTMLDivElement> & CardBodyVariants;
 
-export type CardTitleProps = JSX.HTMLAttributes<HTMLHeadingElement> &
-  CardTitleVariants;
+export type CardTitleProps = JSX.HTMLAttributes<HTMLHeadingElement> & CardTitleVariants;
 
-export type CardActionsProps = JSX.HTMLAttributes<HTMLDivElement> &
-  CardActionsVariants;
+export type CardActionsProps = JSX.HTMLAttributes<HTMLDivElement> & CardActionsVariants;
 
 export const CardBody = (props: CardBodyProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);

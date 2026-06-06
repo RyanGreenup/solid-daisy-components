@@ -1,6 +1,7 @@
 import { ChartConfiguration } from "chart.js";
-import ChartComponent from "./ChartComponent";
 import { JSX, createMemo } from "solid-js";
+
+import ChartComponent from "./ChartComponent";
 
 export interface ScatterChartProps {
   data: {
@@ -94,7 +95,5 @@ export const ScatterChart = (props: ScatterChartProps) => {
     };
   });
 
-  return (
-    <ChartComponent chartConfig={chartConfig()} className={props.className} />
-  );
+  return <ChartComponent chartConfig={chartConfig()} className={props.className} />;
 };

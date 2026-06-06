@@ -1,6 +1,7 @@
 import { ChartConfiguration } from "chart.js";
-import ChartComponent from "./ChartComponent";
 import { JSX, createMemo } from "solid-js";
+
+import ChartComponent from "./ChartComponent";
 
 export interface RadarChartProps {
   data: {
@@ -115,7 +116,5 @@ export const RadarChart = (props: RadarChartProps) => {
     };
   });
 
-  return (
-    <ChartComponent chartConfig={chartConfig()} className={props.className} />
-  );
+  return <ChartComponent chartConfig={chartConfig()} className={props.className} />;
 };

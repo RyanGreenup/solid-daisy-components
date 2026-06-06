@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const carouselVariants = tv({
   base: "carousel",
@@ -27,11 +27,9 @@ export const carouselItemVariants = tv({
 type CarouselVariants = Parameters<typeof carouselVariants>[0];
 type CarouselItemVariants = Parameters<typeof carouselItemVariants>[0];
 
-export type CarouselProps = JSX.HTMLAttributes<HTMLDivElement> &
-  CarouselVariants;
+export type CarouselProps = JSX.HTMLAttributes<HTMLDivElement> & CarouselVariants;
 
-export type CarouselItemProps = JSX.HTMLAttributes<HTMLDivElement> &
-  CarouselItemVariants;
+export type CarouselItemProps = JSX.HTMLAttributes<HTMLDivElement> & CarouselItemVariants;
 
 export const CarouselItem = (props: CarouselItemProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
@@ -45,12 +43,7 @@ export const CarouselItem = (props: CarouselItemProps) => {
 };
 
 const CarouselComponent = (props: CarouselProps) => {
-  const [local, others] = splitProps(props, [
-    "snap",
-    "direction",
-    "class",
-    "children",
-  ]);
+  const [local, others] = splitProps(props, ["snap", "direction", "class", "children"]);
 
   const safeChildren = children(() => local.children);
 

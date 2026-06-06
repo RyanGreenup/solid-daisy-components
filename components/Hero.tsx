@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX, Show } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const heroVariants = tv({
   base: "hero",
@@ -35,14 +35,12 @@ export type HeroContentProps = JSX.HTMLAttributes<HTMLDivElement> &
     description?: string;
   };
 
-export type HeroTitleProps = JSX.HTMLAttributes<HTMLHeadingElement> &
-  HeroTitleVariants;
+export type HeroTitleProps = JSX.HTMLAttributes<HTMLHeadingElement> & HeroTitleVariants;
 
 export type HeroDescriptionProps = JSX.HTMLAttributes<HTMLParagraphElement> &
   HeroDescriptionVariants;
 
-export type HeroOverlayProps = JSX.HTMLAttributes<HTMLDivElement> &
-  HeroOverlayVariants;
+export type HeroOverlayProps = JSX.HTMLAttributes<HTMLDivElement> & HeroOverlayVariants;
 
 export const HeroTitle = (props: HeroTitleProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
@@ -67,12 +65,7 @@ export const HeroDescription = (props: HeroDescriptionProps) => {
 };
 
 export const HeroContent = (props: HeroContentProps) => {
-  const [local, others] = splitProps(props, [
-    "class",
-    "children",
-    "title",
-    "description",
-  ]);
+  const [local, others] = splitProps(props, ["class", "children", "title", "description"]);
   const safeChildren = children(() => local.children);
 
   return (

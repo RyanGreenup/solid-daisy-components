@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const tooltipVariants = tv({
   base: "tooltip",
@@ -45,8 +45,7 @@ export type TooltipProps = JSX.HTMLAttributes<HTMLDivElement> &
     tip?: string;
   };
 
-export type TooltipContentProps = JSX.HTMLAttributes<HTMLDivElement> &
-  TooltipContentVariants;
+export type TooltipContentProps = JSX.HTMLAttributes<HTMLDivElement> & TooltipContentVariants;
 
 export const TooltipContent = (props: TooltipContentProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);

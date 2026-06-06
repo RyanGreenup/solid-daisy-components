@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const badgeVariants = tv({
   base: "badge",
@@ -42,13 +42,7 @@ type BadgeVariants = Parameters<typeof badgeVariants>[0];
 export type BadgeProps = JSX.HTMLAttributes<HTMLSpanElement> & BadgeVariants;
 
 export const Badge = (props: BadgeProps) => {
-  const [local, others] = splitProps(props, [
-    "variant",
-    "color",
-    "size",
-    "class",
-    "children",
-  ]);
+  const [local, others] = splitProps(props, ["variant", "color", "size", "class", "children"]);
 
   const safeChildren = children(() => local.children);
 

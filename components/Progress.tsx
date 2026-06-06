@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, JSX, Accessor, children } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const progressVariants = tv({
   base: "progress",
@@ -31,10 +31,7 @@ export const progressVariants = tv({
 
 type ProgressVariants = Parameters<typeof progressVariants>[0];
 
-export type ProgressProps = Omit<
-  JSX.ProgressHTMLAttributes<HTMLProgressElement>,
-  "value"
-> &
+export type ProgressProps = Omit<JSX.ProgressHTMLAttributes<HTMLProgressElement>, "value"> &
   Omit<JSX.IntrinsicElements["div"], "children"> &
   ProgressVariants & {
     value?: number | Accessor<number>;
@@ -42,13 +39,7 @@ export type ProgressProps = Omit<
   };
 
 export const Progress = (props: ProgressProps) => {
-  const [local, others] = splitProps(props, [
-    "color",
-    "size",
-    "class",
-    "value",
-    "max",
-  ]);
+  const [local, others] = splitProps(props, ["color", "size", "class", "value", "max"]);
 
   const getValue = () => {
     const val = local.value;

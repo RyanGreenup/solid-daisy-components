@@ -1,14 +1,7 @@
-import { tv } from "tailwind-variants";
-import {
-  splitProps,
-  children,
-  JSX,
-  createSignal,
-  Show,
-  createEffect,
-} from "solid-js";
-import { Transition } from "solid-transition-group";
 import ChevronDown from "lucide-solid/icons/chevron-down";
+import { splitProps, children, JSX, createSignal, Show, createEffect } from "solid-js";
+import { Transition } from "solid-transition-group";
+import { tv } from "tailwind-variants";
 
 export const collapsibleVariants = tv({
   base: "collapsible-root",
@@ -17,8 +10,7 @@ export const collapsibleVariants = tv({
       default: "border border-base-300 rounded-box overflow-hidden",
       ghost: "bg-transparent",
       card: "bg-base-100 shadow-sm border border-base-200 rounded-box overflow-hidden",
-      outline:
-        "border-2 border-base-300 rounded-box overflow-hidden bg-transparent",
+      outline: "border-2 border-base-300 rounded-box overflow-hidden bg-transparent",
     },
   },
   defaultVariants: {
@@ -75,10 +67,7 @@ export const collapsibleIconVariants = tv({
 
 type CollapsibleVariants = Parameters<typeof collapsibleVariants>[0];
 
-export type CollapsibleProps = Omit<
-  JSX.HTMLAttributes<HTMLDivElement>,
-  "title" | "onToggle"
-> &
+export type CollapsibleProps = Omit<JSX.HTMLAttributes<HTMLDivElement>, "title" | "onToggle"> &
   CollapsibleVariants & {
     title?: JSX.Element;
     subtitle?: JSX.Element;
@@ -106,13 +95,10 @@ export const Collapsible = (props: CollapsibleProps) => {
   const safeChildren = children(() => local.children);
 
   // Internal state for uncontrolled mode
-  const [internalExpanded, setInternalExpanded] = createSignal(
-    local.defaultExpanded ?? false,
-  );
+  const [internalExpanded, setInternalExpanded] = createSignal(local.defaultExpanded ?? false);
 
   // Use controlled prop if provided, otherwise use internal state
-  const isExpanded = () =>
-    local.expanded !== undefined ? local.expanded : internalExpanded();
+  const isExpanded = () => (local.expanded !== undefined ? local.expanded : internalExpanded());
 
   const handleToggle = () => {
     if (local.disabled) return;
@@ -157,11 +143,7 @@ export const Collapsible = (props: CollapsibleProps) => {
       >
         <div class="flex-1 text-left">
           <div class="font-medium text-base-content">{local.title}</div>
-          {local.subtitle && (
-            <div class="text-sm text-base-content/70 mt-1">
-              {local.subtitle}
-            </div>
-          )}
+          {local.subtitle && <div class="text-sm text-base-content/70 mt-1">{local.subtitle}</div>}
         </div>
 
         {local.showIcon !== false && (
@@ -190,9 +172,7 @@ export const Collapsible = (props: CollapsibleProps) => {
           exitToClass="opacity-0 transform translate-y-2"
         >
           <Show when={isExpanded()}>
-            <div class="p-4 bg-base-50 border-t border-base-200">
-              {safeChildren()}
-            </div>
+            <div class="p-4 bg-base-50 border-t border-base-200">{safeChildren()}</div>
           </Show>
         </Transition>
       </div>

@@ -50,9 +50,7 @@ export function useKeybinding(
       if (!keyMatch) return;
 
       // Check modifier keys
-      const ctrlMatch = ctrl
-        ? ev.ctrlKey || ev.metaKey
-        : !ev.ctrlKey && !ev.metaKey;
+      const ctrlMatch = ctrl ? ev.ctrlKey || ev.metaKey : !ev.ctrlKey && !ev.metaKey;
       if (!ctrlMatch) return;
 
       const shiftMatch = shift ? ev.shiftKey : !ev.shiftKey;

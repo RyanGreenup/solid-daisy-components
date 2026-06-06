@@ -1,6 +1,7 @@
 import { ChartConfiguration, ChartData } from "chart.js";
-import ChartComponent from "./ChartComponent";
 import { createMemo } from "solid-js";
+
+import ChartComponent from "./ChartComponent";
 
 export interface BarChartProps {
   data: ChartData<"bar">;
@@ -62,7 +63,5 @@ export const BarChart = (props: BarChartProps) => {
     };
   });
 
-  return (
-    <ChartComponent chartConfig={chartConfig()} className={props.className} />
-  );
+  return <ChartComponent chartConfig={chartConfig()} className={props.className} />;
 };

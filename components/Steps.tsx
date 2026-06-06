@@ -1,5 +1,5 @@
-import { tv } from "tailwind-variants";
 import { splitProps, children, JSX } from "solid-js";
+import { tv } from "tailwind-variants";
 
 export const stepsVariants = tv({
   base: "steps",
@@ -46,8 +46,7 @@ export type StepsProps = JSX.HTMLAttributes<HTMLUListElement> & StepsVariants;
 
 export type StepProps = JSX.LiHTMLAttributes<HTMLLIElement> & StepVariants;
 
-export type StepIconProps = JSX.HTMLAttributes<HTMLSpanElement> &
-  StepIconVariants;
+export type StepIconProps = JSX.HTMLAttributes<HTMLSpanElement> & StepIconVariants;
 
 export const StepIcon = (props: StepIconProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
