@@ -6,9 +6,7 @@ import {
   getSortedRowModel,
 } from "@tanstack/solid-table";
 import { createVirtualizer } from "@tanstack/solid-virtual";
-// @ts-expect-error
 import ChevronDown from "lucide-solid/icons/chevron-down";
-// @ts-expect-error
 import ChevronUp from "lucide-solid/icons/chevron-up";
 import { For, Show, createMemo, createSignal } from "solid-js";
 

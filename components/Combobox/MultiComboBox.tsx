@@ -1,8 +1,6 @@
 import { Combobox } from "@kobalte/core/combobox";
-// @ts-expect-error
 import Check from "lucide-solid/icons/check";
 import ChevronsUpDown from "lucide-solid/icons/chevrons-up-down";
-// @ts-expect-error
 import X from "lucide-solid/icons/x";
 import { For, Show, createSignal } from "solid-js";
 import { Transition } from "solid-transition-group";

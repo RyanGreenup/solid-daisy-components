@@ -1,4 +1,3 @@
-// @ts-expect-error
 import Download from "lucide-solid/icons/download";
 import { Show, createSignal, splitProps } from "solid-js";
 
