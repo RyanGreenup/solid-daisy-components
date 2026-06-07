@@ -1,35 +1,37 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const cardVariants = tv({
   base: "card",
+  defaultVariants: {
+    border: "default",
+    image: "default",
+    side: "default",
+    size: "md",
+  },
   variants: {
-    size: {
-      xs: "card-xs",
-      sm: "card-sm",
-      md: "",
-      lg: "card-lg",
-      xl: "card-xl",
-    },
     border: {
-      default: "",
       border: "card-border",
       dash: "card-dash",
-    },
-    side: {
       default: "",
-      side: "card-side",
     },
     image: {
       default: "",
       full: "image-full",
     },
-  },
-  defaultVariants: {
-    size: "md",
-    border: "default",
-    side: "default",
-    image: "default",
+    side: {
+      default: "",
+      side: "card-side",
+    },
+    size: {
+      lg: "card-lg",
+      md: "",
+      sm: "card-sm",
+      xl: "card-xl",
+      xs: "card-xs",
+    },
   },
 });
 
@@ -43,15 +45,15 @@ export const cardTitleVariants = tv({
 
 export const cardActionsVariants = tv({
   base: "card-actions",
-  variants: {
-    justify: {
-      start: "justify-start",
-      center: "justify-center",
-      end: "justify-end",
-    },
-  },
   defaultVariants: {
     justify: "end",
+  },
+  variants: {
+    justify: {
+      center: "justify-center",
+      end: "justify-end",
+      start: "justify-start",
+    },
   },
 });
 
@@ -68,6 +70,11 @@ export type CardTitleProps = JSX.HTMLAttributes<HTMLHeadingElement> & CardTitleV
 
 export type CardActionsProps = JSX.HTMLAttributes<HTMLDivElement> & CardActionsVariants;
 
+/**
+ * Container for the main content area of a DaisyUI card.
+ * Renders a `<div>` with the `card-body` class, providing padded layout
+ * for card content such as title, text, and actions.
+ */
 export const CardBody = (props: CardBodyProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -79,6 +86,11 @@ export const CardBody = (props: CardBodyProps) => {
   );
 };
 
+/**
+ * Heading element for a DaisyUI card, rendered as an `<h2>` with the
+ * `card-title` class to apply bold, large-text styling consistent with
+ * the DaisyUI card design.
+ */
 export const CardTitle = (props: CardTitleProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -90,6 +102,11 @@ export const CardTitle = (props: CardTitleProps) => {
   );
 };
 
+/**
+ * Action button row for a DaisyUI card, rendered as a `<div>` with
+ * `card-actions` and a configurable flex-justification (`start`, `center`,
+ * or `end`; defaults to `end`) for aligning buttons and links.
+ */
 export const CardActions = (props: CardActionsProps) => {
   const [local, others] = splitProps(props, ["justify", "class", "children"]);
   const safeChildren = children(() => local.children);
@@ -98,8 +115,8 @@ export const CardActions = (props: CardActionsProps) => {
     <div
       {...others}
       class={cardActionsVariants({
-        justify: local.justify,
         class: local.class,
+        justify: local.justify,
       })}
     >
       {safeChildren()}
@@ -123,11 +140,11 @@ const CardComponent = (props: CardProps) => {
     <div
       {...others}
       class={cardVariants({
-        size: local.size,
         border: local.border,
-        side: local.side,
-        image: local.image,
         class: local.class,
+        image: local.image,
+        side: local.side,
+        size: local.size,
       })}
     >
       {safeChildren()}
@@ -136,7 +153,7 @@ const CardComponent = (props: CardProps) => {
 };
 
 export const Card = Object.assign(CardComponent, {
+  Actions: CardActions,
   Body: CardBody,
   Title: CardTitle,
-  Actions: CardActions,
 });

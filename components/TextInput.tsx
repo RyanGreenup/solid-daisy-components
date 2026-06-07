@@ -1,36 +1,38 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const textInputVariants = tv({
   base: "input",
+  defaultVariants: {
+    color: "default",
+    size: "md",
+    variant: "default",
+  },
   variants: {
     color: {
+      accent: "input-accent",
       default: "",
+      error: "input-error",
+      info: "input-info",
       neutral: "input-neutral",
       primary: "input-primary",
       secondary: "input-secondary",
-      accent: "input-accent",
-      info: "input-info",
       success: "input-success",
       warning: "input-warning",
-      error: "input-error",
     },
     size: {
-      xs: "input-xs",
-      sm: "input-sm",
-      md: "",
       lg: "input-lg",
+      md: "",
+      sm: "input-sm",
       xl: "input-xl",
+      xs: "input-xs",
     },
     variant: {
       default: "",
       ghost: "input-ghost",
     },
-  },
-  defaultVariants: {
-    color: "default",
-    size: "md",
-    variant: "default",
   },
 });
 
@@ -52,15 +54,20 @@ const TextInputComponent = (props: TextInputProps) => {
     <input
       {...others}
       class={textInputVariants({
+        class: local.class,
         color: local.color,
         size: local.size,
         variant: local.variant,
-        class: local.class,
       })}
     />
   );
 };
 
+/**
+ * A DaisyUI `input`-styled `<label>` wrapper used to compose composite input fields
+ * (e.g. icon + input side-by-side). Wrap a `TextInput` and any decorating elements
+ * inside this component to apply the shared `input` border/background styling to the group.
+ */
 export const InputWrapper = (props: InputWrapperProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);

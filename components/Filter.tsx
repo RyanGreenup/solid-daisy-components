@@ -1,5 +1,7 @@
-import { splitProps, children, JSX, Show } from "solid-js";
+import { Show, children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const filterVariants = tv({
   base: "filter",
@@ -21,6 +23,10 @@ export type FilterResetProps = JSX.InputHTMLAttributes<HTMLInputElement> & Filte
 
 export type FilterInputProps = JSX.InputHTMLAttributes<HTMLInputElement>;
 
+/**
+ * A DaisyUI filter-reset button rendered as `<input type="radio">` with `btn filter-reset`
+ * classes. Place inside a `Filter` to allow users to clear all active filter selections.
+ */
 export const FilterReset = (props: FilterResetProps) => {
   const [local, others] = splitProps(props, ["class", "type"]);
 
@@ -33,6 +39,10 @@ export const FilterReset = (props: FilterResetProps) => {
   );
 };
 
+/**
+ * An individual filter option rendered as `<input type="radio">` with `btn` styling.
+ * Place inside a `Filter` container; each instance represents a selectable filter value.
+ */
 export const FilterInput = (props: FilterInputProps) => {
   const [local, others] = splitProps(props, ["class", "type"]);
 
@@ -61,15 +71,13 @@ function FilterAsDiv(props: FilterDivProps) {
   );
 }
 
-const FilterComponent = (props: FilterProps) => {
-  return (
-    <Show when={props.as === "form"} fallback={<FilterAsDiv {...(props as FilterDivProps)} />}>
-      <FilterAsForm {...(props as FilterFormProps)} />
-    </Show>
-  );
-};
+const FilterComponent = (props: FilterProps) => (
+  <Show when={props.as === "form"} fallback={<FilterAsDiv {...(props as FilterDivProps)} />}>
+    <FilterAsForm {...(props as FilterFormProps)} />
+  </Show>
+);
 
 export const Filter = Object.assign(FilterComponent, {
-  Reset: FilterReset,
   Input: FilterInput,
+  Reset: FilterReset,
 });

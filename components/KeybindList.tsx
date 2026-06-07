@@ -1,45 +1,47 @@
-import { createSignal, For, JSX, splitProps } from "solid-js";
+import { For, createSignal, splitProps, Show } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import { useKeybinding } from "../utilities/useKeybinding";
 
+import type { JSX } from "solid-js";
+
 export const keybindListVariants = tv({
   base: "menu bg-base-100 rounded-box border border-base-300 focus:outline-2 focus:outline-primary flex-nowrap",
+  defaultVariants: {
+    maxHeight: "md",
+    size: "md",
+  },
   variants: {
-    size: {
-      sm: "w-48",
-      md: "w-56",
-      lg: "w-64",
-      xl: "w-80",
-    },
     maxHeight: {
-      sm: "max-h-48",
-      md: "max-h-72",
       lg: "max-h-96",
+      md: "max-h-72",
+      sm: "max-h-48",
       xl: "max-h-[32rem]",
     },
-  },
-  defaultVariants: {
-    size: "md",
-    maxHeight: "md",
+    size: {
+      lg: "w-64",
+      md: "w-56",
+      sm: "w-48",
+      xl: "w-80",
+    },
   },
 });
 
 export const keybindListItemVariants = tv({
   base: "cursor-pointer transition-colors duration-150 rounded transition-all duration-100 ease-in-out",
-  variants: {
-    selected: {
-      true: "active bg-primary text-primary-content",
-      false: "hover:bg-base-200",
-    },
-    focused: {
-      true: "ring-2 ring-primary ring-inset",
-      false: "",
-    },
-  },
   defaultVariants: {
-    selected: false,
     focused: false,
+    selected: false,
+  },
+  variants: {
+    focused: {
+      false: "",
+      true: "ring-2 ring-primary ring-inset",
+    },
+    selected: {
+      false: "hover:bg-base-200",
+      true: "active bg-primary text-primary-content",
+    },
   },
 });
 
@@ -61,6 +63,12 @@ export type KeybindListProps<T = string> = Omit<
     ) => JSX.Element;
   };
 
+/**
+ * A keyboard-navigable menu list that supports arrow-key / `j`/`k` focus movement
+ * and `Enter` to select. Renders a `<ul>` with DaisyUI `menu` classes; accepts a
+ * custom `children` render-prop for each item, with `focused` and `selected` state.
+ * Use `size` and `maxHeight` to control width and scroll area.
+ */
 export function KeybindList<T = string>(props: KeybindListProps<T>) {
   const [local, others] = splitProps(props, [
     "items",
@@ -119,9 +127,9 @@ export function KeybindList<T = string>(props: KeybindListProps<T>) {
       tabindex="0"
       {...others}
       class={keybindListVariants({
-        size: local.size,
-        maxHeight: local.maxHeight,
         class: local.class,
+        maxHeight: local.maxHeight,
+        size: local.size,
       })}
       style={{ "overflow-y": "auto" }}
     >
@@ -136,12 +144,26 @@ export function KeybindList<T = string>(props: KeybindListProps<T>) {
                 local.children
                   ? ""
                   : keybindListItemVariants({
-                      selected: isSelected(),
                       focused: isFocused(),
+                      selected: isSelected(),
                     })
               }
             >
-              {local.children ? (
+              <Show
+                when={local.children}
+                fallback={
+                  <a
+                    class="w-full"
+                    onClick={() => {
+                      setFocusedIndex(index());
+                      local.onFocused?.(item, index());
+                      local.onSelect?.(item, index());
+                    }}
+                  >
+                    {String(item)}
+                  </a>
+                }
+              >
                 <div
                   class="w-full"
                   onClick={() => {
@@ -155,18 +177,7 @@ export function KeybindList<T = string>(props: KeybindListProps<T>) {
                     selected: isSelected(),
                   })}
                 </div>
-              ) : (
-                <a
-                  class="w-full"
-                  onClick={() => {
-                    setFocusedIndex(index());
-                    local.onFocused?.(item, index());
-                    local.onSelect?.(item, index());
-                  }}
-                >
-                  {String(item)}
-                </a>
-              )}
+              </Show>
             </li>
           );
         }}

@@ -1,17 +1,16 @@
 import {
   ArcElement,
-  BubbleController,
   BarController,
   BarElement,
+  BubbleController,
   CategoryScale,
   Chart,
-  ChartConfiguration,
   DoughnutController,
   Filler,
   Legend,
-  LinearScale,
   LineController,
   LineElement,
+  LinearScale,
   PointElement,
   PolarAreaController,
   RadarController,
@@ -21,6 +20,8 @@ import {
   Tooltip,
 } from "chart.js";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
+
+import type { ChartConfiguration } from "chart.js";
 
 // Register the required components
 Chart.register(
@@ -49,6 +50,11 @@ interface ChartComponentProps {
   className?: string;
 }
 
+/**
+ * Base Chart.js canvas wrapper for SolidJS. Mounts a Chart instance on a responsive
+ * canvas, reactively updates data and options when props change, and applies a
+ * dark-mode invert filter. All chart-type components delegate rendering to this component.
+ */
 export default function ChartComponent(props: ChartComponentProps) {
   let chartRef!: HTMLCanvasElement;
   let chartInstance: Chart | null = null;
@@ -59,8 +65,8 @@ export default function ChartComponent(props: ChartComponentProps) {
       ...props.chartConfig,
       options: {
         ...props.chartConfig.options,
-        responsive: true,
         maintainAspectRatio: false,
+        responsive: true,
       },
     };
     chartInstance = new Chart(chartRef, config);
@@ -72,8 +78,8 @@ export default function ChartComponent(props: ChartComponentProps) {
       chartInstance.data = props.chartConfig.data;
       chartInstance.options = {
         ...props.chartConfig.options,
-        responsive: true,
         maintainAspectRatio: false,
+        responsive: true,
       };
       chartInstance.update();
     }
@@ -84,8 +90,8 @@ export default function ChartComponent(props: ChartComponentProps) {
   });
 
   return (
-    <div class={`relative w-full ${props.className || ""}`} style="min-height: 300px;">
-      <canvas ref={chartRef}></canvas>
+    <div class={`relative w-full ${props.className || ""}`} style={{ "min-height": "300px" }}>
+      <canvas ref={chartRef} />
       <DarkModeCanvasFilter />
     </div>
   );

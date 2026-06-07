@@ -1,9 +1,9 @@
 import * as CommandPrimitive from "cmdk-solid";
-import { splitProps, Show, createSignal, createEffect, onMount, onCleanup } from "solid-js";
+import { Show, createEffect, createSignal, onCleanup, onMount, splitProps } from "solid-js";
 import { Portal } from "solid-js/web";
 import { tv } from "tailwind-variants";
 
-import type { Component, ComponentProps, ParentProps, VoidProps, JSXElement } from "solid-js";
+import type { Component, ComponentProps, JSXElement, ParentProps, VoidProps } from "solid-js";
 
 const commandVariants = tv({
   base: "flex h-full w-full flex-col overflow-hidden rounded-lg bg-base-100 text-base-content shadow-lg",
@@ -37,6 +37,11 @@ const commandShortcutVariants = tv({
   base: "ml-auto text-xs tracking-widest text-base-content/50",
 });
 
+/**
+ * Root container for the command palette. Renders a rounded, shadowed panel
+ * that composes all other Command sub-components. Accepts all cmdk-solid
+ * `CommandRoot` props plus an optional `class` override.
+ */
 const Command: Component<ParentProps<CommandPrimitive.CommandRootProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
@@ -45,6 +50,11 @@ const Command: Component<ParentProps<CommandPrimitive.CommandRootProps>> = (prop
   );
 };
 
+/**
+ * Search input for the command palette. Renders a search icon followed by a
+ * text field inside a bottom-bordered wrapper. Filters the visible items in
+ * the sibling `CommandList` as the user types.
+ */
 const CommandInput: Component<VoidProps<CommandPrimitive.CommandInputProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
@@ -71,6 +81,10 @@ const CommandInput: Component<VoidProps<CommandPrimitive.CommandInputProps>> = (
   );
 };
 
+/**
+ * Scrollable container that holds `CommandGroup` and `CommandItem` elements.
+ * Limits visible height to 300 px and hides horizontal overflow.
+ */
 const CommandList: Component<ParentProps<CommandPrimitive.CommandListProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
@@ -79,6 +93,10 @@ const CommandList: Component<ParentProps<CommandPrimitive.CommandListProps>> = (
   );
 };
 
+/**
+ * Fallback message displayed inside `CommandList` when the current search
+ * query produces no matching items. Renders centred, muted text.
+ */
 const CommandEmpty: Component<ParentProps<CommandPrimitive.CommandEmptyProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
@@ -90,6 +108,11 @@ const CommandEmpty: Component<ParentProps<CommandPrimitive.CommandEmptyProps>> =
   );
 };
 
+/**
+ * Named section within `CommandList` that groups related `CommandItem`
+ * elements. Renders the group heading in a small, muted label style above the
+ * grouped items.
+ */
 const CommandGroup: Component<ParentProps<CommandPrimitive.CommandGroupProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
@@ -101,6 +124,10 @@ const CommandGroup: Component<ParentProps<CommandPrimitive.CommandGroupProps>> =
   );
 };
 
+/**
+ * Horizontal divider rendered between `CommandGroup` or `CommandItem`
+ * elements to visually separate distinct sections of the command list.
+ */
 const CommandSeparator: Component<VoidProps<CommandPrimitive.CommandSeparatorProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
@@ -112,6 +139,10 @@ const CommandSeparator: Component<VoidProps<CommandPrimitive.CommandSeparatorPro
   );
 };
 
+/**
+ * Individual selectable row inside `CommandList` or `CommandGroup`. Highlights
+ * with a primary tint when focused/selected and dims when disabled.
+ */
 const CommandItem: Component<ParentProps<CommandPrimitive.CommandItemProps>> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
@@ -120,19 +151,29 @@ const CommandItem: Component<ParentProps<CommandPrimitive.CommandItemProps>> = (
   );
 };
 
+/**
+ * Inline label that displays a keyboard shortcut hint at the trailing end of
+ * a `CommandItem`. Renders as a small, spaced, muted `<span>`.
+ */
 const CommandShortcut: Component<ComponentProps<"span">> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
 
   return <span class={commandShortcutVariants({ class: local.class })} {...others} />;
 };
 
-type CommandDialogProps = {
+interface CommandDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   children: JSXElement;
   keybinding?: string;
-};
+}
 
+/**
+ * Modal overlay that wraps a `Command` palette in a centred, backdrop-dimmed
+ * portal. Toggles open/closed via `open`/`onOpenChange` props and registers a
+ * global `keydown` listener for the configured `keybinding` (default `Ctrl/⌘+J`)
+ * and `Escape`. Restores keyboard focus to the previously focused element on close.
+ */
 const CommandDialog: Component<CommandDialogProps> = (props) => {
   const [previousFocusElement, setPreviousFocusElement] = createSignal<HTMLElement | null>(null);
   let commandInputRef: HTMLElement | undefined;

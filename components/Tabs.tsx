@@ -1,50 +1,52 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { tv } from "tailwind-variants";
 
+import type { JSX } from "solid-js";
+
 export const tabsVariants = tv({
   base: "tabs",
+  defaultVariants: {
+    placement: "top",
+    size: "md",
+    style: "default",
+  },
   variants: {
-    style: {
-      default: "",
-      box: "tabs-box",
-      border: "tabs-border",
-      lift: "tabs-lift",
+    placement: {
+      bottom: "tabs-bottom",
+      top: "tabs-top",
     },
     size: {
-      xs: "tabs-xs",
-      sm: "tabs-sm",
-      md: "",
       lg: "tabs-lg",
+      md: "",
+      sm: "tabs-sm",
       xl: "tabs-xl",
+      xs: "tabs-xs",
     },
-    placement: {
-      top: "tabs-top",
-      bottom: "tabs-bottom",
+    style: {
+      border: "tabs-border",
+      box: "tabs-box",
+      default: "",
+      lift: "tabs-lift",
     },
-  },
-  defaultVariants: {
-    style: "default",
-    size: "md",
-    placement: "top",
   },
 });
 
 export const tabVariants = tv({
   base: "tab",
-  variants: {
-    active: {
-      true: "tab-active",
-      false: "",
-    },
-    disabled: {
-      true: "tab-disabled",
-      false: "",
-    },
-  },
   defaultVariants: {
     active: false,
     disabled: false,
+  },
+  variants: {
+    active: {
+      false: "",
+      true: "tab-active",
+    },
+    disabled: {
+      false: "",
+      true: "tab-disabled",
+    },
   },
 });
 
@@ -74,6 +76,10 @@ export type TabInputProps = JSX.InputHTMLAttributes<HTMLInputElement> &
 
 export type TabContentProps = JSX.HTMLAttributes<HTMLDivElement> & TabContentVariants;
 
+/**
+ * A single tab trigger rendered as a `<button>` (or another element via `as`).
+ * Applies `tab-active` and `tab-disabled` variants; forwards `role="tab"` by default.
+ */
 export const Tab = (props: TabProps) => {
   const [local, others] = splitProps(props, [
     "active",
@@ -93,8 +99,8 @@ export const Tab = (props: TabProps) => {
       role={local.role || "tab"}
       class={tabVariants({
         active: local.active,
-        disabled: local.disabled,
         class: local.class,
+        disabled: local.disabled,
       })}
     >
       {safeChildren()}
@@ -102,6 +108,10 @@ export const Tab = (props: TabProps) => {
   );
 };
 
+/**
+ * A radio `<input>` styled as a tab trigger, used inside a `Tabs` container
+ * when tab switching is driven by native radio-button state rather than JS.
+ */
 export const TabInput = (props: TabInputProps) => {
   const [local, others] = splitProps(props, ["active", "disabled", "class", "role", "type"]);
 
@@ -112,13 +122,17 @@ export const TabInput = (props: TabInputProps) => {
       role={local.role || "tab"}
       class={tabVariants({
         active: local.active,
-        disabled: local.disabled,
         class: local.class,
+        disabled: local.disabled,
       })}
     />
   );
 };
 
+/**
+ * The content panel associated with a tab; renders a `<div>` with the
+ * `tab-content` DaisyUI class so it shows/hides alongside its tab trigger.
+ */
 export const TabContent = (props: TabContentProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -147,10 +161,10 @@ const TabsComponent = (props: TabsProps) => {
       {...others}
       role={local.role || "tablist"}
       class={tabsVariants({
-        style: local.style,
-        size: local.size,
-        placement: local.placement,
         class: local.class,
+        placement: local.placement,
+        size: local.size,
+        style: local.style,
       })}
     >
       {safeChildren()}
@@ -159,7 +173,7 @@ const TabsComponent = (props: TabsProps) => {
 };
 
 export const Tabs = Object.assign(TabsComponent, {
+  Content: TabContent,
   Tab,
   TabInput,
-  Content: TabContent,
 });

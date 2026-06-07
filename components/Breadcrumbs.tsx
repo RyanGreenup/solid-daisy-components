@@ -1,5 +1,7 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const breadcrumbsVariants = tv({
   base: "breadcrumbs",
@@ -9,6 +11,10 @@ export type BreadcrumbsProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export type BreadcrumbsItemProps = JSX.LiHTMLAttributes<HTMLLIElement>;
 
+/**
+ * An individual `<li>` item inside a `Breadcrumbs` container. Typically wraps
+ * an anchor or plain text to represent one level of the navigation hierarchy.
+ */
 export const BreadcrumbsItem = (props: BreadcrumbsItemProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);

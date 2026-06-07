@@ -2,20 +2,23 @@
  * CSV export utilities for data tables
  */
 
-import { ColumnDef } from "@tanstack/solid-table";
+import type { ColumnDef } from "@tanstack/solid-table";
 
 /**
  * Escapes a CSV field value by wrapping in quotes and escaping internal quotes
+ * @param value
  */
 function escapeCsvField(value: any): string {
-  if (value == null) return "";
+  if (value == null) {
+    return "";
+  }
 
   const stringValue = String(value);
 
   // If the value contains comma, newline, or quote, wrap in quotes
   if (stringValue.includes(",") || stringValue.includes("\n") || stringValue.includes('"')) {
     // Escape quotes by doubling them
-    return `"${stringValue.replace(/"/g, '""')}"`;
+    return `"${stringValue.replaceAll('"', '""')}"`;
   }
 
   return stringValue;
@@ -23,9 +26,13 @@ function escapeCsvField(value: any): string {
 
 /**
  * Converts an array of objects to CSV string
+ * @param data
+ * @param columns
  */
 export function arrayToCsv<T>(data: T[], columns?: ColumnDef<T>[]): string {
-  if (!data.length) return "";
+  if (data.length === 0) {
+    return "";
+  }
 
   let headers: string[];
   let rows: string[][];
@@ -66,8 +73,10 @@ export function arrayToCsv<T>(data: T[], columns?: ColumnDef<T>[]): string {
 
 /**
  * Downloads CSV data as a file
+ * @param csvContent
+ * @param filename
  */
-export function downloadCsv(csvContent: string, filename: string = "data.csv"): void {
+export function downloadCsv(csvContent: string, filename = "data.csv"): void {
   // Add BOM for proper UTF-8 encoding in Excel
   const bom = "\uFEFF";
   const blob = new Blob([bom + csvContent], { type: "text/csv;charset=utf-8;" });
@@ -80,7 +89,7 @@ export function downloadCsv(csvContent: string, filename: string = "data.csv"): 
   link.setAttribute("download", filename);
   link.style.visibility = "hidden";
 
-  document.body.appendChild(link);
+  document.body.append(link);
   link.click();
   document.body.removeChild(link);
 
@@ -90,11 +99,14 @@ export function downloadCsv(csvContent: string, filename: string = "data.csv"): 
 
 /**
  * Exports table data to CSV and triggers download
+ * @param data
+ * @param columns
+ * @param filename
  */
 export function exportTableToCsv<T>(
   data: T[],
   columns?: ColumnDef<T>[],
-  filename: string = "table-data.csv",
+  filename = "table-data.csv",
 ): void {
   const csvContent = arrayToCsv(data, columns);
   downloadCsv(csvContent, filename);

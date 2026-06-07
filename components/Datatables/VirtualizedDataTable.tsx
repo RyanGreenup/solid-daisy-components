@@ -1,26 +1,32 @@
 import {
-  ColumnDef,
-  ColumnFiltersState,
   createSolidTable,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
-  SortingState,
-  RowData,
-  Column,
 } from "@tanstack/solid-table";
 import { createVirtualizer } from "@tanstack/solid-virtual";
-// @ts-ignore
+// @ts-expect-error
 import ChevronDown from "lucide-solid/icons/chevron-down";
-// @ts-ignore
+// @ts-expect-error
 import ChevronUp from "lucide-solid/icons/chevron-up";
-import { createMemo, createSignal, For, JSXElement, Show } from "solid-js";
+import { For, Show, createMemo, createSignal } from "solid-js";
 
 import DownloadButton from "../DownloadButton";
 import { Input } from "../Input";
 import { Select } from "../Select";
-import { dataTableVariants, sortButtonVariants, DataTableVariants } from "./styles";
+import { dataTableVariants, sortButtonVariants } from "./styles";
+
+import type {
+  Column,
+  ColumnDef,
+  ColumnFiltersState,
+  RowData,
+  SortingState,
+} from "@tanstack/solid-table";
+import type { JSXElement } from "solid-js";
+
+import type { DataTableVariants } from "./styles";
 
 declare module "@tanstack/solid-table" {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -44,9 +50,9 @@ type VirtualizedDataTableProps<T> = DataTableVariants & {
   class?: string;
 };
 
-function Filter<T>({ column, data }: { column: Column<T, unknown>; data: T[] }) {
-  const columnFilterValue = () => column.getFilterValue();
-  const { filterVariant, selectOptions } = column.columnDef.meta ?? {};
+function Filter<T>(props: { column: Column<T, unknown>; data: T[] }) {
+  const columnFilterValue = () => props.column.getFilterValue();
+  const { filterVariant, selectOptions } = props.column.columnDef.meta ?? {};
 
   if (filterVariant === "select") {
     const options = selectOptions || [];
@@ -55,13 +61,11 @@ function Filter<T>({ column, data }: { column: Column<T, unknown>; data: T[] }) 
       <Select
         size="sm"
         value={(columnFilterValue() as string) || ""}
-        onChange={(e) => column.setFilterValue(e.currentTarget.value || undefined)}
+        onChange={(e) => props.column.setFilterValue(e.currentTarget.value || undefined)}
         style={{ flex: "1" }}
       >
         <option value="">All</option>
-        {options.map((option) => (
-          <option value={option.value}>{option.label}</option>
-        ))}
+        <For each={options}>{(option) => <option value={option.value}>{option.label}</option>}</For>
       </Select>
     );
   }
@@ -71,23 +75,29 @@ function Filter<T>({ column, data }: { column: Column<T, unknown>; data: T[] }) 
       style={{ flex: "1", padding: "0.25rem" }}
       type="text"
       value={(columnFilterValue() as string) || ""}
-      onInput={(e) => column.setFilterValue(e.currentTarget.value)}
+      onInput={(e) => props.column.setFilterValue(e.currentTarget.value)}
       placeholder="Filter..."
     />
   );
 }
 
+/**
+ * A data table with virtualized row rendering powered by TanStack Table and `@tanstack/solid-virtual`.
+ * Supports optional global search, per-column filtering (text or select), column sorting, and CSV download.
+ * Only visible rows are rendered in the DOM; configure row height via `estimateSize` and scroll area via `height`.
+ * Visual appearance is controlled by `DataTableVariants` props (striped, darkHeader, verticalBorders, etc.).
+ */
 export function VirtualizedDataTable<T>(props: VirtualizedDataTableProps<T>): JSXElement {
   let parentRef: HTMLTableSectionElement | undefined;
 
   const styles = dataTableVariants({
+    class: props.class,
     darkHeader: props.darkHeader,
-    striped: props.striped,
     horizontalBorder: props.horizontalBorder,
-    verticalBorders: props.verticalBorders,
     noFooter: props.noFooter,
     noHeader: props.noHeader,
-    class: props.class,
+    striped: props.striped,
+    verticalBorders: props.verticalBorders,
   });
 
   const [sorting, setSorting] = createSignal<SortingState>([]);
@@ -95,37 +105,37 @@ export function VirtualizedDataTable<T>(props: VirtualizedDataTableProps<T>): JS
   const [globalFilter, setGlobalFilter] = createSignal("");
 
   const table = createSolidTable({
-    get data() {
-      return props.data;
-    },
     get columns() {
       return props.columns;
     },
+    get data() {
+      return props.data;
+    },
+    debugTable: true,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel:
+      props.enableGlobalFilter !== false || props.enableColumnFilters !== false
+        ? getFilteredRowModel()
+        : getCoreRowModel(),
+    getSortedRowModel: props.enableSorting !== false ? getSortedRowModel() : getCoreRowModel(),
+    onColumnFiltersChange: props.enableColumnFilters !== false ? setColumnFilters : () => {},
+    onGlobalFilterChange: props.enableGlobalFilter !== false ? setGlobalFilter : () => {},
+    onSortingChange: props.enableSorting !== false ? setSorting : () => {},
     state: {
-      get sorting() {
-        return props.enableSorting !== false ? sorting() : [];
-      },
       get columnFilters() {
         return props.enableColumnFilters !== false ? columnFilters() : [];
       },
       get globalFilter() {
         return props.enableGlobalFilter !== false ? globalFilter() : "";
       },
+      get sorting() {
+        return props.enableSorting !== false ? sorting() : [];
+      },
     },
-    onSortingChange: props.enableSorting !== false ? setSorting : () => {},
-    onColumnFiltersChange: props.enableColumnFilters !== false ? setColumnFilters : () => {},
-    onGlobalFilterChange: props.enableGlobalFilter !== false ? setGlobalFilter : () => {},
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: props.enableSorting !== false ? getSortedRowModel() : getCoreRowModel(),
-    getFilteredRowModel:
-      props.enableGlobalFilter !== false || props.enableColumnFilters !== false
-        ? getFilteredRowModel()
-        : getCoreRowModel(),
-    debugTable: true,
   });
 
   const filteredRows = createMemo(() => {
-    const rows = table.getRowModel().rows;
+    const { rows } = table.getRowModel();
 
     return rows;
   });
@@ -135,8 +145,8 @@ export function VirtualizedDataTable<T>(props: VirtualizedDataTableProps<T>): JS
       get count() {
         return filteredRows().length;
       },
-      getScrollElement: () => parentRef!,
       estimateSize: props.estimateSize || (() => 48),
+      getScrollElement: () => parentRef!,
       overscan: props.overscan || 5,
     }),
   );
@@ -186,8 +196,8 @@ export function VirtualizedDataTable<T>(props: VirtualizedDataTableProps<T>): JS
           <thead
             class={styles.header()}
             style={{
-              width: "100%",
               display: "block",
+              width: "100%",
             }}
           >
             <For each={table.getHeaderGroups()}>
@@ -198,47 +208,66 @@ export function VirtualizedDataTable<T>(props: VirtualizedDataTableProps<T>): JS
                       <th
                         class={styles.th()}
                         style={{
-                          width: header.column.columnDef.size
-                            ? `${header.column.columnDef.size}px`
-                            : "auto",
-                          flex: header.column.columnDef.size ? "none" : "1",
+                          flex: header.column.columnDef.size > 0 ? "none" : "1",
+                          width:
+                            header.column.columnDef.size > 0
+                              ? `${header.column.columnDef.size}px`
+                              : "auto",
                         }}
                       >
-                        {header.isPlaceholder ? null : (
-                          <div
-                            style={{
-                              display: "flex",
-                              "flex-direction": "column",
-                              // TODO Let's remove this and have the input automatically shrink to fit
-                              // Probably need flex argument on the input
-                              overflow: "hidden",
-                              gap: "0.25rem",
-                            }}
-                          >
-                            <button
-                              class={sortButtonVariants()}
-                              onClick={header.column.getToggleSortingHandler()}
-                              disabled={
-                                !header.column.getCanSort() || props.enableSorting === false
-                              }
+                        <Show
+                          when={header.isPlaceholder}
+                          fallback={
+                            <div
+                              style={{
+                                display: "flex",
+                                "flex-direction": "column",
+                                // TODO Let's remove this and have the input automatically shrink to fit
+                                // Probably need flex argument on the input
+                                overflow: "hidden",
+                                gap: "0.25rem",
+                              }}
                             >
-                              <span>
-                                {flexRender(header.column.columnDef.header, header.getContext())}
-                              </span>
-                              {props.enableSorting !== false &&
-                                header.column.getIsSorted() === "asc" && <ChevronUp size={16} />}
-                              {props.enableSorting !== false &&
-                                header.column.getIsSorted() === "desc" && <ChevronDown size={16} />}
-                            </button>
-                            <Show
-                              when={
-                                props.enableColumnFilters !== false && header.column.getCanFilter()
-                              }
-                            >
-                              <Filter column={header.column} data={props.data} />
-                            </Show>
-                          </div>
-                        )}
+                              <button
+                                class={sortButtonVariants()}
+                                onClick={header.column.getToggleSortingHandler()}
+                                disabled={
+                                  !header.column.getCanSort() || props.enableSorting === false
+                                }
+                              >
+                                <span>
+                                  {flexRender(header.column.columnDef.header, header.getContext())}
+                                </span>
+                                <Show
+                                  when={
+                                    props.enableSorting !== false &&
+                                    header.column.getIsSorted() === "asc"
+                                  }
+                                >
+                                  <ChevronUp size={16} />
+                                </Show>
+                                <Show
+                                  when={
+                                    props.enableSorting !== false &&
+                                    header.column.getIsSorted() === "desc"
+                                  }
+                                >
+                                  <ChevronDown size={16} />
+                                </Show>
+                              </button>
+                              <Show
+                                when={
+                                  props.enableColumnFilters !== false &&
+                                  header.column.getCanFilter()
+                                }
+                              >
+                                <Filter column={header.column} data={props.data} />
+                              </Show>
+                            </div>
+                          }
+                        >
+                          {null}
+                        </Show>
                       </th>
                     )}
                   </For>
@@ -251,28 +280,30 @@ export function VirtualizedDataTable<T>(props: VirtualizedDataTableProps<T>): JS
             ref={parentRef}
             style={{
               display: "block",
+              height: props.height || "400px",
               overflow: "auto",
               position: "relative",
-              height: props.height || "400px",
             }}
             class={styles.body()}
           >
             <For each={rowVirtualizer().getVirtualItems()}>
               {(virtualItem) => {
                 const row = filteredRows()[virtualItem.index];
-                if (!row) return null;
+                if (!row) {
+                  return null;
+                }
 
                 return (
                   <tr
                     class={styles.row()}
                     style={{
+                      display: "flex",
                       height: `${virtualItem.size}px`,
-                      transform: `translateY(${virtualItem.start}px)`,
+                      left: "0",
                       position: "absolute",
                       top: "0",
-                      left: "0",
+                      transform: `translateY(${virtualItem.start}px)`,
                       width: "100%",
-                      display: "flex",
                     }}
                   >
                     <For each={row.getVisibleCells()}>
@@ -280,10 +311,11 @@ export function VirtualizedDataTable<T>(props: VirtualizedDataTableProps<T>): JS
                         <td
                           class={styles.cell()}
                           style={{
-                            width: cell.column.columnDef.size
-                              ? `${cell.column.columnDef.size}px`
-                              : "auto",
-                            flex: cell.column.columnDef.size ? "none" : "1",
+                            flex: cell.column.columnDef.size > 0 ? "none" : "1",
+                            width:
+                              cell.column.columnDef.size > 0
+                                ? `${cell.column.columnDef.size}px`
+                                : "auto",
                           }}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}

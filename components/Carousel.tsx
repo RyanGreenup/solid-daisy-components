@@ -1,22 +1,24 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const carouselVariants = tv({
   base: "carousel",
+  defaultVariants: {
+    direction: "horizontal",
+    snap: "start",
+  },
   variants: {
-    snap: {
-      start: "carousel-start",
-      center: "carousel-center",
-      end: "carousel-end",
-    },
     direction: {
       horizontal: "",
       vertical: "carousel-vertical",
     },
-  },
-  defaultVariants: {
-    snap: "start",
-    direction: "horizontal",
+    snap: {
+      center: "carousel-center",
+      end: "carousel-end",
+      start: "carousel-start",
+    },
   },
 });
 
@@ -31,6 +33,10 @@ export type CarouselProps = JSX.HTMLAttributes<HTMLDivElement> & CarouselVariant
 
 export type CarouselItemProps = JSX.HTMLAttributes<HTMLDivElement> & CarouselItemVariants;
 
+/**
+ * Individual slide inside a `Carousel`; applies the DaisyUI `carousel-item` class and
+ * forwards all HTML div attributes.
+ */
 export const CarouselItem = (props: CarouselItemProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -51,9 +57,9 @@ const CarouselComponent = (props: CarouselProps) => {
     <div
       {...others}
       class={carouselVariants({
-        snap: local.snap,
-        direction: local.direction,
         class: local.class,
+        direction: local.direction,
+        snap: local.snap,
       })}
     >
       {safeChildren()}

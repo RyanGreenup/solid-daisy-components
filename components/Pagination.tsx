@@ -1,18 +1,20 @@
-import { splitProps, children, JSX, For, Show, createMemo } from "solid-js";
+import { For, Show, children, createMemo, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import { Button } from "./Button";
 
+import type { JSX } from "solid-js";
+
 export const paginationVariants = tv({
   base: "join",
+  defaultVariants: {
+    direction: "horizontal",
+  },
   variants: {
     direction: {
       horizontal: "join-horizontal",
       vertical: "join-vertical",
     },
-  },
-  defaultVariants: {
-    direction: "horizontal",
   },
 });
 
@@ -36,6 +38,10 @@ export type PaginationButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> 
   size?: "xs" | "sm" | "md" | "lg" | "xl";
 };
 
+/**
+ * A single page `Button` styled as a `join-item` for use inside a `Pagination`
+ * container. The `active` prop highlights the current page.
+ */
 export const PaginationButton = (props: PaginationButtonProps) => {
   const [local, others] = splitProps(props, ["active", "page", "size", "class", "children"]);
 
@@ -84,7 +90,7 @@ const PaginationComponent = (props: PaginationProps) => {
 
     const half = Math.floor(max / 2);
     let start = Math.max(1, current - half);
-    let end = Math.min(total, start + max - 1);
+    const end = Math.min(total, start + max - 1);
 
     if (end - start + 1 < max) {
       start = Math.max(1, end - max + 1);
@@ -110,8 +116,8 @@ const PaginationComponent = (props: PaginationProps) => {
       <div
         {...others}
         class={paginationVariants({
-          direction: local.direction,
           class: local.class,
+          direction: local.direction,
         })}
       >
         {safeChildren()}
@@ -124,8 +130,8 @@ const PaginationComponent = (props: PaginationProps) => {
     <div
       {...others}
       class={paginationVariants({
-        direction: local.direction,
         class: local.class,
+        direction: local.direction,
       })}
     >
       <Show when={local.showPrevNext}>

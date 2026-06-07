@@ -1,7 +1,10 @@
 import { onCleanup, onMount } from "solid-js";
 
 /**
- * Configuration options for keybinding behavior.
+ * Configure how keybinding handlers process default browser behavior.
+ *
+ * @remarks
+ * When enabled, the hook should suppress the browser's default action for handled key events.
  */
 export interface KeybindingOptions {
   preventDefault?: boolean;

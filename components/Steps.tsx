@@ -1,36 +1,38 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const stepsVariants = tv({
   base: "steps",
+  defaultVariants: {
+    direction: "horizontal",
+  },
   variants: {
     direction: {
       horizontal: "steps-horizontal",
       vertical: "steps-vertical",
     },
   },
-  defaultVariants: {
-    direction: "horizontal",
-  },
 });
 
 export const stepVariants = tv({
   base: "step",
+  defaultVariants: {
+    color: "default",
+  },
   variants: {
     color: {
+      accent: "step-accent",
       default: "",
+      error: "step-error",
+      info: "step-info",
       neutral: "step-neutral",
       primary: "step-primary",
       secondary: "step-secondary",
-      accent: "step-accent",
-      info: "step-info",
       success: "step-success",
       warning: "step-warning",
-      error: "step-error",
     },
-  },
-  defaultVariants: {
-    color: "default",
   },
 });
 
@@ -48,6 +50,11 @@ export type StepProps = JSX.LiHTMLAttributes<HTMLLIElement> & StepVariants;
 
 export type StepIconProps = JSX.HTMLAttributes<HTMLSpanElement> & StepIconVariants;
 
+/**
+ * Custom icon rendered inside a DaisyUI step indicator, applied via the
+ * `step-icon` class on a `<span>`. Use to replace the default step number
+ * with an SVG icon or other inline content.
+ */
 export const StepIcon = (props: StepIconProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -59,6 +66,12 @@ export const StepIcon = (props: StepIconProps) => {
   );
 };
 
+/**
+ * Individual step item in a DaisyUI steps list, rendered as an `<li>` with
+ * the `step` class. The `color` prop applies a semantic step color
+ * (`primary`, `secondary`, `accent`, `success`, `warning`, `error`, `info`,
+ * or `neutral`) to indicate step status.
+ */
 export const Step = (props: StepProps) => {
   const [local, others] = splitProps(props, ["color", "class", "children"]);
   const safeChildren = children(() => local.children);
@@ -67,8 +80,8 @@ export const Step = (props: StepProps) => {
     <li
       {...others}
       class={stepVariants({
-        color: local.color,
         class: local.class,
+        color: local.color,
       })}
     >
       {safeChildren()}
@@ -84,8 +97,8 @@ const StepsComponent = (props: StepsProps) => {
     <ul
       {...others}
       class={stepsVariants({
-        direction: local.direction,
         class: local.class,
+        direction: local.direction,
       })}
     >
       {safeChildren()}
@@ -94,6 +107,6 @@ const StepsComponent = (props: StepsProps) => {
 };
 
 export const Steps = Object.assign(StepsComponent, {
-  Step: Step,
   Icon: StepIcon,
+  Step,
 });

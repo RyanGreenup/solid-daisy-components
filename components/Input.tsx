@@ -1,36 +1,38 @@
-import { splitProps, JSX, createSignal, createEffect } from "solid-js";
+import { createEffect, createSignal, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const inputVariants = tv({
   base: "input",
+  defaultVariants: {
+    color: "default",
+    size: "md",
+    variant: "default",
+  },
   variants: {
+    color: {
+      accent: "input-accent",
+      default: "",
+      error: "input-error",
+      info: "input-info",
+      neutral: "input-neutral",
+      primary: "input-primary",
+      secondary: "input-secondary",
+      success: "input-success",
+      warning: "input-warning",
+    },
+    size: {
+      lg: "input-lg",
+      md: "",
+      sm: "input-sm",
+      xl: "input-xl",
+      xs: "input-xs",
+    },
     variant: {
       default: "",
       ghost: "input-ghost",
     },
-    color: {
-      default: "",
-      neutral: "input-neutral",
-      primary: "input-primary",
-      secondary: "input-secondary",
-      accent: "input-accent",
-      info: "input-info",
-      success: "input-success",
-      warning: "input-warning",
-      error: "input-error",
-    },
-    size: {
-      xs: "input-xs",
-      sm: "input-sm",
-      md: "",
-      lg: "input-lg",
-      xl: "input-xl",
-    },
-  },
-  defaultVariants: {
-    variant: "default",
-    color: "default",
-    size: "md",
   },
 });
 
@@ -42,6 +44,12 @@ export type InputProps = JSX.InputHTMLAttributes<HTMLInputElement> &
     onValueChange?: (value: string) => void;
   };
 
+/**
+ * A DaisyUI-styled text `<input>` with controlled value management.
+ * Accepts an optional `onValueChange` callback that receives the new string value on each
+ * keystroke, and keeps an internal signal in sync with the `value` prop via a `createEffect`.
+ * Supports `color`, `size`, and `variant` (default, ghost) variant props.
+ */
 export const Input = (props: InputProps) => {
   const [local, others] = splitProps(props, [
     "variant",
@@ -80,15 +88,11 @@ export const Input = (props: InputProps) => {
       {...others}
       value={internalValue()}
       onInput={handleInput}
-      class={
-        inputVariants({
-          variant: local.variant,
-          color: local.color,
-          size: local.size,
-        }) +
-        " " +
-        local.class
-      }
+      class={`${inputVariants({
+        color: local.color,
+        size: local.size,
+        variant: local.variant,
+      })} ${local.class}`}
     />
   );
 };

@@ -1,34 +1,36 @@
-import { children, JSX, splitProps } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const tableVariants = tv({
   base: "table",
+  defaultVariants: {
+    pinCols: false,
+    pinRows: false,
+    size: "md",
+    zebra: false,
+  },
   variants: {
-    size: {
-      xs: "table-xs",
-      sm: "table-sm",
-      md: "",
-      lg: "table-lg",
-      xl: "table-xl",
-    },
-    zebra: {
+    pinCols: {
       false: "",
-      true: "table-zebra",
+      true: "table-pin-cols",
     },
     pinRows: {
       false: "",
       true: "table-pin-rows",
     },
-    pinCols: {
-      false: "",
-      true: "table-pin-cols",
+    size: {
+      lg: "table-lg",
+      md: "",
+      sm: "table-sm",
+      xl: "table-xl",
+      xs: "table-xs",
     },
-  },
-  defaultVariants: {
-    size: "md",
-    zebra: false,
-    pinRows: false,
-    pinCols: false,
+    zebra: {
+      false: "",
+      true: "table-zebra",
+    },
   },
 });
 
@@ -36,6 +38,10 @@ type TableVariants = Parameters<typeof tableVariants>[0];
 
 export type TableProps = JSX.HTMLAttributes<HTMLTableElement> & TableVariants;
 
+/**
+ * A styled `<table>` using DaisyUI table classes. Supports `size` (xs–xl),
+ * `zebra` striping, and `pinRows`/`pinCols` for sticky headers and columns.
+ */
 export const Table = (props: TableProps) => {
   const [local, others] = splitProps(props, [
     "size",
@@ -52,11 +58,11 @@ export const Table = (props: TableProps) => {
     <table
       {...others}
       class={tableVariants({
+        class: local.class,
+        pinCols: local.pinCols,
+        pinRows: local.pinRows,
         size: local.size,
         zebra: local.zebra,
-        pinRows: local.pinRows,
-        pinCols: local.pinCols,
-        class: local.class,
       })}
     >
       {safeChildren()}

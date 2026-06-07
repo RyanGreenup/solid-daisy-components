@@ -1,31 +1,33 @@
-import { splitProps, JSX, Accessor, children } from "solid-js";
+import { splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { Accessor, JSX } from "solid-js";
 
 export const progressVariants = tv({
   base: "progress",
-  variants: {
-    color: {
-      default: "",
-      neutral: "progress-neutral",
-      primary: "progress-primary",
-      secondary: "progress-secondary",
-      accent: "progress-accent",
-      info: "progress-info",
-      success: "progress-success",
-      warning: "progress-warning",
-      error: "progress-error",
-    },
-    size: {
-      xs: "h-1",
-      sm: "h-2",
-      md: "h-3",
-      lg: "h-4",
-      xl: "h-5",
-    },
-  },
   defaultVariants: {
     color: "default",
     size: "md",
+  },
+  variants: {
+    color: {
+      accent: "progress-accent",
+      default: "",
+      error: "progress-error",
+      info: "progress-info",
+      neutral: "progress-neutral",
+      primary: "progress-primary",
+      secondary: "progress-secondary",
+      success: "progress-success",
+      warning: "progress-warning",
+    },
+    size: {
+      lg: "h-4",
+      md: "h-3",
+      sm: "h-2",
+      xl: "h-5",
+      xs: "h-1",
+    },
   },
 });
 
@@ -38,6 +40,11 @@ export type ProgressProps = Omit<JSX.ProgressHTMLAttributes<HTMLProgressElement>
     max?: number;
   };
 
+/**
+ * A `<progress>` element styled with DaisyUI progress classes. Supports `color`
+ * (primary, secondary, success, error, etc.), `size` (xs–xl mapped to height),
+ * and a `value` that may be a number or a reactive `Accessor<number>`.
+ */
 export const Progress = (props: ProgressProps) => {
   const [local, others] = splitProps(props, ["color", "size", "class", "value", "max"]);
 
@@ -52,9 +59,9 @@ export const Progress = (props: ProgressProps) => {
       value={getValue()}
       max={local.max ?? 100}
       class={progressVariants({
+        class: local.class,
         color: local.color,
         size: local.size,
-        class: local.class,
       })}
     />
   );

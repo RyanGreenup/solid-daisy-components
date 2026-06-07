@@ -3,7 +3,7 @@ import { createVirtualizer } from "@tanstack/solid-virtual";
 import Fuse from "fuse.js";
 import Check from "lucide-solid/icons/check";
 import ChevronsUpDown from "lucide-solid/icons/chevrons-up-down";
-import { type Accessor, createSignal, createEffect, createMemo, For, Show } from "solid-js";
+import { type Accessor, For, Show, createEffect, createMemo, createSignal } from "solid-js";
 
 import "./comboboxStyle.module.css";
 import { comboboxStyles } from "./style";
@@ -27,6 +27,12 @@ interface VirtualizedSingleComboboxProps {
   optionTextValue?: string;
 }
 
+/**
+ * A virtualized single-select combobox for large option lists, backed by Kobalte's virtualized Combobox and TanStack Virtual.
+ * Uses Fuse.js for client-side fuzzy filtering and renders only visible rows via `@tanstack/solid-virtual`.
+ * Supports plain string arrays or object arrays via `optionValue`/`optionLabel`/`optionTextValue`.
+ * Set `doubleClickToOpen` to open the dropdown on double-click of the input.
+ */
 export function VirtualizedSingleCombobox(props: VirtualizedSingleComboboxProps) {
   const [value, setValue] = createSignal(props.value || "");
   const [inputValue, setInputValue] = createSignal("");
@@ -59,7 +65,9 @@ export function VirtualizedSingleCombobox(props: VirtualizedSingleComboboxProps)
 
   const filteredOptions = createMemo(() => {
     const input = inputValue();
-    if (!input) return props.options;
+    if (!input) {
+      return props.options;
+    }
     return fuse()
       .search(input)
       .map((r) => r.item);
@@ -89,13 +97,15 @@ export function VirtualizedSingleCombobox(props: VirtualizedSingleComboboxProps)
         open={open()}
         onOpenChange={(isOpen) => {
           setOpen(isOpen);
-          if (isOpen) setInputValue("");
+          if (isOpen) {
+            setInputValue("");
+          }
         }}
         {...(props.optionValue
           ? {
-              optionValue: props.optionValue,
               optionLabel: props.optionLabel,
               optionTextValue: props.optionTextValue ?? props.optionLabel,
+              optionValue: props.optionValue,
             }
           : {})}
       >
@@ -138,9 +148,9 @@ function VirtualizedListbox(props: {
     get count() {
       return props.options().length;
     },
-    getScrollElement: () => listboxRef ?? null,
-    getItemKey: (index: number) => props.extractValue(props.options()[index]),
     estimateSize: () => 36,
+    getItemKey: (index: number) => props.extractValue(props.options()[index]),
+    getScrollElement: () => listboxRef ?? null,
     overscan: 5,
   });
 
@@ -149,33 +159,37 @@ function VirtualizedListbox(props: {
       ref={listboxRef}
       scrollToItem={(key: string) => {
         const idx = props.options().findIndex((o) => props.extractValue(o) === key);
-        if (idx >= 0) virtualizer.scrollToIndex(idx);
+        if (idx !== -1) {
+          virtualizer.scrollToIndex(idx);
+        }
       }}
-      style={{ height: "200px", width: "100%", overflow: "auto" }}
+      style={{ height: "200px", overflow: "auto", width: "100%" }}
     >
       {(items) => (
         <div
           style={{
             height: `${virtualizer.getTotalSize()}px`,
-            width: "100%",
             position: "relative",
+            width: "100%",
           }}
         >
           <For each={virtualizer.getVirtualItems()}>
             {(virtualRow) => {
               const item = items().getItem(String(virtualRow.key));
-              if (!item) return null;
+              if (!item) {
+                return null;
+              }
               return (
                 <Combobox.Item
                   item={item}
                   class={styles.item}
                   style={{
+                    height: `${virtualRow.size}px`,
+                    left: 0,
                     position: "absolute",
                     top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: `${virtualRow.size}px`,
                     transform: `translateY(${virtualRow.start}px)`,
+                    width: "100%",
                   }}
                 >
                   <Combobox.ItemLabel>{props.extractLabel(item.rawValue)}</Combobox.ItemLabel>

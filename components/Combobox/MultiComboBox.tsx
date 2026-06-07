@@ -1,13 +1,16 @@
-import { Combobox, ComboboxTriggerMode } from "@kobalte/core/combobox";
-// @ts-ignore
+import { Combobox } from "@kobalte/core/combobox";
+// @ts-expect-error
 import Check from "lucide-solid/icons/check";
 import ChevronsUpDown from "lucide-solid/icons/chevrons-up-down";
-// @ts-ignore
+// @ts-expect-error
 import X from "lucide-solid/icons/x";
-import { createSignal, For, JSXElement, Show, JSX } from "solid-js";
+import { For, Show, createSignal } from "solid-js";
 import { Transition } from "solid-transition-group";
 
 import { comboboxStyles } from "./style";
+
+import type { ComboboxTriggerMode } from "@kobalte/core/combobox";
+import type { JSX, JSXElement } from "solid-js";
 import "./comboboxStyle.module.css";
 
 const styles = comboboxStyles();
@@ -22,6 +25,11 @@ interface MultiComboboxProps {
   triggerMode?: ComboboxTriggerMode;
 }
 
+/**
+ * A multi-select combobox backed by Kobalte's Combobox primitive.
+ * Selected values are displayed as removable tag chips inside the input control.
+ * Accepts a plain string `options` array; calls `onChange` with the full array of selected strings.
+ */
 export function MultiCombobox(props: MultiComboboxProps): JSX.Element {
   const [value, setValue] = createSignal(props.value || []);
 
@@ -31,7 +39,7 @@ export function MultiCombobox(props: MultiComboboxProps): JSX.Element {
   };
 
   return (
-    <div style={{ width: "100%", "max-width": "20rem" }}>
+    <div style={{ "max-width": "20rem", width: "100%" }}>
       <Combobox<string>
         multiple={true}
         options={props.options}

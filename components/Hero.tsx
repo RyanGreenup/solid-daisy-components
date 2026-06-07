@@ -1,5 +1,7 @@
-import { splitProps, children, JSX, Show } from "solid-js";
+import { Show, children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const heroVariants = tv({
   base: "hero",
@@ -42,6 +44,10 @@ export type HeroDescriptionProps = JSX.HTMLAttributes<HTMLParagraphElement> &
 
 export type HeroOverlayProps = JSX.HTMLAttributes<HTMLDivElement> & HeroOverlayVariants;
 
+/**
+ * Large heading for a DaisyUI hero section, rendered as an `<h1>` with
+ * `text-5xl font-bold` typography classes.
+ */
 export const HeroTitle = (props: HeroTitleProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -53,6 +59,10 @@ export const HeroTitle = (props: HeroTitleProps) => {
   );
 };
 
+/**
+ * Body-text paragraph for a DaisyUI hero section, rendered as a `<p>` with
+ * `py-6` spacing to provide vertical breathing room below the hero title.
+ */
 export const HeroDescription = (props: HeroDescriptionProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -64,6 +74,12 @@ export const HeroDescription = (props: HeroDescriptionProps) => {
   );
 };
 
+/**
+ * Central content area of a DaisyUI hero, rendered as a `<div>` with
+ * `hero-content`. When `title` or `description` props are supplied it wraps
+ * them in a `max-w-md` container alongside any child nodes; otherwise it
+ * renders children directly.
+ */
 export const HeroContent = (props: HeroContentProps) => {
   const [local, others] = splitProps(props, ["class", "children", "title", "description"]);
   const safeChildren = children(() => local.children);
@@ -85,6 +101,11 @@ export const HeroContent = (props: HeroContentProps) => {
   );
 };
 
+/**
+ * Semi-transparent overlay `<div>` for a DaisyUI hero with a background image.
+ * Applies the `hero-overlay` class to darken the background and improve
+ * readability of content placed on top.
+ */
 export const HeroOverlay = (props: HeroOverlayProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -109,7 +130,7 @@ const HeroComponent = (props: HeroProps) => {
 
 export const Hero = Object.assign(HeroComponent, {
   Content: HeroContent,
-  Title: HeroTitle,
   Description: HeroDescription,
   Overlay: HeroOverlay,
+  Title: HeroTitle,
 });

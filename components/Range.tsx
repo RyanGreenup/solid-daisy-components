@@ -1,31 +1,33 @@
-import { splitProps, JSX, Accessor, Setter, createSignal } from "solid-js";
+import { createSignal, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { Accessor, JSX, Setter } from "solid-js";
 
 export const rangeVariants = tv({
   base: "range",
-  variants: {
-    color: {
-      default: "",
-      neutral: "range-neutral",
-      primary: "range-primary",
-      secondary: "range-secondary",
-      accent: "range-accent",
-      success: "range-success",
-      warning: "range-warning",
-      info: "range-info",
-      error: "range-error",
-    },
-    size: {
-      xs: "range-xs",
-      sm: "range-sm",
-      md: "",
-      lg: "range-lg",
-      xl: "range-xl",
-    },
-  },
   defaultVariants: {
     color: "default",
     size: "md",
+  },
+  variants: {
+    color: {
+      accent: "range-accent",
+      default: "",
+      error: "range-error",
+      info: "range-info",
+      neutral: "range-neutral",
+      primary: "range-primary",
+      secondary: "range-secondary",
+      success: "range-success",
+      warning: "range-warning",
+    },
+    size: {
+      lg: "range-lg",
+      md: "",
+      sm: "range-sm",
+      xl: "range-xl",
+      xs: "range-xs",
+    },
   },
 });
 
@@ -37,6 +39,12 @@ export type RangeProps = JSX.InputHTMLAttributes<HTMLInputElement> &
     wheelToChange?: boolean;
   };
 
+/**
+ * A DaisyUI-styled range slider rendered as `<input type="range">` with optional reactive
+ * value binding via `valueSignal` and mouse-wheel stepping support via `wheelToChange`.
+ * Supports `color` and `size` variant props; wheel input accumulates delta before stepping
+ * to avoid overly sensitive scrolling.
+ */
 export const Range = (props: RangeProps) => {
   const [local, others] = splitProps(props, [
     "color",
@@ -110,12 +118,12 @@ export const Range = (props: RangeProps) => {
             target: HTMLInputElement;
           };
           Object.defineProperty(syntheticChangeEvent, "target", {
-            value: target,
             enumerable: true,
+            value: target,
           });
           Object.defineProperty(syntheticChangeEvent, "currentTarget", {
-            value: target,
             enumerable: true,
+            value: target,
           });
           local.onChange(syntheticChangeEvent);
         }
@@ -139,9 +147,9 @@ export const Range = (props: RangeProps) => {
       onChange={handleChange}
       onWheel={handleWheel}
       class={rangeVariants({
+        class: local.class,
         color: local.color,
         size: local.size,
-        class: local.class,
       })}
     />
   );

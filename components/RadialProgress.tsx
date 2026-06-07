@@ -1,5 +1,7 @@
-import { splitProps, children, JSX, createMemo } from "solid-js";
+import { children, createMemo, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const radialProgressVariants = tv({
   base: "radial-progress",
@@ -15,6 +17,11 @@ export type RadialProgressProps = JSX.HTMLAttributes<HTMLDivElement> &
     max?: number;
   };
 
+/**
+ * A circular progress indicator rendered as a `<div>` with the DaisyUI
+ * `radial-progress` class. Requires a `value` (0–`max`); optional `size`
+ * and `thickness` CSS values control the ring dimensions via CSS custom properties.
+ */
 export const RadialProgress = (props: RadialProgressProps) => {
   const [local, others] = splitProps(props, [
     "value",
@@ -37,7 +44,7 @@ export const RadialProgress = (props: RadialProgressProps) => {
       "--value": local.value.toString(),
     };
 
-    if (local.size) {
+    if (local.size > 0) {
       baseStyle["--size"] = local.size;
     }
     if (local.thickness) {

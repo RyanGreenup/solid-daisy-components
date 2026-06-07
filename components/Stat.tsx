@@ -1,34 +1,36 @@
-import { splitProps, children, JSX, Show } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const statsVariants = tv({
   base: "stats",
+  defaultVariants: {
+    direction: "horizontal",
+    variant: "default",
+  },
   variants: {
     direction: {
       horizontal: "",
       vertical: "stats-vertical",
     },
     variant: {
-      default: "",
       bordered: "shadow",
+      default: "",
     },
-  },
-  defaultVariants: {
-    direction: "horizontal",
-    variant: "default",
   },
 });
 
 export const statVariants = tv({
   base: "stat",
-  variants: {
-    place: {
-      default: "",
-      center: "place-items-center",
-    },
-  },
   defaultVariants: {
     place: "default",
+  },
+  variants: {
+    place: {
+      center: "place-items-center",
+      default: "",
+    },
   },
 });
 
@@ -45,6 +47,11 @@ export type StatDescProps = JSX.HTMLAttributes<HTMLDivElement>;
 export type StatFigureProps = JSX.HTMLAttributes<HTMLDivElement>;
 export type StatActionsProps = JSX.HTMLAttributes<HTMLDivElement>;
 
+/**
+ * Wrapper container for one or more `Stat` items, applying DaisyUI's `stats`
+ * class. Supports `direction` (`horizontal` / `vertical`) and `variant`
+ * (`default` / `bordered` which adds a box shadow).
+ */
 export const Stats = (props: StatsProps) => {
   const [local, others] = splitProps(props, ["direction", "variant", "class", "children"]);
 
@@ -54,9 +61,9 @@ export const Stats = (props: StatsProps) => {
     <div
       {...others}
       class={statsVariants({
+        class: local.class,
         direction: local.direction,
         variant: local.variant,
-        class: local.class,
       })}
     >
       {safeChildren()}
@@ -64,6 +71,11 @@ export const Stats = (props: StatsProps) => {
   );
 };
 
+/**
+ * Individual statistic card within a `Stats` container, applying the DaisyUI
+ * `stat` class. The `place` prop (`default` / `center`) controls whether
+ * items are centered with `place-items-center`.
+ */
 export const Stat = (props: StatProps) => {
   const [local, others] = splitProps(props, ["place", "class", "children"]);
 
@@ -73,8 +85,8 @@ export const Stat = (props: StatProps) => {
     <div
       {...others}
       class={statVariants({
-        place: local.place,
         class: local.class,
+        place: local.place,
       })}
     >
       {safeChildren()}
@@ -82,6 +94,10 @@ export const Stat = (props: StatProps) => {
   );
 };
 
+/**
+ * Label / heading for a DaisyUI stat item, rendered with the `stat-title`
+ * class. Typically contains a short descriptor such as "Total Users".
+ */
 export const StatTitle = (props: StatTitleProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
@@ -94,6 +110,10 @@ export const StatTitle = (props: StatTitleProps) => {
   );
 };
 
+/**
+ * Primary numeric or text value displayed in a DaisyUI stat item, rendered
+ * with the `stat-value` class which applies large, prominent typography.
+ */
 export const StatValue = (props: StatValueProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
@@ -106,6 +126,11 @@ export const StatValue = (props: StatValueProps) => {
   );
 };
 
+/**
+ * Secondary description or contextual note for a DaisyUI stat item, rendered
+ * with the `stat-desc` class. Used for supplementary text such as trend
+ * information or data source notes.
+ */
 export const StatDesc = (props: StatDescProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
@@ -118,6 +143,11 @@ export const StatDesc = (props: StatDescProps) => {
   );
 };
 
+/**
+ * Icon or image slot for a DaisyUI stat item, rendered with the `stat-figure`
+ * class. Positioned at the side of the stat to display a supporting visual
+ * such as an SVG icon or avatar.
+ */
 export const StatFigure = (props: StatFigureProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
@@ -130,6 +160,11 @@ export const StatFigure = (props: StatFigureProps) => {
   );
 };
 
+/**
+ * Actions area for a DaisyUI stat item, rendered with the `stat-actions`
+ * class. Intended to hold buttons or links that relate to the displayed
+ * statistic, such as "View details".
+ */
 export const StatActions = (props: StatActionsProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
 

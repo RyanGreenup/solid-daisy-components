@@ -5,16 +5,16 @@ import { tv } from "tailwind-variants";
 
 export const echartsVariants = tv({
   base: "relative w-full",
-  variants: {
-    size: {
-      sm: "h-64",
-      md: "h-80",
-      lg: "h-96",
-      xl: "h-[500px]",
-    },
-  },
   defaultVariants: {
     size: "md",
+  },
+  variants: {
+    size: {
+      lg: "h-96",
+      md: "h-80",
+      sm: "h-64",
+      xl: "h-[500px]",
+    },
   },
 });
 
@@ -28,6 +28,12 @@ export interface EChartsComponentProps {
   size?: EChartsVariants["size"];
 }
 
+/**
+ * A SolidJS component that mounts an Apache ECharts canvas instance onto a div.
+ * Reactively updates the chart option, handles loading state, and auto-switches between
+ * light/dark themes based on the OS color-scheme preference (unless an explicit theme is provided).
+ * @param props - ECharts option config, optional theme, size preset, loading flag, and class name.
+ */
 export default function EChartsComponent(props: EChartsComponentProps) {
   let chartRef!: HTMLDivElement;
   let chartInstance: echarts.ECharts | null = null;
@@ -36,9 +42,8 @@ export default function EChartsComponent(props: EChartsComponentProps) {
   const [local, others] = splitProps(props, ["option", "theme", "size", "className", "loading"]);
 
   // Function to detect dark mode preference
-  const checkDarkMode = () => {
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  };
+  const checkDarkMode = () =>
+    globalThis.matchMedia && globalThis.matchMedia("(prefers-color-scheme: dark)").matches;
 
   // Function to get the appropriate theme
   const getTheme = () => {
@@ -70,7 +75,7 @@ export default function EChartsComponent(props: EChartsComponentProps) {
     setIsMounted(true);
 
     // Listen for dark mode changes
-    const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const darkModeMediaQuery = globalThis.matchMedia("(prefers-color-scheme: dark)");
     const handleDarkModeChange = (e: MediaQueryListEvent) => {
       setIsDarkMode(e.matches);
     };
@@ -121,7 +126,7 @@ export default function EChartsComponent(props: EChartsComponentProps) {
     if (chartInstance && isMounted()) {
       // Update chart option when props change
       if (local.option) {
-        chartInstance.setOption(local.option, true); // true = notMerge for complete replacement
+        chartInstance.setOption(local.option, true); // True = notMerge for complete replacement
       }
 
       // Handle loading state
@@ -139,13 +144,13 @@ export default function EChartsComponent(props: EChartsComponentProps) {
 
   const containerClass = () =>
     echartsVariants({
-      size: local.size,
       class: local.className,
+      size: local.size,
     });
 
   return (
-    <div class={containerClass()} style="min-height: 300px;">
-      <div ref={chartRef} style="width: 100%; height: 100%;"></div>
+    <div class={containerClass()} style={{ "min-height": "300px" }}>
+      <div ref={chartRef} style={{ height: "100%", width: "100%" }} />
     </div>
   );
 }

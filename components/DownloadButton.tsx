@@ -1,10 +1,13 @@
-import { ColumnDef } from "@tanstack/solid-table";
-// @ts-ignore
+// @ts-expect-error
 import Download from "lucide-solid/icons/download";
-import { createSignal, Show, splitProps } from "solid-js";
+import { Show, createSignal, splitProps } from "solid-js";
 
 import { exportTableToCsv } from "../lib/utils/csv-export";
-import { Button, ButtonProps } from "./Button";
+import { Button } from "./Button";
+
+import type { ColumnDef } from "@tanstack/solid-table";
+
+import type { ButtonProps } from "./Button";
 
 const DEBUG = false;
 
@@ -34,6 +37,7 @@ type DownloadButtonProps<T> = ButtonProps & {
 /**
  * A reusable download button component that exports data to CSV
  * with visual feedback. Built on top of the Button component.
+ * @param props
  */
 export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
   const [isDownloading, setIsDownloading] = createSignal(false);
@@ -61,9 +65,9 @@ export const DownloadButton = <T,>(props: DownloadButtonProps<T>) => {
         console.log("📥 Debug: Download button clicked", {
           dataLength: currentData.length,
           dataPreview: currentData.slice(0, 2),
-          filename,
-          hasColumns: !!columns,
           dataType: typeof data,
+          filename,
+          hasColumns: Boolean(columns),
         });
       }
 

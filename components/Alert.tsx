@@ -2,35 +2,37 @@ import AlertTriangle from "lucide-solid/icons/alert-triangle";
 import CheckCircle from "lucide-solid/icons/check-circle";
 import InfoCircle from "lucide-solid/icons/info";
 import XCircle from "lucide-solid/icons/x-circle";
-import { splitProps, children, JSX, Show } from "solid-js";
+import { Show, children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const alertVariants = tv({
   base: "alert",
+  defaultVariants: {
+    color: "default",
+    orientation: "default",
+    style: "default",
+  },
   variants: {
     color: {
       default: "",
+      error: "alert-error",
       info: "alert-info",
       success: "alert-success",
       warning: "alert-warning",
-      error: "alert-error",
-    },
-    style: {
-      default: "",
-      outline: "alert-outline",
-      dash: "alert-dash",
-      soft: "alert-soft",
     },
     orientation: {
       default: "",
-      vertical: "alert-vertical",
       horizontal: "alert-horizontal",
+      vertical: "alert-vertical",
     },
-  },
-  defaultVariants: {
-    color: "default",
-    style: "default",
-    orientation: "default",
+    style: {
+      dash: "alert-dash",
+      default: "",
+      outline: "alert-outline",
+      soft: "alert-soft",
+    },
   },
 });
 
@@ -41,6 +43,11 @@ export type AlertProps = JSX.HTMLAttributes<HTMLDivElement> &
     showIcon?: boolean;
   };
 
+/**
+ * A DaisyUI alert `<div>` that renders a contextual icon (info, success, warning,
+ * or error) alongside child content. Use `color` to set the semantic tone,
+ * `style` for visual treatment (outline, soft, dash), and `showIcon={false}` to hide the icon.
+ */
 const AlertComponent = (props: AlertProps) => {
   const [local, others] = splitProps(props, [
     "color",
@@ -56,16 +63,21 @@ const AlertComponent = (props: AlertProps) => {
 
   const getIcon = () => {
     switch (local.color) {
-      case "info":
+      case "info": {
         return InfoCircle;
-      case "success":
+      }
+      case "success": {
         return CheckCircle;
-      case "warning":
+      }
+      case "warning": {
         return AlertTriangle;
-      case "error":
+      }
+      case "error": {
         return XCircle;
-      default:
+      }
+      default: {
         return InfoCircle;
+      }
     }
   };
 
@@ -76,10 +88,10 @@ const AlertComponent = (props: AlertProps) => {
       {...others}
       role={local.role || "alert"}
       class={alertVariants({
-        color: local.color,
-        style: local.style,
-        orientation: local.orientation,
         class: local.class,
+        color: local.color,
+        orientation: local.orientation,
+        style: local.style,
       })}
     >
       <Show when={local.showIcon !== false}>

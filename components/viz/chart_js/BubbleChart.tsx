@@ -1,7 +1,8 @@
-import { ChartConfiguration } from "chart.js";
 import { createMemo } from "solid-js";
 
 import ChartComponent from "./ChartComponent";
+
+import type { ChartConfiguration } from "chart.js";
 
 export interface BubbleChartProps {
   data: {
@@ -22,72 +23,74 @@ export interface BubbleChartProps {
   options?: ChartConfiguration["options"];
 }
 
+/**
+ * Renders a Chart.js bubble chart where each data point is `{x, y, r}` and `r` controls
+ * the bubble radius. Tooltips display the full x/y/r triple for each point.
+ */
 export const BubbleChart = (props: BubbleChartProps) => {
   // Create a reactive memo for the chart configuration
-  const chartConfig = createMemo<ChartConfiguration>(() => {
-    return {
-      type: "bubble",
-      data: {
-        // Create new array references to ensure reactivity
-        datasets: props.data.datasets.map((dataset) => ({
-          ...dataset,
-          data: [...dataset.data], // Create new array reference
-        })),
+  const chartConfig = createMemo<ChartConfiguration>(() => ({
+    data: {
+      // Create new array references to ensure reactivity
+      datasets: props.data.datasets.map((dataset) => ({
+        ...dataset,
+        data: [...dataset.data], // Create new array reference
+      })),
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: "nearest" as const,
+        intersect: false,
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-          mode: "nearest" as const,
-          intersect: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: "top" as const,
         },
-        plugins: {
-          legend: {
+        tooltip: {
+          callbacks: {
+            label: (context: any) => {
+              const point = context.parsed;
+              return `${context.dataset.label}: (${point.x}, ${point.y}, ${point._custom || point.r})`;
+            },
+          },
+        },
+        ...(props.title && {
+          title: {
             display: true,
-            position: "top" as const,
+            text: props.title,
           },
-          tooltip: {
-            callbacks: {
-              label: (context: any) => {
-                const point = context.parsed;
-                return `${context.dataset.label}: (${point.x}, ${point.y}, ${point._custom || point.r})`;
-              },
-            },
-          },
-          ...(props.title && {
-            title: {
-              display: true,
-              text: props.title,
-            },
-          }),
-          // Merge any additional plugin options
-          ...(props.options?.plugins && props.options.plugins),
-        },
-        scales: {
-          x: {
-            type: "linear" as const,
-            position: "bottom" as const,
-            beginAtZero: true,
-          },
-          y: {
-            type: "linear" as const,
-            beginAtZero: true,
-          },
-          // Merge any additional scale options
-          ...(props.options?.scales && props.options.scales),
-        },
-        elements: {
-          point: {
-            hoverRadius: 8,
-          },
-          // Merge any additional element options
-          ...(props.options?.elements && props.options.elements),
-        },
-        // Merge any other top-level options
-        ...props.options,
+        }),
+        // Merge any additional plugin options
+        ...(props.options?.plugins && props.options.plugins),
       },
-    };
-  });
+      scales: {
+        x: {
+          type: "linear" as const,
+          position: "bottom" as const,
+          beginAtZero: true,
+        },
+        y: {
+          type: "linear" as const,
+          beginAtZero: true,
+        },
+        // Merge any additional scale options
+        ...(props.options?.scales && props.options.scales),
+      },
+      elements: {
+        point: {
+          hoverRadius: 8,
+        },
+        // Merge any additional element options
+        ...(props.options?.elements && props.options.elements),
+      },
+      // Merge any other top-level options
+      ...props.options,
+    },
+    type: "bubble",
+  }));
 
-  return <ChartComponent chartConfig={chartConfig()} className={props.className} />;
+  return <ChartComponent chartConfig={chartConfig()} class={props.className} />;
 };

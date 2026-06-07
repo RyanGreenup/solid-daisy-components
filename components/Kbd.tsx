@@ -1,19 +1,21 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const kbdVariants = tv({
   base: "kbd",
-  variants: {
-    size: {
-      xs: "kbd-xs",
-      sm: "kbd-sm",
-      md: "",
-      lg: "kbd-lg",
-      xl: "kbd-xl",
-    },
-  },
   defaultVariants: {
     size: "md",
+  },
+  variants: {
+    size: {
+      lg: "kbd-lg",
+      md: "",
+      sm: "kbd-sm",
+      xl: "kbd-xl",
+      xs: "kbd-xs",
+    },
   },
 });
 
@@ -21,6 +23,10 @@ type KbdVariants = Parameters<typeof kbdVariants>[0];
 
 export type KbdProps = JSX.HTMLAttributes<HTMLElement> & KbdVariants;
 
+/**
+ * A `<kbd>` element styled with the DaisyUI `kbd` class to visually represent
+ * a keyboard key or shortcut. Use `size` (xs–xl) to scale the badge.
+ */
 export const Kbd = (props: KbdProps) => {
   const [local, others] = splitProps(props, ["size", "class", "children"]);
 
@@ -30,8 +36,8 @@ export const Kbd = (props: KbdProps) => {
     <kbd
       {...others}
       class={kbdVariants({
-        size: local.size,
         class: local.class,
+        size: local.size,
       })}
     >
       {safeChildren()}

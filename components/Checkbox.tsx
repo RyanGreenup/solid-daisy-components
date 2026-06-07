@@ -1,31 +1,33 @@
-import { splitProps, JSX } from "solid-js";
+import { splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const checkboxVariants = tv({
   base: "checkbox",
-  variants: {
-    color: {
-      default: "",
-      primary: "checkbox-primary",
-      secondary: "checkbox-secondary",
-      accent: "checkbox-accent",
-      neutral: "checkbox-neutral",
-      info: "checkbox-info",
-      success: "checkbox-success",
-      warning: "checkbox-warning",
-      error: "checkbox-error",
-    },
-    size: {
-      xs: "checkbox-xs",
-      sm: "checkbox-sm",
-      md: "",
-      lg: "checkbox-lg",
-      xl: "checkbox-xl",
-    },
-  },
   defaultVariants: {
     color: "default",
     size: "md",
+  },
+  variants: {
+    color: {
+      accent: "checkbox-accent",
+      default: "",
+      error: "checkbox-error",
+      info: "checkbox-info",
+      neutral: "checkbox-neutral",
+      primary: "checkbox-primary",
+      secondary: "checkbox-secondary",
+      success: "checkbox-success",
+      warning: "checkbox-warning",
+    },
+    size: {
+      lg: "checkbox-lg",
+      md: "",
+      sm: "checkbox-sm",
+      xl: "checkbox-xl",
+      xs: "checkbox-xs",
+    },
   },
 });
 
@@ -33,6 +35,11 @@ type CheckboxVariants = Parameters<typeof checkboxVariants>[0];
 
 export type CheckboxProps = JSX.InputHTMLAttributes<HTMLInputElement> & CheckboxVariants;
 
+/**
+ * A DaisyUI-styled checkbox input rendered as `<input type="checkbox">`.
+ * Supports `color` (primary, secondary, accent, info, success, warning, error, neutral)
+ * and `size` (xs, sm, md, lg, xl) variant props in addition to all standard input attributes.
+ */
 const CheckboxComponent = (props: CheckboxProps) => {
   const [local, others] = splitProps(props, ["color", "size", "class", "type"]);
 
@@ -41,9 +48,9 @@ const CheckboxComponent = (props: CheckboxProps) => {
       {...others}
       type="checkbox"
       class={checkboxVariants({
+        class: local.class,
         color: local.color,
         size: local.size,
-        class: local.class,
       })}
     />
   );

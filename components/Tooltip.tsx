@@ -1,35 +1,37 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const tooltipVariants = tv({
   base: "tooltip",
+  defaultVariants: {
+    color: "default",
+    open: false,
+    placement: "top",
+  },
   variants: {
-    placement: {
-      top: "tooltip-top",
-      bottom: "tooltip-bottom",
-      left: "tooltip-left",
-      right: "tooltip-right",
-    },
     color: {
+      accent: "tooltip-accent",
       default: "",
+      error: "tooltip-error",
+      info: "tooltip-info",
       neutral: "tooltip-neutral",
       primary: "tooltip-primary",
       secondary: "tooltip-secondary",
-      accent: "tooltip-accent",
-      info: "tooltip-info",
       success: "tooltip-success",
       warning: "tooltip-warning",
-      error: "tooltip-error",
     },
     open: {
-      true: "tooltip-open",
       false: "",
+      true: "tooltip-open",
     },
-  },
-  defaultVariants: {
-    placement: "top",
-    color: "default",
-    open: false,
+    placement: {
+      bottom: "tooltip-bottom",
+      left: "tooltip-left",
+      right: "tooltip-right",
+      top: "tooltip-top",
+    },
   },
 });
 
@@ -47,6 +49,10 @@ export type TooltipProps = JSX.HTMLAttributes<HTMLDivElement> &
 
 export type TooltipContentProps = JSX.HTMLAttributes<HTMLDivElement> & TooltipContentVariants;
 
+/**
+ * Optional rich-content slot for a `Tooltip`; applies the `tooltip-content` DaisyUI
+ * class when custom JSX content is needed instead of the plain `tip` string attribute.
+ */
 export const TooltipContent = (props: TooltipContentProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -74,10 +80,10 @@ const TooltipComponent = (props: TooltipProps) => {
     <div
       {...others}
       class={tooltipVariants({
-        placement: local.placement,
+        class: local.class,
         color: local.color,
         open: local.open,
-        class: local.class,
+        placement: local.placement,
       })}
       data-tip={local.tip}
     >

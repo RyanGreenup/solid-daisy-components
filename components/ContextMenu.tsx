@@ -1,18 +1,10 @@
-import {
-  splitProps,
-  children,
-  JSX,
-  createSignal,
-  createEffect,
-  onCleanup,
-  Show,
-  For,
-  createMemo,
-} from "solid-js";
+import { For, Show, createEffect, createMemo, createSignal, onCleanup, splitProps } from "solid-js";
 import { Portal } from "solid-js/web";
 import { tv } from "tailwind-variants";
 
 import { useKeybinding } from "../utilities/useKeybinding";
+
+import type { JSX } from "solid-js";
 
 // Context menu item types
 export interface ContextMenuItem {
@@ -33,15 +25,15 @@ export const contextMenuVariants = tv({
     "animate-in fade-in-0 zoom-in-95",
     "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
   ],
-  variants: {
-    size: {
-      sm: "min-w-40 text-sm",
-      md: "min-w-48",
-      lg: "min-w-56 text-lg",
-    },
-  },
   defaultVariants: {
     size: "md",
+  },
+  variants: {
+    size: {
+      lg: "min-w-56 text-lg",
+      md: "min-w-48",
+      sm: "min-w-40 text-sm",
+    },
   },
 });
 
@@ -77,6 +69,12 @@ export type ContextMenuProps = {
 } & ContextMenuVariants;
 
 // Context menu component
+/**
+ * Positioned context-menu overlay rendered via a `Portal`. Accepts an `items` array
+ * (supporting icons, keybind labels, disabled state, and separators) and controlled
+ * `open`/`x`/`y`/`onOpenChange` props. Supports keyboard navigation (ArrowUp/Down,
+ * Enter, Escape) and auto-adjusts position to stay within the viewport.
+ */
 export const ContextMenu = (props: ContextMenuProps) => {
   const [local, others] = splitProps(props, [
     "items",
@@ -153,7 +151,9 @@ export const ContextMenu = (props: ContextMenuProps) => {
 
   // Close on click outside
   createEffect(() => {
-    if (!local.open) return;
+    if (!local.open) {
+      return;
+    }
 
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef && !menuRef.contains(event.target as Node)) {
@@ -195,7 +195,9 @@ export const ContextMenu = (props: ContextMenuProps) => {
     // Access the signal to make this reactive to menu rendering
     menuRendered();
 
-    if (!local.open || !menuRef) return { x: local.x, y: local.y };
+    if (!local.open || !menuRef) {
+      return { x: local.x, y: local.y };
+    }
 
     const rect = menuRef.getBoundingClientRect();
 
@@ -207,8 +209,8 @@ export const ContextMenu = (props: ContextMenuProps) => {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    let x = local.x;
-    let y = local.y;
+    let { x } = local;
+    let { y } = local;
 
     // Adjust horizontal position
     if (x + rect.width > viewportWidth) {
@@ -221,7 +223,7 @@ export const ContextMenu = (props: ContextMenuProps) => {
       y = local.y - rect.height;
     } else {
       // Enough space below, position below the cursor
-      y = local.y;
+      ({ y } = local);
     }
 
     // Final bounds check
@@ -237,8 +239,8 @@ export const ContextMenu = (props: ContextMenuProps) => {
           ref={menuRef}
           tabindex="-1"
           class={contextMenuVariants({
-            size: local.size,
             class: local.class,
+            size: local.size,
           })}
           style={{
             left: `${position().x}px`,
@@ -295,6 +297,11 @@ export interface UseContextMenuOptions {
   onOpenChange?: (open: boolean) => void;
 }
 
+/**
+ * Convenience hook that manages open state and cursor position for a `ContextMenu`.
+ * Returns `open` (to call on `onContextMenu`), `close`, `isOpen`, and `contextMenuProps`
+ * (spread directly onto `<ContextMenu>`).
+ */
 export const useContextMenu = (options: UseContextMenuOptions) => {
   const [isOpen, setIsOpen] = createSignal(false);
   const [position, setPosition] = createSignal({ x: 0, y: 0 });
@@ -313,19 +320,19 @@ export const useContextMenu = (options: UseContextMenuOptions) => {
 
   const contextMenuProps = () => ({
     items: options.items,
-    open: isOpen(),
-    x: position().x,
-    y: position().y,
     onOpenChange: (open: boolean) => {
       setIsOpen(open);
       options.onOpenChange?.(open);
     },
+    open: isOpen(),
+    x: position().x,
+    y: position().y,
   });
 
   return {
-    isOpen,
-    open,
     close,
     contextMenuProps,
+    isOpen,
+    open,
   };
 };

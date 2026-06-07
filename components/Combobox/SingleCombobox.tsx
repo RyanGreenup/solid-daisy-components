@@ -1,11 +1,12 @@
-import { Combobox, ComboboxTriggerMode } from "@kobalte/core/combobox";
-// @ts-ignore
+import { Combobox } from "@kobalte/core/combobox";
 import Check from "lucide-solid/icons/check";
-// @ts-ignore
 import ChevronsUpDown from "lucide-solid/icons/chevrons-up-down";
-import { createSignal, createEffect, JSX, Show } from "solid-js";
+import { Show, createEffect, createSignal } from "solid-js";
 
 import { comboboxStyles } from "./style";
+
+import type { ComboboxTriggerMode } from "@kobalte/core/combobox";
+import type { JSX } from "solid-js";
 import "./comboboxStyle.module.css";
 
 const styles = comboboxStyles();
@@ -27,6 +28,11 @@ interface SingleComboboxProps {
   class?: string;
 }
 
+/**
+ * A single-select combobox backed by Kobalte's Combobox primitive.
+ * Supports both plain string arrays and object arrays (via `optionValue`/`optionLabel`/`optionTextValue`).
+ * Syncs internal state with the `value` prop and calls `onChange` with the selected string value.
+ */
 export function SingleCombobox(props: SingleComboboxProps): JSX.Element {
   const [value, setValue] = createSignal(props.value || "");
 
@@ -66,9 +72,9 @@ export function SingleCombobox(props: SingleComboboxProps): JSX.Element {
         triggerMode={props.triggerMode ?? "input"}
         {...(props.optionValue
           ? {
-              optionValue: props.optionValue,
               optionLabel: props.optionLabel,
               optionTextValue: props.optionTextValue ?? props.optionLabel,
+              optionValue: props.optionValue,
             }
           : {})}
         itemComponent={(itemProps: any) => (

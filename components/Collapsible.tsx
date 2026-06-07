@@ -1,20 +1,22 @@
 import ChevronDown from "lucide-solid/icons/chevron-down";
-import { splitProps, children, JSX, createSignal, Show, createEffect } from "solid-js";
+import { Show, children, createSignal, splitProps } from "solid-js";
 import { Transition } from "solid-transition-group";
 import { tv } from "tailwind-variants";
 
+import type { JSX } from "solid-js";
+
 export const collapsibleVariants = tv({
   base: "collapsible-root",
-  variants: {
-    variant: {
-      default: "border border-base-300 rounded-box overflow-hidden",
-      ghost: "bg-transparent",
-      card: "bg-base-100 shadow-sm border border-base-200 rounded-box overflow-hidden",
-      outline: "border-2 border-base-300 rounded-box overflow-hidden bg-transparent",
-    },
-  },
   defaultVariants: {
     variant: "default",
+  },
+  variants: {
+    variant: {
+      card: "bg-base-100 shadow-sm border border-base-200 rounded-box overflow-hidden",
+      default: "border border-base-300 rounded-box overflow-hidden",
+      ghost: "bg-transparent",
+      outline: "border-2 border-base-300 rounded-box overflow-hidden bg-transparent",
+    },
   },
 });
 
@@ -26,42 +28,42 @@ export const collapsibleHeaderVariants = tv({
     "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
     "cursor-pointer select-none",
   ],
-  variants: {
-    variant: {
-      default: "bg-base-100",
-      ghost: "bg-transparent hover:bg-base-200/30",
-      card: "bg-base-50",
-      outline: "bg-transparent",
-    },
-  },
   defaultVariants: {
     variant: "default",
+  },
+  variants: {
+    variant: {
+      card: "bg-base-50",
+      default: "bg-base-100",
+      ghost: "bg-transparent hover:bg-base-200/30",
+      outline: "bg-transparent",
+    },
   },
 });
 
 export const collapsibleContentVariants = tv({
   base: "overflow-hidden transition-all duration-300 ease-out",
-  variants: {
-    expanded: {
-      true: "max-h-screen opacity-100",
-      false: "max-h-0 opacity-0",
-    },
-  },
   defaultVariants: {
     expanded: false,
+  },
+  variants: {
+    expanded: {
+      false: "max-h-0 opacity-0",
+      true: "max-h-screen opacity-100",
+    },
   },
 });
 
 export const collapsibleIconVariants = tv({
   base: "transition-transform duration-200 ease-out text-base-content/70",
-  variants: {
-    expanded: {
-      true: "rotate-180",
-      false: "rotate-0",
-    },
-  },
   defaultVariants: {
     expanded: false,
+  },
+  variants: {
+    expanded: {
+      false: "rotate-0",
+      true: "rotate-180",
+    },
   },
 });
 
@@ -78,6 +80,12 @@ export type CollapsibleProps = Omit<JSX.HTMLAttributes<HTMLDivElement>, "title" 
     showIcon?: boolean;
   };
 
+/**
+ * Animated expand/collapse panel with a clickable header, optional chevron icon, title,
+ * and subtitle. Supports both controlled (`expanded` + `onToggle`) and uncontrolled
+ * (`defaultExpanded`) modes, keyboard activation (Enter/Space), and four visual variants:
+ * default, card, ghost, and outline.
+ */
 export const Collapsible = (props: CollapsibleProps) => {
   const [local, others] = splitProps(props, [
     "variant",
@@ -101,7 +109,9 @@ export const Collapsible = (props: CollapsibleProps) => {
   const isExpanded = () => (local.expanded !== undefined ? local.expanded : internalExpanded());
 
   const handleToggle = () => {
-    if (local.disabled) return;
+    if (local.disabled) {
+      return;
+    }
 
     const newExpanded = !isExpanded();
 
@@ -125,8 +135,8 @@ export const Collapsible = (props: CollapsibleProps) => {
     <div
       {...others}
       class={collapsibleVariants({
-        variant: local.variant,
         class: local.class,
+        variant: local.variant,
       })}
     >
       {/* Header */}
@@ -143,17 +153,19 @@ export const Collapsible = (props: CollapsibleProps) => {
       >
         <div class="flex-1 text-left">
           <div class="font-medium text-base-content">{local.title}</div>
-          {local.subtitle && <div class="text-sm text-base-content/70 mt-1">{local.subtitle}</div>}
+          <Show when={local.subtitle}>
+            <div class="text-sm text-base-content/70 mt-1">{local.subtitle}</div>
+          </Show>
         </div>
 
-        {local.showIcon !== false && (
+        <Show when={local.showIcon !== false}>
           <ChevronDown
             size={20}
             class={collapsibleIconVariants({
               expanded: isExpanded(),
             })}
           />
-        )}
+        </Show>
       </button>
 
       {/* Content */}

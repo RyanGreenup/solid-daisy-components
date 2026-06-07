@@ -1,44 +1,46 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps, Show } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const avatarVariants = tv({
   base: "avatar",
+  defaultVariants: {
+    placeholder: "default",
+    status: "default",
+  },
   variants: {
-    status: {
-      default: "",
-      online: "online",
-      offline: "offline",
-    },
     placeholder: {
       default: "",
       placeholder: "placeholder",
     },
-  },
-  defaultVariants: {
-    status: "default",
-    placeholder: "default",
+    status: {
+      default: "",
+      offline: "offline",
+      online: "online",
+    },
   },
 });
 
 export const avatarImageVariants = tv({
   base: "",
-  variants: {
-    size: {
-      xs: "w-8",
-      sm: "w-12",
-      md: "w-16",
-      lg: "w-24",
-      xl: "w-32",
-    },
-    shape: {
-      square: "rounded",
-      rounded: "rounded-xl",
-      circle: "rounded-full",
-    },
-  },
   defaultVariants: {
-    size: "lg",
     shape: "rounded",
+    size: "lg",
+  },
+  variants: {
+    shape: {
+      circle: "rounded-full",
+      rounded: "rounded-xl",
+      square: "rounded",
+    },
+    size: {
+      lg: "w-24",
+      md: "w-16",
+      sm: "w-12",
+      xl: "w-32",
+      xs: "w-8",
+    },
   },
 });
 
@@ -53,6 +55,11 @@ export type AvatarProps = JSX.HTMLAttributes<HTMLDivElement> &
     placeholder?: string;
   };
 
+/**
+ * A DaisyUI avatar that renders an `<img>` when `src` is provided, or falls back
+ * to children (e.g. initials). Supports `shape` (circle, rounded, square),
+ * `size` (xs–xl), and `status` (online/offline) indicator dots.
+ */
 export const Avatar = (props: AvatarProps) => {
   const [local, others] = splitProps(props, [
     "status",
@@ -71,18 +78,20 @@ export const Avatar = (props: AvatarProps) => {
     <div
       {...others}
       class={avatarVariants({
-        status: local.status,
-        placeholder: local.placeholder,
         class: local.class,
+        placeholder: local.placeholder,
+        status: local.status,
       })}
     >
       <div
         class={avatarImageVariants({
-          size: local.size,
           shape: local.shape,
+          size: local.size,
         })}
       >
-        {local.src ? <img src={local.src} alt={local.alt || "Avatar"} /> : safeChildren()}
+        <Show when={local.src} fallback={safeChildren()}>
+          <img src={local.src} alt={local.alt || "Avatar"} />
+        </Show>
       </div>
     </div>
   );

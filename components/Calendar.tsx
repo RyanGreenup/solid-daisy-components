@@ -1,5 +1,7 @@
-import { splitProps, children, ComponentProps, onMount } from "solid-js";
+import { children, onMount, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { ComponentProps } from "solid-js";
 
 export const calendarVariants = tv({
   base: "cally",
@@ -43,6 +45,11 @@ declare module "solid-js" {
   }
 }
 
+/**
+ * Single-date picker backed by the `cally` web component (`<calendar-date>`), lazily
+ * imported on mount. Accepts `value`, `min`, and `max` as ISO date strings and fires
+ * `onDateChange` with the selected date string via a native `change` CustomEvent.
+ */
 export const CalendarDate = (props: CalendarDateProps) => {
   const [local] = splitProps(props, ["class", "children", "value", "min", "max", "onDateChange"]);
 
@@ -72,6 +79,10 @@ export const CalendarDate = (props: CalendarDateProps) => {
   );
 };
 
+/**
+ * Month grid slot for the `cally` calendar; renders a `<calendar-month>` web component
+ * that displays one month's date grid inside a `CalendarDate` parent.
+ */
 export const CalendarMonth = (props: CalendarMonthProps) => {
   const [local] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);

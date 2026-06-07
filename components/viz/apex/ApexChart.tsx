@@ -1,19 +1,19 @@
 import { SolidApexCharts } from "solid-apexcharts";
-import { splitProps, createMemo, JSX, createSignal, createEffect } from "solid-js";
+import { createMemo, createSignal, splitProps, Show } from "solid-js";
 import { tv } from "tailwind-variants";
 
 export const apexChartVariants = tv({
   base: "w-full",
-  variants: {
-    size: {
-      sm: "h-64",
-      md: "h-80",
-      lg: "h-96",
-      xl: "h-[500px]",
-    },
-  },
   defaultVariants: {
     size: "md",
+  },
+  variants: {
+    size: {
+      lg: "h-96",
+      md: "h-80",
+      sm: "h-64",
+      xl: "h-[500px]",
+    },
   },
 });
 
@@ -41,6 +41,11 @@ export interface ApexChartProps {
   size?: ApexChartVariants["size"];
 }
 
+/**
+ * A wrapper around `solid-apexcharts` that renders any ApexCharts chart type (line, bar, pie, etc.).
+ * Handles chart re-creation on type changes and exposes tailwind-variants size presets.
+ * @param props - Chart type, series data, ApexCharts options, and optional size/class overrides.
+ */
 export const ApexChart = (props: ApexChartProps) => {
   const [local] = splitProps(props, [
     "type",
@@ -60,11 +65,11 @@ export const ApexChart = (props: ApexChartProps) => {
   const chartOptions = createMemo((prev: ApexCharts.ApexOptions | undefined) => {
     const newOptions: ApexCharts.ApexOptions = {
       chart: {
-        type: local.type,
         background: "transparent",
         fontFamily: "inherit",
         redrawOnParentResize: true,
         redrawOnWindowResize: true,
+        type: local.type,
         ...local.options?.chart,
       },
       theme: {
@@ -92,14 +97,16 @@ export const ApexChart = (props: ApexChartProps) => {
 
   const containerClass = createMemo(() =>
     apexChartVariants({
-      size: local.size,
       class: local.class,
+      size: local.size,
     }),
   );
 
   // Ensure series is stable and properly formatted
   const stableSeries = createMemo(() => {
-    if (!local.series) return [];
+    if (!local.series) {
+      return [];
+    }
     return Array.isArray(local.series)
       ? local.series.map((s) => ({ ...s })) // Deep copy to prevent reference issues
       : local.series;
@@ -107,7 +114,7 @@ export const ApexChart = (props: ApexChartProps) => {
 
   return (
     <div class={containerClass()}>
-      {!isUpdating() && (
+      <Show when={!isUpdating()}>
         <SolidApexCharts
           key={chartKey()}
           type={local.type}
@@ -116,12 +123,12 @@ export const ApexChart = (props: ApexChartProps) => {
           width={local.width || "100%"}
           height={local.height || "100%"}
         />
-      )}
-      {isUpdating() && (
+      </Show>
+      <Show when={isUpdating()}>
         <div class="flex items-center justify-center h-full">
-          <div class="loading loading-spinner loading-lg"></div>
+          <div class="loading loading-spinner loading-lg" />
         </div>
-      )}
+      </Show>
     </div>
   );
 };

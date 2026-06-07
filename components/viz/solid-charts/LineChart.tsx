@@ -1,9 +1,7 @@
 import { Axis, AxisGrid, AxisLabel, AxisLine, Chart, Line } from "solid-charts";
-import { JSX, For, mergeProps } from "solid-js";
+import { For, mergeProps, Show } from "solid-js";
 
-export interface LineData {
-  [key: string]: any;
-}
+export type LineData = Record<string, any>;
 
 export interface LineConfig {
   dataKey: string;
@@ -25,16 +23,21 @@ export interface LineChartProps {
   showXAxisLabels?: boolean;
 }
 
+/**
+ * A line chart component built on the `solid-charts` library.
+ * Renders one or more lines over a shared x-axis with optional grid, axis labels, and axis line.
+ * @param props - Chart data, line configurations, x-axis key, and display toggles.
+ */
 export const LineChart = (props: LineChartProps) => {
   const merged = mergeProps(
     {
-      width: "w-125",
       height: "h-37.5",
       showGrid: true,
+      showXAxisLabels: true,
       showXAxisLine: true,
       showYAxisLabels: true,
-      showXAxisLabels: true,
       strokeWidth: 3,
+      width: "w-125",
     },
     props,
   );
@@ -43,12 +46,20 @@ export const LineChart = (props: LineChartProps) => {
     <div class={`${merged.height} ${merged.width} ${merged.class || ""}`}>
       <Chart data={merged.data}>
         <Axis axis="y" position="left">
-          {merged.showYAxisLabels && <AxisLabel />}
-          {merged.showGrid && <AxisGrid class="opacity-20" />}
+          <Show when={merged.showYAxisLabels}>
+            <AxisLabel />
+          </Show>
+          <Show when={merged.showGrid}>
+            <AxisGrid class="opacity-20" />
+          </Show>
         </Axis>
         <Axis axis="x" position="bottom" dataKey={merged.xAxisKey}>
-          {merged.showXAxisLabels && <AxisLabel />}
-          {merged.showXAxisLine && <AxisLine />}
+          <Show when={merged.showXAxisLabels}>
+            <AxisLabel />
+          </Show>
+          <Show when={merged.showXAxisLine}>
+            <AxisLine />
+          </Show>
         </Axis>
         <For each={merged.lines}>
           {(line) => (

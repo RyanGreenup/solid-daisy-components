@@ -1,5 +1,7 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const indicatorVariants = tv({
   base: "indicator",
@@ -7,21 +9,21 @@ export const indicatorVariants = tv({
 
 export const indicatorItemVariants = tv({
   base: "indicator-item",
-  variants: {
-    horizontal: {
-      start: "indicator-start",
-      center: "indicator-center",
-      end: "indicator-end",
-    },
-    vertical: {
-      top: "indicator-top",
-      middle: "indicator-middle",
-      bottom: "indicator-bottom",
-    },
-  },
   defaultVariants: {
     horizontal: "end",
     vertical: "top",
+  },
+  variants: {
+    horizontal: {
+      center: "indicator-center",
+      end: "indicator-end",
+      start: "indicator-start",
+    },
+    vertical: {
+      bottom: "indicator-bottom",
+      middle: "indicator-middle",
+      top: "indicator-top",
+    },
   },
 });
 
@@ -32,6 +34,11 @@ export type IndicatorProps = JSX.HTMLAttributes<HTMLDivElement> & IndicatorVaria
 
 export type IndicatorItemProps = JSX.HTMLAttributes<HTMLSpanElement> & IndicatorItemVariants;
 
+/**
+ * A `<span>` absolutely positioned over its `Indicator` sibling content.
+ * Use `horizontal` (start/center/end) and `vertical` (top/middle/bottom) to
+ * control which corner the badge or dot appears in.
+ */
 export const IndicatorItem = (props: IndicatorItemProps) => {
   const [local, others] = splitProps(props, ["horizontal", "vertical", "class", "children"]);
 
@@ -41,9 +48,9 @@ export const IndicatorItem = (props: IndicatorItemProps) => {
     <span
       {...others}
       class={indicatorItemVariants({
+        class: local.class,
         horizontal: local.horizontal,
         vertical: local.vertical,
-        class: local.class,
       })}
     >
       {safeChildren()}

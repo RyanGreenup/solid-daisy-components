@@ -1,5 +1,7 @@
 import { createVirtualizer } from "@tanstack/solid-virtual";
-import { JSX, For, Accessor, createMemo } from "solid-js";
+import { For, createMemo } from "solid-js";
+
+import type { Accessor, JSX } from "solid-js";
 
 interface VirtualListProps {
   count: Accessor<number>;
@@ -9,14 +11,19 @@ interface VirtualListProps {
   renderItemCallback: (index: number, size: number) => JSX.Element;
 }
 
+/**
+ * A generic virtualized list component backed by `@tanstack/solid-virtual`.
+ * Renders only the visible subset of items by calling `renderItemCallback(index, size)` for each visible row.
+ * Configure the scroll container height with `height`, row estimate with `estimateSize`, and render buffer with `overscan`.
+ */
 export function VirtualList(props: VirtualListProps) {
   let parentRef!: HTMLDivElement;
 
   const rowVirtualizer = createMemo(() =>
     createVirtualizer({
       count: props.count(),
-      getScrollElement: () => parentRef,
       estimateSize: props.estimateSize || (() => 35),
+      getScrollElement: () => parentRef,
       overscan: props.overscan || 5,
     }),
   );
@@ -32,20 +39,20 @@ export function VirtualList(props: VirtualListProps) {
       <div
         style={{
           height: `${rowVirtualizer().getTotalSize()}px`,
-          width: "100%",
           position: "relative",
+          width: "100%",
         }}
       >
         <For each={rowVirtualizer().getVirtualItems()}>
           {(virtualItem) => (
             <div
               style={{
+                height: `${virtualItem.size}px`,
+                left: 0,
                 position: "absolute",
                 top: 0,
-                left: 0,
-                width: "100%",
-                height: `${virtualItem.size}px`,
                 transform: `translateY(${virtualItem.start}px)`,
+                width: "100%",
               }}
             >
               {props.renderItemCallback(virtualItem.index, virtualItem.size)}

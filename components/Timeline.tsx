@@ -1,9 +1,20 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const timelineVariants = tv({
   base: "timeline",
+  defaultVariants: {
+    compact: "default",
+    orientation: "horizontal",
+    snap: "default",
+  },
   variants: {
+    compact: {
+      compact: "timeline-compact",
+      default: "",
+    },
     orientation: {
       horizontal: "",
       vertical: "timeline-vertical",
@@ -12,15 +23,6 @@ export const timelineVariants = tv({
       default: "",
       icon: "timeline-snap-icon",
     },
-    compact: {
-      default: "",
-      compact: "timeline-compact",
-    },
-  },
-  defaultVariants: {
-    orientation: "horizontal",
-    snap: "default",
-    compact: "default",
   },
 });
 
@@ -30,14 +32,14 @@ export const timelineItemVariants = tv({
 
 export const timelineStartVariants = tv({
   base: "timeline-start",
-  variants: {
-    box: {
-      default: "",
-      box: "timeline-box",
-    },
-  },
   defaultVariants: {
     box: "default",
+  },
+  variants: {
+    box: {
+      box: "timeline-box",
+      default: "",
+    },
   },
 });
 
@@ -47,14 +49,14 @@ export const timelineMiddleVariants = tv({
 
 export const timelineEndVariants = tv({
   base: "timeline-end",
-  variants: {
-    box: {
-      default: "",
-      box: "timeline-box",
-    },
-  },
   defaultVariants: {
     box: "default",
+  },
+  variants: {
+    box: {
+      box: "timeline-box",
+      default: "",
+    },
   },
 });
 
@@ -74,6 +76,11 @@ export type TimelineMiddleProps = JSX.HTMLAttributes<HTMLDivElement> & TimelineM
 
 export type TimelineEndProps = JSX.HTMLAttributes<HTMLDivElement> & TimelineEndVariants;
 
+/**
+ * A single entry in a DaisyUI timeline list, rendered as an `<li>`. Acts as
+ * the row/column container that holds `TimelineStart`, `TimelineMiddle`, and
+ * `TimelineEnd` sub-components.
+ */
 export const TimelineItem = (props: TimelineItemProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -85,6 +92,11 @@ export const TimelineItem = (props: TimelineItemProps) => {
   );
 };
 
+/**
+ * Content placed before (above or to the left of) the connector in a
+ * DaisyUI timeline item. Applies the `timeline-start` class; the optional
+ * `box` prop adds `timeline-box` to render it as a rounded bordered box.
+ */
 export const TimelineStart = (props: TimelineStartProps) => {
   const [local, others] = splitProps(props, ["box", "class", "children"]);
   const safeChildren = children(() => local.children);
@@ -102,6 +114,11 @@ export const TimelineStart = (props: TimelineStartProps) => {
   );
 };
 
+/**
+ * The connector/icon slot in the middle of a DaisyUI timeline item, rendered
+ * with the `timeline-middle` class. Typically contains a small circle SVG or
+ * icon that visually marks the point on the timeline axis.
+ */
 export const TimelineMiddle = (props: TimelineMiddleProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -113,6 +130,11 @@ export const TimelineMiddle = (props: TimelineMiddleProps) => {
   );
 };
 
+/**
+ * Content placed after (below or to the right of) the connector in a
+ * DaisyUI timeline item. Applies the `timeline-end` class; the optional
+ * `box` prop adds `timeline-box` to render it as a rounded bordered box.
+ */
 export const TimelineEnd = (props: TimelineEndProps) => {
   const [local, others] = splitProps(props, ["box", "class", "children"]);
   const safeChildren = children(() => local.children);
@@ -145,10 +167,10 @@ const TimelineComponent = (props: TimelineProps) => {
     <ul
       {...others}
       class={timelineVariants({
+        class: local.class,
+        compact: local.compact,
         orientation: local.orientation,
         snap: local.snap,
-        compact: local.compact,
-        class: local.class,
       })}
     >
       {safeChildren()}
@@ -157,8 +179,8 @@ const TimelineComponent = (props: TimelineProps) => {
 };
 
 export const Timeline = Object.assign(TimelineComponent, {
-  Item: TimelineItem,
-  Start: TimelineStart,
-  Middle: TimelineMiddle,
   End: TimelineEnd,
+  Item: TimelineItem,
+  Middle: TimelineMiddle,
+  Start: TimelineStart,
 });

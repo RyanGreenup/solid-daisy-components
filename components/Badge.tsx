@@ -1,39 +1,41 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const badgeVariants = tv({
   base: "badge",
+  defaultVariants: {
+    color: "default",
+    size: "md",
+    variant: "default",
+  },
   variants: {
-    variant: {
-      default: "",
-      outline: "badge-outline",
-      soft: "badge-soft",
-      dash: "badge-dash",
-      ghost: "badge-ghost",
-    },
     color: {
+      accent: "badge-accent",
       default: "",
+      error: "badge-error",
+      info: "badge-info",
       neutral: "badge-neutral",
       primary: "badge-primary",
       secondary: "badge-secondary",
-      accent: "badge-accent",
-      info: "badge-info",
       success: "badge-success",
       warning: "badge-warning",
-      error: "badge-error",
     },
     size: {
-      xs: "badge-xs",
-      sm: "badge-sm",
-      md: "badge-md",
       lg: "badge-lg",
+      md: "badge-md",
+      sm: "badge-sm",
       xl: "badge-xl",
+      xs: "badge-xs",
     },
-  },
-  defaultVariants: {
-    variant: "default",
-    color: "default",
-    size: "md",
+    variant: {
+      dash: "badge-dash",
+      default: "",
+      ghost: "badge-ghost",
+      outline: "badge-outline",
+      soft: "badge-soft",
+    },
   },
 });
 
@@ -41,6 +43,10 @@ type BadgeVariants = Parameters<typeof badgeVariants>[0];
 
 export type BadgeProps = JSX.HTMLAttributes<HTMLSpanElement> & BadgeVariants;
 
+/**
+ * A `<span>` rendered as a DaisyUI badge. Supports `color` (primary, error,
+ * success, etc.), `size` (xs–xl), and `variant` (outline, ghost, soft, dash).
+ */
 export const Badge = (props: BadgeProps) => {
   const [local, others] = splitProps(props, ["variant", "color", "size", "class", "children"]);
 
@@ -50,10 +56,10 @@ export const Badge = (props: BadgeProps) => {
     <span
       {...others}
       class={badgeVariants({
-        variant: local.variant,
+        class: local.class,
         color: local.color,
         size: local.size,
-        class: local.class,
+        variant: local.variant,
       })}
     >
       {safeChildren()}

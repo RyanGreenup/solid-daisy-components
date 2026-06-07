@@ -1,16 +1,18 @@
-import { splitProps, children, JSX } from "solid-js";
+import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
+
+import type { JSX } from "solid-js";
 
 export const fabVariants = tv({
   base: "fab",
+  defaultVariants: {
+    flower: false,
+  },
   variants: {
     flower: {
       false: "",
       true: "fab-flower",
     },
-  },
-  defaultVariants: {
-    flower: false,
   },
 });
 
@@ -36,6 +38,10 @@ export type FabMainActionProps = JSX.HTMLAttributes<HTMLDivElement> & FabMainAct
 
 export type FabItemProps = JSX.HTMLAttributes<HTMLDivElement>;
 
+/**
+ * Trigger element for a Floating Action Button; renders a focusable `div` with
+ * `role="button"` and `tabindex="0"` by default so it participates in keyboard navigation.
+ */
 export const FabTrigger = (props: FabTriggerProps) => {
   const [local, others] = splitProps(props, ["class", "children", "tabindex", "role"]);
   const safeChildren = children(() => local.children);
@@ -52,6 +58,10 @@ export const FabTrigger = (props: FabTriggerProps) => {
   );
 };
 
+/**
+ * Close button slot for a Floating Action Button; applies the `fab-close` DaisyUI class
+ * to its wrapper `div` and forwards all HTML div attributes.
+ */
 export const FabClose = (props: FabCloseProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -63,6 +73,10 @@ export const FabClose = (props: FabCloseProps) => {
   );
 };
 
+/**
+ * Primary action slot for a Floating Action Button; applies the `fab-main-action`
+ * DaisyUI class and forwards all HTML div attributes.
+ */
 export const FabMainAction = (props: FabMainActionProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -74,6 +88,10 @@ export const FabMainAction = (props: FabMainActionProps) => {
   );
 };
 
+/**
+ * Individual action item inside a Floating Action Button speed-dial; renders a plain
+ * `div` wrapper and passes through all HTML div attributes and the provided class.
+ */
 export const FabItem = (props: FabItemProps) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
@@ -94,8 +112,8 @@ const FabComponent = (props: FabProps) => {
     <div
       {...others}
       class={fabVariants({
-        flower: local.flower,
         class: local.class,
+        flower: local.flower,
       })}
     >
       {safeChildren()}
@@ -104,8 +122,8 @@ const FabComponent = (props: FabProps) => {
 };
 
 export const Fab = Object.assign(FabComponent, {
-  Trigger: FabTrigger,
   Close: FabClose,
-  MainAction: FabMainAction,
   Item: FabItem,
+  MainAction: FabMainAction,
+  Trigger: FabTrigger,
 });

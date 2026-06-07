@@ -1,9 +1,7 @@
 import { Axis, AxisCursor, AxisGrid, AxisLabel, AxisTooltip, Bar, Chart } from "solid-charts";
-import { JSX, For, mergeProps, Show } from "solid-js";
+import { For, Show, mergeProps } from "solid-js";
 
-export interface BarData {
-  [key: string]: any;
-}
+export type BarData = Record<string, any>;
 
 export interface BarConfig {
   dataKey: string;
@@ -28,18 +26,23 @@ export interface BarChartProps {
   stackId?: string;
 }
 
+/**
+ * A bar chart component built on the `solid-charts` library.
+ * Supports grouped ("dodge") and stacked bar layouts with optional grid, cursor, and tooltip.
+ * @param props - Chart data, bar configurations, x-axis key, layout mode, and display toggles.
+ */
 export const BarChart = (props: BarChartProps) => {
   const merged = mergeProps(
     {
-      width: "w-125",
       height: "h-62.5",
+      layout: "dodge" as const,
+      showCursor: true,
       showGrid: true,
       showTooltip: true,
-      showCursor: true,
-      showYAxisLabels: true,
       showXAxisLabels: true,
-      layout: "dodge" as const,
+      showYAxisLabels: true,
       stackId: "defaultStack",
+      width: "w-125",
     },
     props,
   );
@@ -50,15 +53,19 @@ export const BarChart = (props: BarChartProps) => {
       return merged.stackId;
     }
     // For dodge layout, each bar gets its own stackId or no stackId
-    return undefined;
+    return;
   };
 
   return (
     <div class={`${merged.height} text-sm ${merged.width} m-6 ${merged.class || ""}`}>
       <Chart data={merged.data}>
         <Axis axis="y" position="left">
-          {merged.showYAxisLabels && <AxisLabel />}
-          {merged.showGrid && <AxisGrid class="opacity-20" />}
+          <Show when={merged.showYAxisLabels}>
+            <AxisLabel />
+          </Show>
+          <Show when={merged.showGrid}>
+            <AxisGrid class="opacity-20" />
+          </Show>
         </Axis>
 
         <For each={merged.bars}>
@@ -72,14 +79,16 @@ export const BarChart = (props: BarChartProps) => {
         </For>
 
         <Axis axis="x" position="bottom" dataKey={merged.xAxisKey}>
-          {merged.showXAxisLabels && <AxisLabel />}
-          {merged.showCursor && (
+          <Show when={merged.showXAxisLabels}>
+            <AxisLabel />
+          </Show>
+          <Show when={merged.showCursor}>
             <AxisCursor
               stroke-dasharray="10,10"
               stroke-width={2}
               class="stroke-base-content/70 transition-opacity"
             />
-          )}
+          </Show>
           <Show when={merged.showTooltip}>
             <AxisTooltip class="rounded-md text-xs overflow-hidden shadow-lg border border-base-300 bg-base-100">
               {(tooltipProps: any) => (
