@@ -36,7 +36,7 @@ export function useKeybinding(
   keyPress: KeyPress,
   callback: (ev: KeyboardEvent) => void,
   options: KeybindingOptions & { ref?: () => HTMLElement | undefined } = {},
-) {
+): void {
   const { ref, preventDefault = true } = options;
   const { key, ctrl = false, shift = false, alt = false } = keyPress;
 

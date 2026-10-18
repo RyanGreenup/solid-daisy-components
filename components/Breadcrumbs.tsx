@@ -2,8 +2,13 @@ import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const breadcrumbsVariants = tv({
+export const breadcrumbsVariants: TVReturnType<
+  {}, undefined, "breadcrumbs", {}, undefined
+> = tv<
+  {}, [], {}, "breadcrumbs", undefined, undefined, {}, undefined
+>({
   base: "breadcrumbs",
 });
 
@@ -15,7 +20,7 @@ export type BreadcrumbsItemProps = JSX.LiHTMLAttributes<HTMLLIElement>;
  * An individual `<li>` item inside a `Breadcrumbs` container. Typically wraps
  * an anchor or plain text to represent one level of the navigation hierarchy.
  */
-export const BreadcrumbsItem = (props: BreadcrumbsItemProps) => {
+export const BreadcrumbsItem = (props: BreadcrumbsItemProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
@@ -26,7 +31,7 @@ export const BreadcrumbsItem = (props: BreadcrumbsItemProps) => {
   );
 };
 
-const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
+const BreadcrumbsComponent = (props: BreadcrumbsProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
@@ -37,6 +42,8 @@ const BreadcrumbsComponent = (props: BreadcrumbsProps) => {
   );
 };
 
-export const Breadcrumbs = Object.assign(BreadcrumbsComponent, {
+export const Breadcrumbs: typeof BreadcrumbsComponent & {
+  Item: typeof BreadcrumbsItem;
+} = Object.assign(BreadcrumbsComponent, {
   Item: BreadcrumbsItem,
 });

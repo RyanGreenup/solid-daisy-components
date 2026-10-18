@@ -2,8 +2,18 @@ import { children, splitProps, Show } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const avatarVariants = tv({
+type AvatarVariantsSchema = {
+  placeholder: Record<"default" | "placeholder", string>;
+  status: Record<"default" | "offline" | "online", string>;
+};
+
+export const avatarVariants: TVReturnType<
+  AvatarVariantsSchema, undefined, "avatar", AvatarVariantsSchema, undefined
+> = tv<
+  AvatarVariantsSchema, [], {}, "avatar", undefined, undefined, AvatarVariantsSchema, undefined
+>({
   base: "avatar",
   defaultVariants: {
     placeholder: "default",
@@ -22,7 +32,16 @@ export const avatarVariants = tv({
   },
 });
 
-export const avatarImageVariants = tv({
+type AvatarImageVariantsSchema = {
+  shape: Record<"circle" | "rounded" | "square", string>;
+  size: Record<"lg" | "md" | "sm" | "xl" | "xs", string>;
+};
+
+export const avatarImageVariants: TVReturnType<
+  AvatarImageVariantsSchema, undefined, "", AvatarImageVariantsSchema, undefined
+> = tv<
+  AvatarImageVariantsSchema, [], {}, "", undefined, undefined, AvatarImageVariantsSchema, undefined
+>({
   base: "",
   defaultVariants: {
     shape: "rounded",
@@ -60,7 +79,7 @@ export type AvatarProps = JSX.HTMLAttributes<HTMLDivElement> &
  * to children (e.g. initials). Supports `shape` (circle, rounded, square),
  * `size` (xs–xl), and `status` (online/offline) indicator dots.
  */
-export const Avatar = (props: AvatarProps) => {
+export const Avatar = (props: AvatarProps): JSX.Element => {
   const [local, others] = splitProps(props, [
     "status",
     "placeholder",

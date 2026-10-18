@@ -2,8 +2,19 @@ import { createEffect, createSignal, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const inputVariants = tv({
+type InputVariantsSchema = {
+  color: Record<"accent" | "default" | "error" | "info" | "neutral" | "primary" | "secondary" | "success" | "warning", string>;
+  size: Record<"lg" | "md" | "sm" | "xl" | "xs", string>;
+  variant: Record<"default" | "ghost", string>;
+};
+
+export const inputVariants: TVReturnType<
+  InputVariantsSchema, undefined, "input", InputVariantsSchema, undefined
+> = tv<
+  InputVariantsSchema, [], {}, "input", undefined, undefined, InputVariantsSchema, undefined
+>({
   base: "input",
   defaultVariants: {
     color: "default",
@@ -50,7 +61,7 @@ export type InputProps = JSX.InputHTMLAttributes<HTMLInputElement> &
  * keystroke, and keeps an internal signal in sync with the `value` prop via a `createEffect`.
  * Supports `color`, `size`, and `variant` (default, ghost) variant props.
  */
-export const Input = (props: InputProps) => {
+export const Input = (props: InputProps): JSX.Element => {
   const [local, others] = splitProps(props, [
     "variant",
     "color",

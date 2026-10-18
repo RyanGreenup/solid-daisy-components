@@ -2,8 +2,22 @@ import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const buttonVariants = tv({
+type ButtonVariantsSchema = {
+  color: Record<"accent" | "default" | "error" | "info" | "neutral" | "primary" | "secondary" | "success" | "warning", string>;
+  shape: Record<"circle" | "default" | "square", string>;
+  size: Record<"lg" | "md" | "sm" | "xl" | "xs", string>;
+  state: Record<"active" | "default" | "disabled", string>;
+  variant: Record<"dash" | "default" | "ghost" | "link" | "outline" | "soft", string>;
+  width: Record<"block" | "default" | "wide", string>;
+};
+
+export const buttonVariants: TVReturnType<
+  ButtonVariantsSchema, undefined, "btn", ButtonVariantsSchema, undefined
+> = tv<
+  ButtonVariantsSchema, [], {}, "btn", undefined, undefined, ButtonVariantsSchema, undefined
+>({
   base: "btn",
   defaultVariants: {
     color: "default",
@@ -67,7 +81,7 @@ export type ButtonProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & ButtonVa
  * variant (ghost, outline, soft, link, dash), width, and state (active, disabled).
  * Renders a native `<button>` and forwards all standard HTML button attributes.
  */
-export const Button = (props: ButtonProps) => {
+export const Button = (props: ButtonProps): JSX.Element => {
   const [local, others] = splitProps(props, [
     "variant",
     "color",

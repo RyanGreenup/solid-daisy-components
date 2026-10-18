@@ -2,8 +2,19 @@ import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const badgeVariants = tv({
+type BadgeVariantsSchema = {
+  color: Record<"accent" | "default" | "error" | "info" | "neutral" | "primary" | "secondary" | "success" | "warning", string>;
+  size: Record<"lg" | "md" | "sm" | "xl" | "xs", string>;
+  variant: Record<"dash" | "default" | "ghost" | "outline" | "soft", string>;
+};
+
+export const badgeVariants: TVReturnType<
+  BadgeVariantsSchema, undefined, "badge", BadgeVariantsSchema, undefined
+> = tv<
+  BadgeVariantsSchema, [], {}, "badge", undefined, undefined, BadgeVariantsSchema, undefined
+>({
   base: "badge",
   defaultVariants: {
     color: "default",
@@ -47,7 +58,7 @@ export type BadgeProps = JSX.HTMLAttributes<HTMLSpanElement> & BadgeVariants;
  * A `<span>` rendered as a DaisyUI badge. Supports `color` (primary, error,
  * success, etc.), `size` (xs–xl), and `variant` (outline, ghost, soft, dash).
  */
-export const Badge = (props: BadgeProps) => {
+export const Badge = (props: BadgeProps): JSX.Element => {
   const [local, others] = splitProps(props, ["variant", "color", "size", "class", "children"]);
 
   const safeChildren = children(() => local.children);

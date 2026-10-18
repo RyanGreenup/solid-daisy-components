@@ -2,8 +2,18 @@ import { splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const radioVariants = tv({
+type RadioVariantsSchema = {
+  color: Record<"accent" | "default" | "error" | "info" | "neutral" | "primary" | "secondary" | "success" | "warning", string>;
+  size: Record<"lg" | "md" | "sm" | "xl" | "xs", string>;
+};
+
+export const radioVariants: TVReturnType<
+  RadioVariantsSchema, undefined, "radio", RadioVariantsSchema, undefined
+> = tv<
+  RadioVariantsSchema, [], {}, "radio", undefined, undefined, RadioVariantsSchema, undefined
+>({
   base: "radio",
   defaultVariants: {
     color: "default",
@@ -40,7 +50,7 @@ export type RadioProps = JSX.InputHTMLAttributes<HTMLInputElement> & RadioVarian
  * Supports `color` (primary, secondary, accent, info, success, warning, error, neutral)
  * and `size` (xs, sm, md, lg, xl) variant props in addition to all standard input attributes.
  */
-export const Radio = (props: RadioProps) => {
+export const Radio = (props: RadioProps): JSX.Element => {
   const [local, others] = splitProps(props, ["color", "size", "class", "type"]);
 
   return (

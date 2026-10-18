@@ -2,8 +2,18 @@ import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const statsVariants = tv({
+type StatsVariantsSchema = {
+  direction: Record<"horizontal" | "vertical", string>;
+  variant: Record<"bordered" | "default", string>;
+};
+
+export const statsVariants: TVReturnType<
+  StatsVariantsSchema, undefined, "stats", StatsVariantsSchema, undefined
+> = tv<
+  StatsVariantsSchema, [], {}, "stats", undefined, undefined, StatsVariantsSchema, undefined
+>({
   base: "stats",
   defaultVariants: {
     direction: "horizontal",
@@ -21,7 +31,15 @@ export const statsVariants = tv({
   },
 });
 
-export const statVariants = tv({
+type StatVariantsSchema = {
+  place: Record<"center" | "default", string>;
+};
+
+export const statVariants: TVReturnType<
+  StatVariantsSchema, undefined, "stat", StatVariantsSchema, undefined
+> = tv<
+  StatVariantsSchema, [], {}, "stat", undefined, undefined, StatVariantsSchema, undefined
+>({
   base: "stat",
   defaultVariants: {
     place: "default",
@@ -52,7 +70,7 @@ export type StatActionsProps = JSX.HTMLAttributes<HTMLDivElement>;
  * class. Supports `direction` (`horizontal` / `vertical`) and `variant`
  * (`default` / `bordered` which adds a box shadow).
  */
-export const Stats = (props: StatsProps) => {
+export const Stats = (props: StatsProps): JSX.Element => {
   const [local, others] = splitProps(props, ["direction", "variant", "class", "children"]);
 
   const safeChildren = children(() => local.children);
@@ -76,7 +94,7 @@ export const Stats = (props: StatsProps) => {
  * `stat` class. The `place` prop (`default` / `center`) controls whether
  * items are centered with `place-items-center`.
  */
-export const Stat = (props: StatProps) => {
+export const Stat = (props: StatProps): JSX.Element => {
   const [local, others] = splitProps(props, ["place", "class", "children"]);
 
   const safeChildren = children(() => local.children);
@@ -98,7 +116,7 @@ export const Stat = (props: StatProps) => {
  * Label / heading for a DaisyUI stat item, rendered with the `stat-title`
  * class. Typically contains a short descriptor such as "Total Users".
  */
-export const StatTitle = (props: StatTitleProps) => {
+export const StatTitle = (props: StatTitleProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   const safeChildren = children(() => local.children);
@@ -114,7 +132,7 @@ export const StatTitle = (props: StatTitleProps) => {
  * Primary numeric or text value displayed in a DaisyUI stat item, rendered
  * with the `stat-value` class which applies large, prominent typography.
  */
-export const StatValue = (props: StatValueProps) => {
+export const StatValue = (props: StatValueProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   const safeChildren = children(() => local.children);
@@ -131,7 +149,7 @@ export const StatValue = (props: StatValueProps) => {
  * with the `stat-desc` class. Used for supplementary text such as trend
  * information or data source notes.
  */
-export const StatDesc = (props: StatDescProps) => {
+export const StatDesc = (props: StatDescProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   const safeChildren = children(() => local.children);
@@ -148,7 +166,7 @@ export const StatDesc = (props: StatDescProps) => {
  * class. Positioned at the side of the stat to display a supporting visual
  * such as an SVG icon or avatar.
  */
-export const StatFigure = (props: StatFigureProps) => {
+export const StatFigure = (props: StatFigureProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   const safeChildren = children(() => local.children);
@@ -165,7 +183,7 @@ export const StatFigure = (props: StatFigureProps) => {
  * class. Intended to hold buttons or links that relate to the displayed
  * statistic, such as "View details".
  */
-export const StatActions = (props: StatActionsProps) => {
+export const StatActions = (props: StatActionsProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   const safeChildren = children(() => local.children);

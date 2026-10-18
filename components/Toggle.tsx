@@ -2,8 +2,18 @@ import { splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const toggleVariants = tv({
+type ToggleVariantsSchema = {
+  color: Record<"accent" | "default" | "error" | "info" | "neutral" | "primary" | "secondary" | "success" | "warning", string>;
+  size: Record<"lg" | "md" | "sm" | "xl" | "xs", string>;
+};
+
+export const toggleVariants: TVReturnType<
+  ToggleVariantsSchema, undefined, "toggle", ToggleVariantsSchema, undefined
+> = tv<
+  ToggleVariantsSchema, [], {}, "toggle", undefined, undefined, ToggleVariantsSchema, undefined
+>({
   base: "toggle",
   defaultVariants: {
     color: "default",
@@ -40,7 +50,7 @@ export type ToggleProps = JSX.InputHTMLAttributes<HTMLInputElement> & ToggleVari
  * Supports `color` (primary, secondary, accent, info, success, warning, error, neutral)
  * and `size` (xs, sm, md, lg, xl) variant props in addition to all standard input attributes.
  */
-export const Toggle = (props: ToggleProps) => {
+export const Toggle = (props: ToggleProps): JSX.Element => {
   const [local, others] = splitProps(props, ["color", "size", "class", "type"]);
 
   return (

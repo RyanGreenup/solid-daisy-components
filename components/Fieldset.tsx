@@ -2,16 +2,29 @@ import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const fieldsetVariants = tv({
+export const fieldsetVariants: TVReturnType<
+  {}, undefined, "fieldset", {}, undefined
+> = tv<
+  {}, [], {}, "fieldset", undefined, undefined, {}, undefined
+>({
   base: "fieldset",
 });
 
-export const fieldsetLegendVariants = tv({
+export const fieldsetLegendVariants: TVReturnType<
+  {}, undefined, "fieldset-legend", {}, undefined
+> = tv<
+  {}, [], {}, "fieldset-legend", undefined, undefined, {}, undefined
+>({
   base: "fieldset-legend",
 });
 
-export const labelVariants = tv({
+export const labelVariants: TVReturnType<
+  {}, undefined, "label", {}, undefined
+> = tv<
+  {}, [], {}, "label", undefined, undefined, {}, undefined
+>({
   base: "label",
 });
 
@@ -29,7 +42,7 @@ export type LabelProps = JSX.LabelHTMLAttributes<HTMLLabelElement> & LabelVarian
  * A DaisyUI-styled `<legend>` element for use inside a `Fieldset`.
  * Applies the `fieldset-legend` base class and forwards all standard legend HTML attributes.
  */
-export const FieldsetLegend = (props: FieldsetLegendProps) => {
+export const FieldsetLegend = (props: FieldsetLegendProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
@@ -44,7 +57,7 @@ export const FieldsetLegend = (props: FieldsetLegendProps) => {
  * A DaisyUI-styled `<label>` element applying the `label` base class.
  * Use to annotate form controls inside a `Fieldset`; forwards all standard label attributes.
  */
-export const Label = (props: LabelProps) => {
+export const Label = (props: LabelProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
@@ -55,7 +68,7 @@ export const Label = (props: LabelProps) => {
   );
 };
 
-const FieldsetComponent = (props: FieldsetProps) => {
+const FieldsetComponent = (props: FieldsetProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
@@ -66,6 +79,8 @@ const FieldsetComponent = (props: FieldsetProps) => {
   );
 };
 
-export const Fieldset = Object.assign(FieldsetComponent, {
+export const Fieldset: typeof FieldsetComponent & {
+  Legend: typeof FieldsetLegend;
+} = Object.assign(FieldsetComponent, {
   Legend: FieldsetLegend,
 });

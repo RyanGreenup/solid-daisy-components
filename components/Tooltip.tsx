@@ -2,8 +2,19 @@ import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const tooltipVariants = tv({
+type TooltipVariantsSchema = {
+  color: Record<"accent" | "default" | "error" | "info" | "neutral" | "primary" | "secondary" | "success" | "warning", string>;
+  open: Record<"false" | "true", string>;
+  placement: Record<"bottom" | "left" | "right" | "top", string>;
+};
+
+export const tooltipVariants: TVReturnType<
+  TooltipVariantsSchema, undefined, "tooltip", TooltipVariantsSchema, undefined
+> = tv<
+  TooltipVariantsSchema, [], {}, "tooltip", undefined, undefined, TooltipVariantsSchema, undefined
+>({
   base: "tooltip",
   defaultVariants: {
     color: "default",
@@ -35,7 +46,11 @@ export const tooltipVariants = tv({
   },
 });
 
-export const tooltipContentVariants = tv({
+export const tooltipContentVariants: TVReturnType<
+  {}, undefined, "tooltip-content", {}, undefined
+> = tv<
+  {}, [], {}, "tooltip-content", undefined, undefined, {}, undefined
+>({
   base: "tooltip-content",
 });
 
@@ -53,7 +68,7 @@ export type TooltipContentProps = JSX.HTMLAttributes<HTMLDivElement> & TooltipCo
  * Optional rich-content slot for a `Tooltip`; applies the `tooltip-content` DaisyUI
  * class when custom JSX content is needed instead of the plain `tip` string attribute.
  */
-export const TooltipContent = (props: TooltipContentProps) => {
+export const TooltipContent = (props: TooltipContentProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
@@ -64,7 +79,7 @@ export const TooltipContent = (props: TooltipContentProps) => {
   );
 };
 
-const TooltipComponent = (props: TooltipProps) => {
+const TooltipComponent = (props: TooltipProps): JSX.Element => {
   const [local, others] = splitProps(props, [
     "placement",
     "color",
@@ -92,6 +107,8 @@ const TooltipComponent = (props: TooltipProps) => {
   );
 };
 
-export const Tooltip = Object.assign(TooltipComponent, {
+export const Tooltip: typeof TooltipComponent & {
+  Content: typeof TooltipContent;
+} = Object.assign(TooltipComponent, {
   Content: TooltipContent,
 });

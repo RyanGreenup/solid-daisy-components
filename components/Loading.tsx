@@ -2,8 +2,18 @@ import { splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const loadingVariants = tv({
+type LoadingVariantsSchema = {
+  size: Record<"lg" | "md" | "sm" | "xl" | "xs", string>;
+  variant: Record<"ball" | "bars" | "dots" | "infinity" | "ring" | "spinner", string>;
+};
+
+export const loadingVariants: TVReturnType<
+  LoadingVariantsSchema, undefined, "loading", LoadingVariantsSchema, undefined
+> = tv<
+  LoadingVariantsSchema, [], {}, "loading", undefined, undefined, LoadingVariantsSchema, undefined
+>({
   base: "loading",
   defaultVariants: {
     size: "md",
@@ -37,7 +47,7 @@ export type LoadingProps = JSX.HTMLAttributes<HTMLSpanElement> & LoadingVariants
  * the animation style (spinner, dots, ring, ball, bars, infinity) and `size`
  * (xs–xl) to control its dimensions.
  */
-export const Loading = (props: LoadingProps) => {
+export const Loading = (props: LoadingProps): JSX.Element => {
   const [local, others] = splitProps(props, ["variant", "size", "class"]);
 
   return (

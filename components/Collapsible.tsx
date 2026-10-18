@@ -4,8 +4,17 @@ import { Transition } from "solid-transition-group";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const collapsibleVariants = tv({
+type CollapsibleVariantsSchema = {
+  variant: Record<"card" | "default" | "ghost" | "outline", string>;
+};
+
+export const collapsibleVariants: TVReturnType<
+  CollapsibleVariantsSchema, undefined, "collapsible-root", CollapsibleVariantsSchema, undefined
+> = tv<
+  CollapsibleVariantsSchema, [], {}, "collapsible-root", undefined, undefined, CollapsibleVariantsSchema, undefined
+>({
   base: "collapsible-root",
   defaultVariants: {
     variant: "default",
@@ -20,7 +29,15 @@ export const collapsibleVariants = tv({
   },
 });
 
-export const collapsibleHeaderVariants = tv({
+type CollapsibleHeaderVariantsSchema = {
+  variant: Record<"card" | "default" | "ghost" | "outline", string>;
+};
+
+export const collapsibleHeaderVariants: TVReturnType<
+  CollapsibleHeaderVariantsSchema, undefined, string[], CollapsibleHeaderVariantsSchema, undefined
+> = tv<
+  CollapsibleHeaderVariantsSchema, [], {}, string[], undefined, undefined, CollapsibleHeaderVariantsSchema, undefined
+>({
   base: [
     "flex items-center justify-between w-full p-4 text-left",
     "transition-colors duration-200",
@@ -41,7 +58,15 @@ export const collapsibleHeaderVariants = tv({
   },
 });
 
-export const collapsibleContentVariants = tv({
+type CollapsibleContentVariantsSchema = {
+  expanded: Record<"false" | "true", string>;
+};
+
+export const collapsibleContentVariants: TVReturnType<
+  CollapsibleContentVariantsSchema, undefined, "overflow-hidden transition-all duration-300 ease-out", CollapsibleContentVariantsSchema, undefined
+> = tv<
+  CollapsibleContentVariantsSchema, [], {}, "overflow-hidden transition-all duration-300 ease-out", undefined, undefined, CollapsibleContentVariantsSchema, undefined
+>({
   base: "overflow-hidden transition-all duration-300 ease-out",
   defaultVariants: {
     expanded: false,
@@ -54,7 +79,15 @@ export const collapsibleContentVariants = tv({
   },
 });
 
-export const collapsibleIconVariants = tv({
+type CollapsibleIconVariantsSchema = {
+  expanded: Record<"false" | "true", string>;
+};
+
+export const collapsibleIconVariants: TVReturnType<
+  CollapsibleIconVariantsSchema, undefined, "transition-transform duration-200 ease-out text-base-content/70", CollapsibleIconVariantsSchema, undefined
+> = tv<
+  CollapsibleIconVariantsSchema, [], {}, "transition-transform duration-200 ease-out text-base-content/70", undefined, undefined, CollapsibleIconVariantsSchema, undefined
+>({
   base: "transition-transform duration-200 ease-out text-base-content/70",
   defaultVariants: {
     expanded: false,
@@ -86,7 +119,7 @@ export type CollapsibleProps = Omit<JSX.HTMLAttributes<HTMLDivElement>, "title" 
  * (`defaultExpanded`) modes, keyboard activation (Enter/Space), and four visual variants:
  * default, card, ghost, and outline.
  */
-export const Collapsible = (props: CollapsibleProps) => {
+export const Collapsible = (props: CollapsibleProps): JSX.Element => {
   const [local, others] = splitProps(props, [
     "variant",
     "class",

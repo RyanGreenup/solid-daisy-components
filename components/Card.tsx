@@ -2,8 +2,20 @@ import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const cardVariants = tv({
+type CardVariantsSchema = {
+  border: Record<"border" | "dash" | "default", string>;
+  image: Record<"default" | "full", string>;
+  side: Record<"default" | "side", string>;
+  size: Record<"lg" | "md" | "sm" | "xl" | "xs", string>;
+};
+
+export const cardVariants: TVReturnType<
+  CardVariantsSchema, undefined, "card", CardVariantsSchema, undefined
+> = tv<
+  CardVariantsSchema, [], {}, "card", undefined, undefined, CardVariantsSchema, undefined
+>({
   base: "card",
   defaultVariants: {
     border: "default",
@@ -35,15 +47,31 @@ export const cardVariants = tv({
   },
 });
 
-export const cardBodyVariants = tv({
+export const cardBodyVariants: TVReturnType<
+  {}, undefined, "card-body", {}, undefined
+> = tv<
+  {}, [], {}, "card-body", undefined, undefined, {}, undefined
+>({
   base: "card-body",
 });
 
-export const cardTitleVariants = tv({
+export const cardTitleVariants: TVReturnType<
+  {}, undefined, "card-title", {}, undefined
+> = tv<
+  {}, [], {}, "card-title", undefined, undefined, {}, undefined
+>({
   base: "card-title",
 });
 
-export const cardActionsVariants = tv({
+type CardActionsVariantsSchema = {
+  justify: Record<"center" | "end" | "start", string>;
+};
+
+export const cardActionsVariants: TVReturnType<
+  CardActionsVariantsSchema, undefined, "card-actions", CardActionsVariantsSchema, undefined
+> = tv<
+  CardActionsVariantsSchema, [], {}, "card-actions", undefined, undefined, CardActionsVariantsSchema, undefined
+>({
   base: "card-actions",
   defaultVariants: {
     justify: "end",
@@ -75,7 +103,7 @@ export type CardActionsProps = JSX.HTMLAttributes<HTMLDivElement> & CardActionsV
  * Renders a `<div>` with the `card-body` class, providing padded layout
  * for card content such as title, text, and actions.
  */
-export const CardBody = (props: CardBodyProps) => {
+export const CardBody = (props: CardBodyProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
@@ -91,7 +119,7 @@ export const CardBody = (props: CardBodyProps) => {
  * `card-title` class to apply bold, large-text styling consistent with
  * the DaisyUI card design.
  */
-export const CardTitle = (props: CardTitleProps) => {
+export const CardTitle = (props: CardTitleProps): JSX.Element => {
   const [local, others] = splitProps(props, ["class", "children"]);
   const safeChildren = children(() => local.children);
 
@@ -107,7 +135,7 @@ export const CardTitle = (props: CardTitleProps) => {
  * `card-actions` and a configurable flex-justification (`start`, `center`,
  * or `end`; defaults to `end`) for aligning buttons and links.
  */
-export const CardActions = (props: CardActionsProps) => {
+export const CardActions = (props: CardActionsProps): JSX.Element => {
   const [local, others] = splitProps(props, ["justify", "class", "children"]);
   const safeChildren = children(() => local.children);
 
@@ -124,7 +152,7 @@ export const CardActions = (props: CardActionsProps) => {
   );
 };
 
-const CardComponent = (props: CardProps) => {
+const CardComponent = (props: CardProps): JSX.Element => {
   const [local, others] = splitProps(props, [
     "size",
     "border",
@@ -152,7 +180,11 @@ const CardComponent = (props: CardProps) => {
   );
 };
 
-export const Card = Object.assign(CardComponent, {
+export const Card: typeof CardComponent & {
+  Actions: typeof CardActions;
+  Body: typeof CardBody;
+  Title: typeof CardTitle;
+} = Object.assign(CardComponent, {
   Actions: CardActions,
   Body: CardBody,
   Title: CardTitle,

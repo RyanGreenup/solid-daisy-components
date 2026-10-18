@@ -2,8 +2,19 @@ import { children, splitProps } from "solid-js";
 import { tv } from "tailwind-variants";
 
 import type { JSX } from "solid-js";
+import type { TVReturnType } from "tailwind-variants";
 
-export const selectVariants = tv({
+type SelectVariantsSchema = {
+  color: Record<"accent" | "default" | "error" | "info" | "neutral" | "primary" | "secondary" | "success" | "warning", string>;
+  size: Record<"lg" | "md" | "sm" | "xl" | "xs", string>;
+  variant: Record<"default" | "ghost", string>;
+};
+
+export const selectVariants: TVReturnType<
+  SelectVariantsSchema, undefined, "select", SelectVariantsSchema, undefined
+> = tv<
+  SelectVariantsSchema, [], {}, "select", undefined, undefined, SelectVariantsSchema, undefined
+>({
   base: "select",
   defaultVariants: {
     color: "default",
@@ -46,7 +57,7 @@ export type SelectProps = JSX.SelectHTMLAttributes<HTMLSelectElement> & SelectVa
  * `size` (xs, sm, md, lg, xl), and `variant` (default, ghost) props alongside all standard
  * select attributes and children (`<option>` elements).
  */
-export const Select = (props: SelectProps) => {
+export const Select = (props: SelectProps): JSX.Element => {
   const [local, others] = splitProps(props, [
     "color",
     "size",
